@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import roomRoutes from './routes/rooms.js';
+import bookingRoutes from './routes/bookings.js';
+import { verifyToken } from './middleware/auth.js';
 
 dotenv.config();
 
@@ -14,7 +16,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
-
+app.use('/api/bookings', bookingRoutes);
 app.get('/', (req, res) => {
     res.send('рабоfeтает');
 });

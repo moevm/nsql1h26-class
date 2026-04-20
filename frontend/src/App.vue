@@ -1,11 +1,4 @@
 <template>
-  <header>
-    <nav v-if="!$route.meta.hideNavbar">
-      <RouterLink to="/">Главная</RouterLink> |
-      <RouterLink to="/login">ieufb</RouterLink>
-    </nav>
-  </header>
-
   <RouterView />
 </template>
 

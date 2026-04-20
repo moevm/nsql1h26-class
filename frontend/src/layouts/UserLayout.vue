@@ -16,9 +16,8 @@ const onLogout = () => {
     <header class="user-header">
       <div class="header-left">
         <nav class="nav-links">
-          <RouterLink to="/" exact-active-class="active">Дашборд</RouterLink>
-          <RouterLink to="/my-bookings" active-class="active">Пользователи</RouterLink>
-          <RouterLink to="/my-bookings" active-class="active">Классы</RouterLink>
+          <RouterLink to="/" exact-active-class="active">Поиск мест</RouterLink>
+          <RouterLink to="/my-bookings" active-class="active">Мои записи</RouterLink>
         </nav>
       </div>
 

@@ -3,6 +3,7 @@ import { Database } from "arangojs";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import bcrypt from 'bcryptjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
@@ -44,6 +45,7 @@ async function setup() {
             console.log(`Edge-коллекция ${name} готова.`);
         }
 
+        const hashedPassword = await bcrypt.hash("admin", 10);
         const users = [
             { 
                 _key: 'ivan_i0000', 
@@ -58,7 +60,7 @@ async function setup() {
                 _key: 'admin_vasya', 
                 full_name: 'Василий Админов', 
                 email: 'admin@uni.edu', 
-                password: 'admin', 
+                password: hashedPassword, 
                 group_code: 'STAFF', 
                 is_admin: true,
                 meta: { created_at: "2026-04-01T12:00:00Z" } 

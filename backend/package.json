@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js", 
-    "setup_random_db": "node scripts/setup-db.js"
+    "setup_random_db": "node scripts/setup-db.js",
+    "docker:seed": "docker exec -it backend_container npm run setup_random_db"
   },
   "keywords": [],
   "author": "",

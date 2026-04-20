@@ -17,7 +17,7 @@ const onLogout = () => {
       <div class="header-left">
         <nav class="nav-links">
           <RouterLink to="/" exact-active-class="active">Дашборд</RouterLink>
-          <RouterLink to="/my-bookings" active-class="active">Пользователи</RouterLink>
+          <RouterLink to="/admin/users" active-class="active">Пользователи</RouterLink>
           <RouterLink to="/my-bookings" active-class="active">Классы</RouterLink>
         </nav>
       </div>
@@ -27,7 +27,7 @@ const onLogout = () => {
             Я
         </RouterLink>
         <button @click="onLogout" class="logout-icon" title="Выйти">
-          ВЫХОД
+          Выйти
         </button>
       </div>
     </header>

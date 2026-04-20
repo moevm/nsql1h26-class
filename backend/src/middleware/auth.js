@@ -14,3 +14,11 @@ export const verifyToken = (req, res, next) => {
         res.status(403).json({ error: "Неверный или просроченный токен." });
     }
 };
+
+export const isAdmin = (req, res, next) => {
+    if (req.user && req.user.is_admin === true) {
+        next();
+    } else {
+        res.status(403).json({ error: "Доступ запрещен. Требуются права администратора." });
+    }
+};

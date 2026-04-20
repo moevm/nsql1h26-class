@@ -1,3 +1,8 @@
+/**
+ * authService.js
+ * Business logic for user management and authentication.
+ */
+
 import jwt from 'jsonwebtoken';
 
 
@@ -6,6 +11,13 @@ class AuthService {
         // временная база данных в памяти
         this.users = [
             {
+                _key: "admin_master",
+                full_name: "Геннадий Администратор",
+                email: "admin@vuz.ru",
+                password: "root",
+                role: "admin"
+            },
+            {
                 _key: "user_static_1",
                 full_name: "Тестовый Тест",
                 email: "test@vuz.ru",
@@ -13,8 +25,6 @@ class AuthService {
                 role: "student"
             }
         ];
-
-        this.secret = process.env.JWT_SECRET || 'fallback_secret';
     }
 
     async registerUser(userData) {
@@ -40,7 +50,7 @@ class AuthService {
             role: 'student'
         };
 
-        this.users.push(newUser); // "Сохраняем"
+        this.users.push(newUser);
         console.log("[Mock DB]: Новый пользователь добавлен. Всего:", this.users.length);
 
         return newUser;
@@ -61,10 +71,13 @@ class AuthService {
             throw error;
         }
 
+        console.log("JWT_SECRET из env:", process.env.JWT_SECRET);
+        const secret = process.env.JWT_SECRET || 'fallback_secret';
+
         // Генерируем токен. В payload кладем ID и роль.
         const token = jwt.sign(
             { id: user._key, role: user.role },
-            this.secret,
+            secret,
             { expiresIn: '1d' } // Токен живет 1 день
         );
 
@@ -73,7 +86,6 @@ class AuthService {
         return { user: userWithoutPassword, token };
     }
 
-    // НОВЫЙ МЕТОД: Показать всех (для отладки)
     async getAllUsers() {
         return this.users;
     }

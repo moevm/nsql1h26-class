@@ -6,8 +6,6 @@ class AuthController {
         res.status(statusCode).json({ message: error.message });
     }
 
-
-
     register = async (req, res) => {
         try {
             const { full_name, group_number, email, password } = req.body;
@@ -23,9 +21,11 @@ class AuthController {
                 password
             });
 
+            const { password: _, ...safeUser } = user;
+
             res.status(201).json({
                 message: "Регистрация прошла успешно!",
-                user
+                user: safeUser
             });
         } catch (error) {
             this.handleError(res, error);
@@ -52,9 +52,15 @@ class AuthController {
 
     getDebugUsers = async (req, res) => {
         const users = await authService.getAllUsers();
+
+        const safeUsers = users.map(user => {
+            const { password, ...userWithoutPassword } = user;
+            return userWithoutPassword;
+        });
+
         res.status(200).json({
-            count: users.length,
-            data: users
+            count: safeUsers.length,
+            data: safeUsers
         });
     }
 }

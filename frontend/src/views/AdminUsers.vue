@@ -7,8 +7,13 @@ const users = ref([])
 const totalUsers = ref(0)
 const loading = ref(true)
 
-const searchQuery = ref('')
-const selectedRole = ref('')
+const filters = ref({
+  full_name: '',
+  email: '',
+  group_code: '',
+  role: ''
+})
+
 const currentPage = ref(1)
 const itemsPerPage = 8
 
@@ -25,8 +30,10 @@ const fetchUsers = async () => {
   loading.value = true
   try {
     const params = new URLSearchParams({
-      search: searchQuery.value,
-      role: selectedRole.value,
+      full_name: filters.value.full_name,
+      email: filters.value.email,
+      group_code: filters.value.group_code,
+      role: filters.value.role,
       page: currentPage.value.toString(),
       limit: itemsPerPage.toString()
     })
@@ -51,13 +58,13 @@ const fetchUsers = async () => {
 }
 
 let timeout = null
-watch([searchQuery, selectedRole], () => {
+watch(filters, () => {
   clearTimeout(timeout)
   timeout = setTimeout(() => {
     currentPage.value = 1
     fetchUsers()
   }, 500)
-})
+}, { deep: true })
 
 watch(currentPage, fetchUsers)
 
@@ -85,19 +92,6 @@ const createUser = async () => {
   }
 }
 
-const deleteUser = async (id) => {
-  if (!confirm('Вы уверены, что хотите удалить этого пользователя?')) return
-  try {
-    const res = await fetch(`http://localhost:3000/api/admin/users/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${authStore.token}` }
-    })
-    if (res.ok) fetchUsers()
-  } catch (e) {
-    console.error(e)
-  }
-}
-
 onMounted(fetchUsers)
 </script>
 
@@ -113,19 +107,27 @@ onMounted(fetchUsers)
       </button>
     </div>
 
-    <div class="filters-bar">
-      <div class="search-box">
-        <input 
-          v-model="searchQuery" 
-          type="text" 
-          placeholder="Поиск по ФИО, Email или группе..."
-        />
+    <div class="filters-grid">
+      <div class="filter-item">
+        <label>ФИО</label>
+        <input v-model="filters.full_name" type="text" placeholder="Поиск по имени..." />
       </div>
-      <select v-model="selectedRole" class="role-filter">
-        <option value="">Все роли</option>
-        <option value="admin">Администраторы</option>
-        <option value="user">Студенты</option>
-      </select>
+      <div class="filter-item">
+        <label>Email</label>
+        <input v-model="filters.email" type="text" placeholder="example@uni.edu" />
+      </div>
+      <div class="filter-item">
+        <label>Группа</label>
+        <input v-model="filters.group_code" type="text" placeholder="0000" />
+      </div>
+      <div class="filter-item">
+        <label>Роль</label>
+        <select v-model="filters.role">
+          <option value="">Все</option>
+          <option value="admin">Администраторы</option>
+          <option value="user">Студенты</option>
+        </select>
+      </div>
     </div>
 
     <div class="table-wrapper">
@@ -160,62 +162,15 @@ onMounted(fetchUsers)
               {{ user.last_login ? new Date(user.last_login).toLocaleString() : 'Нет данных' }}
             </td>
             <td class="actions-cell">
-              <router-link :to="'/admin/users/' + user.id" class="btn-profile" title="Перейти в профиль">
-                <span class="profile-icon">Открыть профиль</span>
+              <router-link :to="'/admin/users/' + user.id" class="btn-profile">
+                Открыть профиль
               </router-link>
             </td>
           </tr>
-          <tr v-if="users.length === 0">
-            <td colspan="5" class="empty-state">Пользователи не найдены</td>
-          </tr>
         </tbody>
       </table>
-      <div v-else class="loading-overlay">Загрузка данных...</div>
     </div>
-
-    <div class="pagination" v-if="totalUsers > itemsPerPage">
-      <button :disabled="currentPage === 1" @click="currentPage--">назад</button>
-      <span class="page-num">{{ currentPage }}</span>
-      <button :disabled="currentPage * itemsPerPage >= totalUsers" @click="currentPage++">вперед</button>
     </div>
-
-    <div v-if="isModalOpen" class="modal-overlay" @click.self="isModalOpen = false">
-      <div class="modal-content">
-        <h2>Новый пользователь</h2>
-        <form @submit.prevent="createUser">
-          <div class="form-row">
-            <div class="form-group">
-              <label>ФИО</label>
-              <input v-model="newUser.full_name" placeholder="Иванов Иван" required />
-            </div>
-            <div class="form-group">
-              <label>Группа</label>
-              <input v-model="newUser.group_code" placeholder="0000" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input v-model="newUser.email" type="email" required />
-          </div>
-          <div class="form-group">
-            <label>Пароль</label>
-            <input v-model="newUser.password" type="password" required />
-          </div>
-          <div class="form-group">
-            <label>Роль</label>
-            <select v-model="newUser.is_admin">
-              <option :value="false">Студент</option>
-              <option :value="true">Администратор</option>
-            </select>
-          </div>
-          <div class="modal-actions">
-            <button type="button" class="btn-cancel" @click="isModalOpen = false">Отмена</button>
-            <button type="submit" class="btn-submit">Создать</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 </template>
 
 <style lang="scss" scoped>

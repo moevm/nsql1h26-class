@@ -4,17 +4,24 @@ import bcrypt from 'bcryptjs';
 
 export const getAdminUsers = async (req, res) => {
     try {
-        const { search = "", role = "", page = 1, limit = 8 } = req.query;
+        const { 
+            full_name = "", 
+            email = "", 
+            group_code = "", 
+            role = "", 
+            page = 1, 
+            limit = 8 
+        } = req.query;
+
         const offset = (Number(page) - 1) * Number(limit);
         const countLimit = Number(limit);
 
         const cursor = await db.query(aql`
             LET filtered = (
                 FOR u IN Users
-                    FILTER ${search} == "" OR 
-                           CONTAINS(LOWER(u.full_name), LOWER(${search})) OR 
-                           CONTAINS(LOWER(u.email), LOWER(${search})) OR
-                           CONTAINS(LOWER(u.group_code || ""), LOWER(${search}))
+                    FILTER ${full_name} == "" OR CONTAINS(LOWER(u.full_name), LOWER(${full_name}))
+                    FILTER ${email} == "" OR CONTAINS(LOWER(u.email), LOWER(${email}))
+                    FILTER ${group_code} == "" OR CONTAINS(LOWER(u.group_code || ""), LOWER(${group_code}))
                     
                     FILTER ${role} == "" OR 
                            (${role} == "admin" ? u.is_admin == true : u.is_admin == false)

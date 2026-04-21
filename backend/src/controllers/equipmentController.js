@@ -112,7 +112,6 @@ class EquipmentController {
 
     /**
      * Method: updateEquipment
-     * PATCH /api/admin/equipment/:id
      * Обновить компьютер (из модалки "Редактировать").
      */
     updateEquipment = async (req, res) => {

@@ -3,7 +3,7 @@
  * Бизнес-логика для работы с оборудованием.
  */
 
-import equipmentDao from '../dao/equipmentDao.js';
+import equipmentDao from '../dao/equipments.js';
 
 
 class EquipmentService {

@@ -50,6 +50,12 @@ const router = createRouter({
           name: 'admin-users',
           component: () => import('../views/AdminUsers.vue')
         }
+        ,
+        {
+          path: 'rooms',
+          name: 'admin-rooms',
+          component: () => import('../views/AdminRooms.vue')
+        }
       ]
     },
     {

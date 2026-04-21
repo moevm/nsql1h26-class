@@ -15,7 +15,7 @@ const filters = ref({
 })
 
 const currentPage = ref(1)
-const itemsPerPage = 8
+const itemsPerPage = 3
 
 const isModalOpen = ref(false)
 const newUser = ref({
@@ -170,7 +170,49 @@ onMounted(fetchUsers)
         </tbody>
       </table>
     </div>
+     <div class="pagination" v-if="totalUsers > itemsPerPage">
+      <button :disabled="currentPage === 1" @click="currentPage--">назад</button>
+      <span class="page-num">{{ currentPage }}</span>
+      <button :disabled="currentPage * itemsPerPage >= totalUsers" @click="currentPage++">вперед</button>
     </div>
+
+    <div v-if="isModalOpen" class="modal-overlay" @click.self="isModalOpen = false">
+      <div class="modal-content">
+        <h2>Новый пользователь</h2>
+        <form @submit.prevent="createUser">
+          <div class="form-row">
+            <div class="form-group">
+              <label>ФИО</label>
+              <input v-model="newUser.full_name" placeholder="Иванов Иван" required />
+            </div>
+            <div class="form-group">
+              <label>Группа</label>
+              <input v-model="newUser.group_code" placeholder="0000" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input v-model="newUser.email" type="email" required />
+          </div>
+          <div class="form-group">
+            <label>Пароль</label>
+            <input v-model="newUser.password" type="password" required />
+          </div>
+          <div class="form-group">
+            <label>Роль</label>
+            <select v-model="newUser.is_admin">
+              <option :value="false">Студент</option>
+              <option :value="true">Администратор</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" @click="isModalOpen = false">Отмена</button>
+            <button type="submit" class="btn-submit">Создать</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>

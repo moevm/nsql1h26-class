@@ -83,11 +83,11 @@ const openBooking = async (room) => {
   try {
     const roomId = room._key || room.id
     const res = await fetch(`http://localhost:3000/api/rooms/${roomId}?date=${selectedDate.value}&pair=${selectedPair.value}`, {
-      headers: { 'Authorization': `Bearer ${authStore.token}` }
-    })
+    headers: { 'Authorization': `Bearer ${authStore.token}` }
+  })
     const data = await res.json()
     selectedRoom.value = data.room
-    selectedRoomComputers.value = data.computers
+    selectedRoomComputers.value = data.pcs
     selectedPC.value = null
     isModalOpen.value = true
   } catch (e) { console.error(e) }
@@ -99,21 +99,34 @@ const selectSeat = (pc) => {
 
 const confirmBooking = async () => {
   if (!selectedPC.value) return
+  
+  const pcId = selectedPC.value._id || selectedPC.value.id || selectedPC.value._key;
+
   try {
     const res = await fetch('http://localhost:3000/api/bookings', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authStore.token}` },
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': `Bearer ${authStore.token}` 
+      },
       body: JSON.stringify({ 
-        pc_id: selectedPC.value.id, 
+        pc_id: pcId, 
         date: selectedDate.value, 
-        pair: selectedPair.value 
+        pair: Number(selectedPair.value)
       })
     })
+    
     if (res.ok) {
       isModalOpen.value = false
-      await fetchAll()
+      await fetchAll() 
+      alert('Успешно забронировано!')
+    } else {
+      const errorData = await res.json()
+      alert('Ошибка: ' + errorData.error)
     }
-  } catch (e) { console.error(e) }
+  } catch (e) { 
+    console.error(e) 
+  }
 }
 
 const cancelBooking = async (id) => {
@@ -143,6 +156,20 @@ const handleQuickBook = async () => {
     }
   } catch (e) { console.error(e) }
 }
+
+const gridSeats = computed(() => {
+  if (!selectedRoom.value) return []
+
+  const { rows, cols } = selectedRoom.value.grid
+  const totalSlots = rows * cols
+  
+  const grid = []
+  for (let i = 1; i <= totalSlots; i++) {
+    const pc = selectedRoomComputers.value.find(p => p.seat_index === i)
+    grid.push(pc || { seat_index: i, isPlaceholder: true }) 
+  }
+  return grid
+})
 
 onMounted(fetchAll)
 </script>
@@ -279,7 +306,8 @@ onMounted(fetchAll)
         <div v-else class="select-prompt">Выберите ПК на схеме</div>
 
         <div class="seats-layout">
-          <div v-for="pc in selectedRoomComputers" :key="pc.id"
+          <!-- <pre>{{ selectedRoomComputers }}</pre> -->
+          <div v-for="pc in gridSeats" :key="pc.id"
             :class="['seat-unit', { selected: selectedPC?.id === pc.id, occupied: pc.status !== 'active' }]"
             @click="selectSeat(pc)"
           >

@@ -79,21 +79,22 @@ const fetchLogs = async () => {
 
 const cancelBooking = async (bookingId) => {
   if (!confirm('Вы уверены, что хотите отменить это бронирование?')) return
+
   try {
-    const res = await fetch(`http://localhost:3000/api/bookings/${bookingId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${authStore.token}`, 'Accept': 'application/json' }
+    const res = await fetch(`http://localhost:3000/api/bookings/${bookingId}/cancel`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
 
     if (res.ok) {
       alert('Бронирование успешно отменено')
-      fetchLogs()
+      fetchLogs() 
     } else {
-      const data = await res.json().catch(() => ({}))
-      alert(`Ошибка: ${data.error || 'Не удалось отменить'}`)
+      const err = await res.json()
+      alert('Ошибка: ' + (err.error || 'Не удалось отменить'))
     }
   } catch (e) {
-    console.error(e)
+    console.error('Ошибка при отмене:', e)
   }
 }
 

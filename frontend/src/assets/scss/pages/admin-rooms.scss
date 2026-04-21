@@ -1,0 +1,302 @@
+@use "../variables" as v;
+
+.admin-rooms-page {
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+
+    .title-block {
+      h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 5px; }
+      p { color: v.$text-muted; font-size: 1rem; }
+    }
+
+    .btn-primary {
+      padding: 12px 24px;
+      background: v.$accent;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: 0.2s;
+      &:hover { opacity: 0.9; transform: translateY(-2px); }
+    }
+  }
+
+  // Стили для новой панели фильтров
+  .filters-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    background: v.$bg-surface;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border: 1px solid v.$border-color;
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      label { font-size: 0.8rem; font-weight: 700; color: v.$text-muted; text-transform: uppercase; }
+      input {
+        background: v.$bg-main;
+        border: 1px solid v.$border-color;
+        padding: 12px;
+        border-radius: 10px;
+        color: white;
+        font-size: 0.9rem;
+        transition: 0.2s;
+        &:focus { border-color: v.$accent; outline: none; }
+      }
+    }
+  }
+}
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+
+  .room-card {
+    background: v.$bg-surface;
+    border-radius: 20px;
+    border: 1px solid v.$border-color;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s;
+
+    &:hover { border-color: v.$accent; transform: translateY(-5px); }
+
+    .card-content {
+      padding: 25px;
+      flex-grow: 1;
+
+      .room-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+
+        h3 { font-weight: 800; font-size: 1.3rem; }
+        .grid-badge {
+          font-size: 0.75rem;
+          background: v.$bg-main;
+          padding: 4px 8px;
+          border-radius: 6px;
+          color: v.$accent;
+          font-weight: 700;
+        }
+      }
+
+      .description {
+        color: v.$text-muted;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+      }
+
+      .tags-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        .tag {
+          font-size: 0.7rem;
+          background: rgba(v.$accent, 0.1);
+          color: v.$accent;
+          padding: 4px 10px;
+          border-radius: 20px;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .card-actions {
+      padding: 15px 25px;
+      background: rgba(white, 0.02);
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid v.$border-color;
+
+      button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .btn-edit { background: v.$bg-main; border: 1px solid v.$border-color; color: white; &:hover { border-color: v.$accent; } }
+      .btn-delete { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; &:hover { background: #ff4d4d; color: white; } }
+    }
+  }
+}
+
+// Стили модального окна редактора
+.editor-modal {
+  width: 95vw;
+  height: 85vh;
+  background: v.$bg-surface;
+  border-radius: 30px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+
+  .settings-sidebar {
+    width: 380px;
+    padding: 40px;
+    background: v.$bg-main;
+    border-right: 1px solid v.$border-color;
+    display: flex;
+    flex-direction: column;
+
+    h2 { font-weight: 900; margin-bottom: 30px; }
+
+    .form-group {
+      margin-bottom: 20px;
+      label { display: block; font-size: 0.8rem; font-weight: 700; color: v.$text-muted; margin-bottom: 8px; text-transform: uppercase; }
+      input, textarea {
+        width: 100%;
+        background: v.$bg-surface;
+        border: 1px solid v.$border-color;
+        padding: 12px;
+        border-radius: 12px;
+        color: white;
+        &:focus { border-color: v.$accent; outline: none; }
+      }
+      textarea { height: 80px; resize: none; }
+    }
+
+    .grid-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      button { padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; }
+      .btn-save { background: v.$accent; border: none; color: white; }
+      .btn-cancel { background: transparent; border: 1px solid v.$border-color; color: v.$text-muted; }
+    }
+  }
+
+  .grid-preview {
+    flex-grow: 1;
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, rgba(v.$accent, 0.05) 0%, transparent 70%);
+
+    .matrix-container {
+      display: grid;
+      gap: 15px;
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16/10;
+
+      .seat-cell {
+        background: v.$bg-main;
+        border-radius: 12px;
+        border: 2px dashed v.$border-color;
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+
+        &:hover { border-color: v.$accent; background: rgba(v.$accent, 0.02); }
+
+        &.has-pc {
+          border-style: solid;
+          border-color: v.$accent;
+          background: rgba(v.$accent, 0.05);
+        }
+
+        .seat-index { position: absolute; top: 8px; left: 8px; font-size: 0.7rem; color: v.$text-muted; font-weight: 800; }
+        .pc-name { font-size: 0.8rem; font-weight: 800; color: v.$accent; text-align: center; padding: 0 5px; overflow: hidden; text-overflow: ellipsis; }
+      }
+    }
+  }
+}
+
+// Стили селектора ПК
+.pc-selector-card {
+  width: 450px;
+  background: v.$bg-surface;
+  border-radius: 24px;
+  padding: 30px;
+  border: 1px solid v.$border-color;
+
+  .selector-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    h3 { font-weight: 800; }
+    .close-icon { background: none; border: none; color: v.$text-muted; cursor: pointer; font-size: 1.2rem; }
+  }
+
+  .pc-card-detailed {
+    background: v.$bg-main;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid v.$accent;
+
+    .header { margin-bottom: 15px; h4 { color: v.$accent; font-size: 1.1rem; } .pc-id-label { font-size: 0.6rem; color: v.$text-muted; } }
+    .specs p { font-size: 0.85rem; margin-bottom: 6px; span { color: v.$text-muted; width: 50px; display: inline-block; } }
+    .btn-detach { margin-top: 20px; width: 100%; padding: 12px; border-radius: 8px; background: rgba(#ff4d4d, 0.1); color: #ff4d4d; border: 1px solid #ff4d4d; cursor: pointer; font-weight: 700; }
+  }
+
+  .pc-items-list {
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .pc-list-item {
+      padding: 15px;
+      background: v.$bg-main;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+      &:hover { border-color: v.$accent; }
+      .info { display: flex; flex-direction: column; strong { font-size: 0.9rem; } .gpu-spec { font-size: 0.7rem; color: v.$text-muted; } }
+      .plus { color: v.$accent; font-weight: 900; }
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  &.dark { background: rgba(0,0,0,0.9); }
+}

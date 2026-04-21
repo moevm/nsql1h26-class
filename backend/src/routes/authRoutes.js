@@ -1,6 +1,6 @@
 /**
  * authRoutes.js
- * Authentication endpoints configuration.
+ * Маршрутизация аутентификации.
  */
 
 import { Router } from 'express';
@@ -10,9 +10,9 @@ import authController from '../controllers/authController.js';
 const router = Router();
 
 /**
- * Публичные роуты
+ * Публичные роуты, доступные всем
  */
-router.post('/register', authController.register);
+// router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 /**

@@ -3,6 +3,7 @@ import { Database } from "arangojs";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import bcrypt from 'bcryptjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
@@ -18,10 +19,10 @@ async function setup() {
             process.env.DB_USER,
             process.env.DB_PASSWORD
         );
-        
+
         const dbName = process.env.DB_NAME;
         const databases = await systemDb.listDatabases();
-        
+
         if (!databases.includes(dbName)) {
             await systemDb.createDatabase(dbName);
             console.log(`База данных "${dbName}" создана.`);
@@ -40,53 +41,54 @@ async function setup() {
         for (const name of edges) {
             const col = db.collection(name);
             if (await col.exists()) await col.drop();
-            await col.create({ type: 3 }); 
+            await col.create({ type: 3 });
             console.log(`Edge-коллекция ${name} готова.`);
         }
 
+        const hashedPassword = await bcrypt.hash("admin", 10);
         const users = [
-            { 
-                _key: 'ivan_i0000', 
-                full_name: 'Иван Иванов', 
-                email: 'ivanov@uni.edu', 
-                password: '123', 
-                group_code: '0000', 
+            {
+                _key: 'ivan_i0000',
+                full_name: 'Иван Иванов',
+                email: 'ivanov@uni.edu',
+                password: await bcrypt.hash('123', 10),
+                group_code: '0000',
                 is_admin: false,
-                meta: { created_at: "2026-03-01T10:00:00Z", last_login: new Date().toISOString() } 
+                meta: { created_at: "2026-03-01T10:00:00Z", last_login: new Date().toISOString() }
             },
-            { 
-                _key: 'admin_vasya', 
-                full_name: 'Василий Админов', 
-                email: 'admin@uni.edu', 
-                password: 'admin', 
-                group_code: 'STAFF', 
+            {
+                _key: 'admin_vasya',
+                full_name: 'Василий Админов',
+                email: 'admin@uni.edu',
+                password: hashedPassword,
+                group_code: 'STAFF',
                 is_admin: true,
-                meta: { created_at: "2026-04-01T12:00:00Z" } 
+                meta: { created_at: "2026-04-01T12:00:00Z" }
             }
         ];
         await db.collection('Users').import(users);
 
         const roomsData = [
-            { 
-                _key: 'room_405b', 
-                name: '405-Б', 
-                description: 'Основная лаборатория для занятий по нейросетям', 
+            {
+                _key: 'room_405b',
+                name: '405-Б',
+                description: 'Основная лаборатория для занятий по нейросетям',
                 grid: { rows: 4, cols: 4 },
-                tags: ["Машинное обучение", "GPU RTX 4090", "Проектор"] 
+                tags: ["Машинное обучение", "GPU RTX 4090", "Проектор"]
             },
-            { 
-                _key: 'room_101', 
-                name: '101', 
-                description: 'Коворкинг', 
+            {
+                _key: 'room_101',
+                name: '101',
+                description: 'Коворкинг',
                 grid: { rows: 2, cols: 5 },
-                tags: ["WiFi", "Chill zone"] 
+                tags: ["WiFi", "Chill zone"]
             }
         ];
         await db.collection('Rooms').import(roomsData);
 
         const computers = [];
         const softwarePool = ["Python 3.12", "CUDA 12.1", "PyTorch", "VS Code", "Docker"];
-        
+
         roomsData.forEach(room => {
             const count = room.grid.rows * room.grid.cols;
             for (let i = 1; i <= count; i++) {

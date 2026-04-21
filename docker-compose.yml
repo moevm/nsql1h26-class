@@ -1,0 +1,38 @@
+services:
+  db:
+    image: arangodb:3.11
+    container_name: db_container
+    restart: always
+    environment:
+      - ARANGO_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "8529:8529"
+    volumes:
+      - db_data:/var/lib/arangodb3
+
+  backend:
+    build: ./backend
+    container_name: backend_container
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_container
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  db_data:

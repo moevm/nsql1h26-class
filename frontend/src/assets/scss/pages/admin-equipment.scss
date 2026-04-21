@@ -1,0 +1,243 @@
+@use "@/assets/scss/variables" as v;
+
+.admin-equipment {
+padding: 40px;
+max-width: 1500px;
+margin: 0 auto;
+font-family: v.$font-mont;
+color: v.$text-main;
+
+.header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 40px;
+
+h1 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+
+}
+}
+
+// Секция фильтров
+.filters {
+display: flex;
+gap: 20px;
+background: v.$bg-surface;
+padding: 25px;
+border-radius: 24px;
+border: 1px solid v.$border-color;
+margin-bottom: 30px;
+align-items: center;
+
+.search-input, .filter-select, .filter-input {
+background: v.$bg-main;
+border: 1px solid v.$border-color;
+color: white;
+padding: 14px 20px;
+border-radius: 14px;
+outline: none;
+font-weight: 600;
+font-family: v.$font-mont;
+transition: v.$transition;
+
+&:focus {
+  border-color: v.$accent;
+  box-shadow: 0 0 0 4px rgba(v.$accent, 0.1);
+}
+
+
+}
+
+.search-input {
+flex-grow: 2;
+}
+
+.filter-select, .filter-input {
+flex-grow: 1;
+}
+}
+
+// Список оборудования
+.equipment-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+gap: 25px;
+}
+
+.equipment-card {
+background: v.$bg-surface;
+border-radius: 28px;
+padding: 30px;
+border: 1px solid v.$border-color;
+transition: v.$transition;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+
+&:hover {
+border-color: v.$accent;
+transform: translateY(-5px);
+}
+
+.equipment-info {
+h3 {
+font-size: 1.4rem;
+font-weight: 900;
+margin: 0 0 15px 0;
+color: v.$accent;
+font-family: v.$font-mono;
+}
+
+p {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: v.$text-muted;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+
+  &::after {
+    content: "";
+    flex-grow: 1;
+    border-bottom: 1px dashed v.$border-color;
+    margin: 0 10px;
+    align-self: flex-end;
+    opacity: 0.3;
+  }
+}
+
+
+}
+
+.equipment-actions {
+margin-top: 25px;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+}
+}
+
+// Состояния загрузки и отсутствия данных
+.loading, .no-data {
+text-align: center;
+padding: 100px;
+font-weight: 900;
+color: v.$text-muted;
+background: v.$bg-surface;
+border-radius: 24px;
+border: 1px solid v.$border-color;
+}
+
+// Кнопки
+.btn-primary, .btn-secondary, .btn-danger {
+padding: 14px 24px;
+border-radius: 14px;
+font-weight: 900;
+font-size: 0.85rem;
+cursor: pointer;
+transition: v.$transition;
+border: none;
+font-family: v.$font-mont;
+text-align: center;
+}
+
+.btn-primary {
+background: v.$accent;
+color: #000;
+&:hover { filter: brightness(1.1); }
+}
+
+.btn-secondary {
+background: v.$bg-main;
+color: v.$text-main;
+border: 1px solid v.$border-color;
+&:hover { border-color: v.$text-muted; }
+}
+
+.btn-danger {
+background: rgba(v.$danger, 0.1);
+color: v.$danger;
+&:hover { background: v.$danger; color: white; }
+}
+
+// Модальное окно
+.modal-overlay {
+position: fixed;
+inset: 0;
+background: rgba(0, 0, 0, 0.85);
+backdrop-filter: blur(8px);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 1100;
+}
+
+.modal-content {
+background: v.$bg-surface;
+width: 90%;
+max-width: 600px;
+border-radius: 32px;
+padding: 40px;
+border: 1px solid v.$border-color;
+box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+h2 {
+font-size: 1.8rem;
+font-weight: 900;
+margin-bottom: 30px;
+letter-spacing: -0.5px;
+}
+
+form {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+
+.form-group {
+display: flex;
+flex-direction: column;
+gap: 8px;
+
+label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: v.$text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+input, select, textarea {
+  background: v.$bg-main;
+  border: 1px solid v.$border-color;
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  font-family: v.$font-mont;
+  font-weight: 600;
+  outline: none;
+
+  &:focus { border-color: v.$accent; }
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+
+}
+
+.modal-actions {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 15px;
+margin-top: 20px;
+}
+}

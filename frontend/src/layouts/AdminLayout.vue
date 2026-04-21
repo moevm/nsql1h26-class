@@ -19,6 +19,7 @@ const onLogout = () => {
           <RouterLink to="/" exact-active-class="active">Дашборд</RouterLink>
           <RouterLink to="/admin/users" active-class="active">Пользователи</RouterLink>
           <RouterLink to="/admin/rooms" active-class="active">Классы</RouterLink>
+          <RouterLink to="/admin/equipment" active-class="active">Оборудование</RouterLink>
         </nav>
       </div>
 

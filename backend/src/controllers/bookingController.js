@@ -37,14 +37,26 @@ export const createBooking = async (req, res) => {
             return res.status(409).json({ error: "Это место уже забронировано на выбранное время" });
         }
 
+        const now = new Date().toISOString();
+
         const newBooking = {
             _from: `Users/${userId}`,
             _to: pcFullId,
             start_at: interval.start,
             end_at: interval.end,
-            pair: Number(pair),
             status: 'reserved',
-            meta: { created_at: new Date().toISOString() }
+            total_work_time_minutes: 0,
+            meta: { 
+                created_at: now 
+            },
+            history: [ 
+                {
+                    old_status: null,
+                    new_status: 'reserved',
+                    changed_at: now,
+                    changed_by: `Users/${userId}`
+                }
+            ]
         };
 
         const result = await db.query(aql`INSERT ${newBooking} INTO Bookings RETURN NEW`);
@@ -149,14 +161,23 @@ export const quickBook = async (req, res) => {
         const freePC = await cursor.next();
         if (!freePC) return res.status(404).json({ error: "Нет свободных ПК по вашему запросу" });
 
+        const now = new Date().toISOString();
         const newBooking = {
             _from: `Users/${userId}`,
             _to: freePC._id,
             start_at: interval.start,
             end_at: interval.end,
-            pair: Number(pair),
             status: 'reserved',
-            meta: { created_at: new Date().toISOString() }
+            total_work_time_minutes: 0,
+            meta: { created_at: now },
+            history: [
+                {
+                    old_status: null,
+                    new_status: 'reserved',
+                    changed_at: now,
+                    changed_by: `Users/${userId}`
+                }
+            ]
         };
 
         await db.query(aql`INSERT ${newBooking} INTO Bookings`);

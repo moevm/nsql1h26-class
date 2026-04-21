@@ -8,7 +8,7 @@ class AuthController {
 
     register = async (req, res) => {
         try {
-            const { full_name, group_number, email, password } = req.body;
+            const { full_name, group_code, email, password } = req.body;
 
             if (!email || !password || !full_name) {
                 return res.status(400).json({ message: "Заполните все обязательные поля" });
@@ -16,7 +16,7 @@ class AuthController {
 
             const user = await authService.registerUser({
                 full_name,
-                group_number,
+                group_code,
                 email,
                 password
             });

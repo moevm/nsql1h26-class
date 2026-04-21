@@ -38,7 +38,7 @@ const verifyToken = (req, res, next) => {
     try {
 
         // Приклеиваем данные пользователя к объекту запроса, чтобы они были доступны дальше
-        req.user = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+        req.user = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
         next();
 
     } catch (error) {
@@ -56,7 +56,7 @@ const verifyToken = (req, res, next) => {
  * Проверяет, что пользователь является администратором
  */
 const isAdmin = (req, res, next) => {
-    if (req.user && req.user.role === 'admin') {
+    if (req.user && req.user.is_admin === true) {
         next();
     } else {
         res.status(403).json({

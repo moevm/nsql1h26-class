@@ -45,7 +45,6 @@ async function setup() {
             console.log(`Edge-коллекция ${name} готова.`);
         }
 
-        const hashedPassword = await bcrypt.hash("admin", 10);
         const users = [
             {
                 _key: 'ivan_i0000',
@@ -60,7 +59,7 @@ async function setup() {
                 _key: 'admin_vasya',
                 full_name: 'Василий Админов',
                 email: 'admin@uni.edu',
-                password: hashedPassword,
+                password: await bcrypt.hash("admin", 10),
                 group_code: 'STAFF',
                 is_admin: true,
                 meta: { created_at: "2026-04-01T12:00:00Z" }

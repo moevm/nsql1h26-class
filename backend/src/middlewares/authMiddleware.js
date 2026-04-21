@@ -38,7 +38,7 @@ const verifyToken = (req, res, next) => {
     try {
 
         // Приклеиваем данные пользователя к объекту запроса, чтобы они были доступны дальше
-        req.user = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+        req.user = jwt.verify(token, process.env.JWT_SECRET);
         next();
 
     } catch (error) {

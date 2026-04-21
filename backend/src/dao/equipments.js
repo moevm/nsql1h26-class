@@ -32,7 +32,7 @@ class EquipmentDao {
                     FILTER ${search} == "" OR (
                         CONTAINS(LOWER(c.inv_number), LOWER(${search})) OR
                         CONTAINS(LOWER(c.mac_address), LOWER(${search})) OR
-                        ${search} IN c.software
+                        (IS_ARRAY(c.software) AND ${search} IN c.software)
                     )
                     
                     // Подтягиваем аудиторию по ссылке
@@ -89,7 +89,6 @@ class EquipmentDao {
                 }
         `);
 
-        // next() вернёт один документ или undefined
         return await cursor.next();
     }
 

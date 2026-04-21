@@ -1,0 +1,274 @@
+@use "@/assets/scss/variables" as v;
+
+.admin-logs {
+  padding: 10px 0;
+  font-family: v.$font-mont;
+
+  // Блок фильтров (Детальный поиск согласно ТЗ)
+  .logs-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    background: v.$bg-surface;
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid v.$border-color;
+    margin-bottom: 30px;
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      label {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: v.$text-muted;
+        letter-spacing: 1px;
+      }
+
+      .filter-input {
+        background: v.$bg-main;
+        border: 1px solid v.$border-color;
+        color: white;
+        padding: 12px 15px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+
+        &:focus {
+          border-color: v.$accent;
+          box-shadow: 0 0 0 2px rgba(v.$accent, 0.2);
+          outline: none;
+        }
+      }
+
+      &.search-flex {
+        grid-column: span 2;
+        @media (max-width: 768px) { grid-column: span 1; }
+      }
+    }
+  }
+
+  // Таблица
+  .table-container {
+    background: v.$bg-surface;
+    border-radius: 24px;
+    border: 1px solid v.$border-color;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .logs-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+      padding: 20px 24px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: v.$text-muted;
+      background: rgba(white, 0.02);
+      border-bottom: 1px solid v.$border-color;
+    }
+
+    tr {
+      transition: background 0.2s;
+      
+      &.is-expanded {
+        background: rgba(v.$accent, 0.03);
+      }
+
+      &:hover:not(.details-row) {
+        background: rgba(white, 0.02);
+      }
+    }
+
+    td {
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(white, 0.03);
+      vertical-align: middle;
+    }
+  }
+
+  // Стили ячеек
+  .id-cell {
+    .date-text { display: block; font-weight: 700; font-size: 0.9rem; color: white; }
+    .id-text { font-family: v.$font-mono; font-size: 0.75rem; color: v.$text-muted; }
+  }
+
+  .user-info, .room-info {
+    display: flex;
+    flex-direction: column;
+    strong { font-size: 0.95rem; color: white; }
+    span { font-size: 0.8rem; color: v.$text-muted; }
+  }
+
+  // Статус-бейджи
+  .status-badge {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: inline-block;
+
+    &.finished { background: rgba(16, 185, 129, 0.1); color: #10B981; }
+    &.missed { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+    &.active { background: rgba(59, 130, 246, 0.1); color: #3B82F6; }
+    &.reserved { background: rgba(245, 158, 11, 0.1); color: #F59E0B; }
+  }
+
+  // Кнопка деталей
+  .btn-details {
+    background: rgba(white, 0.05);
+    border: 1px solid v.$border-color;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+
+    &:hover { background: v.$accent; border-color: v.$accent; }
+
+    .arrow {
+      font-size: 0.6rem;
+      transition: transform 0.3s;
+      &.active { transform: rotate(180deg); }
+    }
+  }
+
+  // Секция деталей (Timeline)
+  .details-row td {
+    padding: 0; // Чтобы таймлайн прилегал к краям внутри ячейки
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  .timeline-container {
+    padding: 30px 50px;
+    border-left: 2px solid v.$border-color;
+    margin-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 25px;
+      margin-bottom: 20px;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: -51px;
+        top: 8px;
+        width: 10px;
+        height: 10px;
+        background: v.$accent;
+        border-radius: 50%;
+        box-shadow: 0 0 10px v.$accent;
+      }
+
+      .t-time {
+        font-family: v.$font-mono;
+        font-size: 0.85rem;
+        color: v.$text-muted;
+        min-width: 50px;
+        padding-top: 2px;
+      }
+
+      .t-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .t-status { font-size: 0.9rem; color: white; }
+        .t-author { font-size: 0.8rem; color: v.$text-muted; }
+      }
+    }
+  }
+
+  .empty-history {
+    padding: 30px;
+    text-align: center;
+    color: v.$text-muted;
+    font-style: italic;
+  }
+
+  // Пагинация
+  .pagination {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    button {
+      background: v.$bg-surface;
+      border: 1px solid v.$border-color;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.3s;
+
+      &:hover:not(:disabled) { border-color: v.$accent; color: v.$accent; }
+      &:disabled { opacity: 0.3; cursor: not-allowed; }
+    }
+
+    .page-info { font-weight: 800; color: white; }
+  }
+
+  .table-loading {
+    padding: 40px;
+    text-align: center;
+    color: v.$accent;
+    font-weight: 700;
+  }
+}
+
+.text-right { text-align: right; }
+
+
+.logs-filters.extended {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  .filter-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); }
+  }
+  .mt-20 { margin-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
+}
+
+.btn-cancel-booking {
+  margin-top: 15px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #EF4444;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover { background: #EF4444; color: white; }
+}
+
+.status-badge-mini {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  margin-left: 8px;
+  &.reserved { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+}

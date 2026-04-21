@@ -31,33 +31,14 @@
     </div>
 
     <div v-if="currentTab === 'logs'" class="tab-content">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID / Дата</th>
-              <th>Пользователь</th>
-              <th>Аудитория</th>
-              <th>Статус</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="log in logs" :key="log.id">
-              <td class="mono">{{ log.date }}<br>{{ log.id }}</td>
-              <td><strong>{{ log.user }}</strong></td>
-              <td>{{ log.room }}</td>
-              <td><span :class="['badge', log.statusType]">{{ log.status }}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <AdminLogs />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-
+import AdminLogs from './AdminLogs.vue'
 const currentTab = ref('summary')
 const tabNames = { summary: 'Сводка', logs: 'Журнал', schedule: 'Расписание' }
 

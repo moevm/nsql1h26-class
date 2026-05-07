@@ -24,6 +24,14 @@ app.get('/', (req, res) => {
     res.send('рабоfeтает');
 });
 
+app.use((err, req, res, next) => {
+    console.error("Ошибка на сервере:", err.stack);
+    
+    res.status(500).json({ 
+        error: err.message || 'Произошла внутренняя ошибка сервера' 
+    });
+});
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
 });

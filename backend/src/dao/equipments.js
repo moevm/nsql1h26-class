@@ -32,7 +32,7 @@ class EquipmentDao {
                     FILTER ${search} == "" OR (
                         CONTAINS(LOWER(c.inv_number), LOWER(${search})) OR
                         CONTAINS(LOWER(c.mac_address), LOWER(${search})) OR
-                        (IS_ARRAY(c.software) AND ${search} IN c.software)
+                        ${search} IN c.software
                     )
                     
                     // Подтягиваем аудиторию по ссылке
@@ -89,7 +89,6 @@ class EquipmentDao {
                 }
         `);
 
-        // next() вернёт один документ или undefined
         return await cursor.next();
     }
 
@@ -114,10 +113,12 @@ class EquipmentDao {
         const cursor = await db.query(aql`
             FOR c IN Computers
                 FILTER c._key == ${id}
-                UPDATE c WITH ${document} IN Computers
+                UPDATE c WITH MERGE(
+                    ${document},
+                    { meta: MERGE(c.meta, { updated_at: ${new Date().toISOString()} }) }
+                ) IN Computers
                 RETURN NEW
         `);
-
         return await cursor.next();
     }
 

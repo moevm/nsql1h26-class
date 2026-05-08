@@ -1,25 +1,76 @@
-import db from '../config/db.js';
-import { aql } from 'arangojs';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import asyncHandler from '../services/asyncHandler.js';
+/**
+ * authController.js
+ * Обработка запросов аутентификации
+ */
 
-export const login = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+import asyncHandler from '../utils/asyncHandler.js';
+import authService from '../services/authService.js';
 
-    const cursor = await db.query(aql`
-        FOR u IN Users FILTER u.email == ${email} RETURN u`);
-    const user = await cursor.next();
+class AuthController {
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json({ error: "Неверный логин или пароль" });
-    }
+    // register = async (req, res) => {
+    //     try {
+    //         const { full_name, group_code, email, password } = req.body;
+    //
+    //         if (!email || !password || !full_name) {
+    //             return res.status(400).json({ message: "Заполните все обязательные поля" });
+    //         }
+    //
+    //         const user = await authService.registerUser({
+    //             full_name,
+    //             group_code,
+    //             email,
+    //             password
+    //         });
+    //
+    //         const { password: _, ...safeUser } = user;
+    //
+    //         res.status(201).json({
+    //             message: "Регистрация прошла успешно!",
+    //             user: safeUser
+    //         });
+    //     } catch (error) {
+    //         this.handleError(res, error);
+    //     }
+    // }
 
-    const token = jwt.sign(
-        { id: user._key, is_admin: user.is_admin },
-        process.env.JWT_SECRET || 'secret_key',
-        { expiresIn: '24h' }
-    );
 
-    res.json({ token, user: { name: user.full_name, is_admin: user.is_admin } });
-});
+    /**
+     * Method: login
+     * Обработка запросов пользователя связанных с авторизацией
+     */
+    login = asyncHandler(async (req, res) => {
+        const { email, password } = req.body;
+
+        // Получаем и юзера, и токен из сервиса
+        const { user, token } = await authService.loginUser(email, password);
+
+        res.status(200).json({
+            message: "Успешный вход",
+            token,
+            user: {
+                _key: user._key,
+                full_name: user.full_name,
+                email: user.email,
+                is_admin: user.is_admin,
+                group_code: user.group_code,
+                meta: user.meta
+            }
+        });
+    });
+
+    /**
+     * Method: getDebugUsers
+     * Обработка запроса админа на получение всех пользователей для отладки
+     */
+    getDebugUsers = asyncHandler(async (req, res) => {
+        const users = await authService.getAllUsers();
+
+        res.status(200).json({
+            count: users.length,
+            data: users
+        });
+    });
+}
+
+export default new AuthController();

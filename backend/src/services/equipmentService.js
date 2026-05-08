@@ -21,7 +21,15 @@ class EquipmentService {
      * Получить один компьютер по ID.
      */
     async getById(id) {
-        return await equipmentDao.findById(id);
+        const equipment = await equipmentDao.findById(id);
+
+        if (!equipment) {
+            const error = new Error("Компьютер не найден");
+            error.status = 404;
+            throw error;
+        }
+
+        return equipment;
     }
 
     /**
@@ -41,13 +49,21 @@ class EquipmentService {
         //     created_by: "Users/admin_vasya"
         // }
 
+        const { created_by, ...dataWithoutCreatedBy } = equipmentData;
+
+        if (!dataWithoutCreatedBy.inv_number || !dataWithoutCreatedBy.room_id) {
+            const error = new Error("Инвентарный номер и аудитория обязательны");
+            error.status = 400;
+            throw error;
+        }
+
         const documentToInsert = {
-            ...equipmentData,
+            ...dataWithoutCreatedBy,
             status: equipmentData.status || 'active',
             meta: {
                 created_at: new Date().toISOString(),
                 updated_at: null,
-                created_by: equipmentData.created_by || null
+                created_by: created_by || null
             }
         };
 
@@ -60,26 +76,29 @@ class EquipmentService {
      * Method: update
      * Обновить компьютер.
      */
-    async update(id, updateData) {
-        const existing = await equipmentDao.findById(id);
-        if (!existing) {
+    async update(id, body) {
+        const allowedFields = ['status', 'admin_notes', 'software', 'specs', 'mac_address', 'seat_index', 'room_id'];
+        const updateData = {};
+
+        for (const key of allowedFields) {
+            if (body[key] !== undefined) updateData[key] = body[key];
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            const error = new Error("Нет данных для обновления");
+            error.status = 400;
+            throw error;
+        }
+
+        const updated = await equipmentDao.update(id, updateData);
+
+        if (!updated) {
             const error = new Error("Компьютер не найден");
             error.status = 404;
             throw error;
         }
 
-        const newMeta = {
-            ...existing.meta,
-            updated_at: new Date().toISOString()
-        };
-
-        // 3. Формируем итоговый документ
-        const documentToUpdate = {
-            ...updateData,
-            meta: newMeta
-        };
-
-        return await equipmentDao.update(id, documentToUpdate);
+        return updated;
     }
 
     /**
@@ -87,7 +106,15 @@ class EquipmentService {
      * Удалить компьютер.
      */
     async delete(id) {
-        return await equipmentDao.remove(id);
+        const deleted = await equipmentDao.remove(id);
+
+        if (!deleted) {
+            const error = new Error("Компьютер не найден");
+            error.status = 404;
+            throw error;
+        }
+
+        return deleted;
     }
 }
 

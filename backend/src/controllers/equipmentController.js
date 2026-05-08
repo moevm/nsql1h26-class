@@ -3,19 +3,10 @@
  * Обработка запросов оборудования
  */
 
+import asyncHandler from '../utils/asyncHandler.js';
 import equipmentService from '../services/equipmentService.js';
-import asyncHandler from '../services/asyncHandler.js';
 
 class EquipmentController {
-    /**
-     * Method: handleError
-     * Вспомогательный метод для формирования ответа при ошибке
-     */
-    handleError(res, error) {
-        const statusCode = error.status || 500;
-        res.status(statusCode).json({ message: error.message });
-    }
-
     /**
      * Method: getAllEquipment
      * Получить список компьютеров с фильтрами и пагинацией
@@ -38,6 +29,7 @@ class EquipmentController {
         });
 
         res.status(200).json(result);
+
     });
 
     /**
@@ -46,15 +38,7 @@ class EquipmentController {
      */
     getEquipmentById = asyncHandler(async (req, res) => {
         const { id } = req.params;
-
         const equipment = await equipmentService.getById(id);
-
-        if (!equipment) {
-            return res.status(404).json({
-                message: "Компьютер не найден"
-            });
-        }
-
         res.status(200).json(equipment);
     });
 
@@ -63,30 +47,9 @@ class EquipmentController {
      * Создать новый компьютер
      */
     createEquipment = asyncHandler(async (req, res) => {
-        const {
-            inv_number,
-            room_id,
-            seat_index,
-            mac_address,
-            specs,
-            software,
-            admin_notes
-        } = req.body;
-
-        if (!inv_number || !room_id) {
-            return res.status(400).json({
-                message: "Инвентарный номер и аудитория обязательны"
-            });
-        }
 
         const newEquipment = await equipmentService.create({
-            inv_number,
-            room_id,
-            seat_index,
-            mac_address,
-            specs,
-            software,
-            admin_notes,
+            ...req.body,
             created_by: req.user ? `Users/${req.user.id}` : null
         });
 
@@ -94,7 +57,6 @@ class EquipmentController {
             message: "Компьютер успешно создан",
             equipment: newEquipment
         });
-
     });
 
     /**
@@ -103,42 +65,7 @@ class EquipmentController {
      */
     updateEquipment = asyncHandler(async (req, res) => {
         const { id } = req.params;
-
-        // Достаём только переданные поля
-        const {
-            status,
-            admin_notes,
-            software,
-            specs,
-            mac_address,
-            seat_index,
-            room_id
-        } = req.body;
-
-        // Формируем объект обновления — только то, что пришло
-        const updateData = {};
-        if (status !== undefined) updateData.status = status;
-        if (admin_notes !== undefined) updateData.admin_notes = admin_notes;
-        if (software !== undefined) updateData.software = software;
-        if (specs !== undefined) updateData.specs = specs;
-        if (mac_address !== undefined) updateData.mac_address = mac_address;
-        if (seat_index !== undefined) updateData.seat_index = seat_index;
-        if (room_id !== undefined) updateData.room_id = room_id;
-
-        // Проверяем, есть ли что обновлять
-        if (Object.keys(updateData).length === 0) {
-            return res.status(400).json({
-                message: "Нет данных для обновления"
-            });
-        }
-
-        const updated = await equipmentService.update(id, updateData);
-
-        if (!updated) {
-            return res.status(404).json({
-                message: "Компьютер не найден"
-            });
-        }
+        const updated = await equipmentService.update(id, req.body);
 
         res.status(200).json({
             message: "Компьютер успешно обновлён",
@@ -146,21 +73,14 @@ class EquipmentController {
         });
     });
 
+
     /**
      * Method: deleteEquipment
      * Удалить компьютер
      */
     deleteEquipment = asyncHandler(async (req, res) => {
-        const { id } = req.params;
-
-        const deleted = await equipmentService.delete(id);
-
-        if (!deleted) {
-            return res.status(404).json({
-                message: "Компьютер не найден"
-            });
-        }
-
+        const { id } = req.params
+        await equipmentService.delete(id);
         res.status(204).send();
     });
 }

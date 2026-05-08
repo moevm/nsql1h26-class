@@ -23,44 +23,60 @@ export const createBooking = asyncHandler(async (req, res) => {
     const { pc_id, date, pair } = req.body;
     const userId = req.user.id;
     const interval = getPairInterval(date, pair);
-    const pcFullId = pc_id.includes('/') ? pc_id : `Computers/${pc_id}`;
 
-    const checkCursor = await db.query(aql`
-        FOR b IN Bookings
-        FILTER b._to == ${pcFullId}
-        FILTER b.status != 'cancelled'
-        FILTER b.start_at == ${interval.start}
-        RETURN b
-    `);
-    
-    if ((await checkCursor.all()).length > 0) {
-        return res.status(409).json({ error: "Это место уже забронировано на выбранное время" });
-    }
+    const fromId = `Users/${userId}`;
+    const toId = pc_id.includes('/') ? pc_id : `Computers/${pc_id}`;
 
-    const now = new Date().toISOString();
+    const transaction = await db.beginTransaction({
+        write: ['Bookings'],
+        read: ['Computers']
+    });
 
-    const newBooking = {
-        _from: `Users/${userId}`,
-        _to: pcFullId,
-        start_at: interval.start,
-        end_at: interval.end,
-        status: 'reserved',
-        total_work_time_minutes: 0,
-        meta: { 
-            created_at: now 
-        },
-        history: [ 
-            {
+    try {
+        const checkCursor = await db.query(aql`
+            FOR b IN Bookings
+            FILTER b._to == ${toId}
+            FILTER b.status != 'cancelled'
+            FILTER b.start_at == ${interval.start}
+            RETURN b
+        `, {}, { transaction });
+        
+        if ((await checkCursor.all()).length > 0) {
+            await transaction.abort();
+            return res.status(409).json({ error: "Это место уже забронировано" });
+        }
+
+        const now = new Date().toISOString();
+
+        const newBooking = {
+            _from: fromId, 
+            _to: toId,     
+            start_at: interval.start,
+            end_at: interval.end,
+            status: 'reserved',
+            meta: { created_at: now },
+            history: [{
                 old_status: null,
                 new_status: 'reserved',
                 changed_at: now,
-                changed_by: `Users/${userId}`
-            }
-        ]
-    };
+                changed_by: fromId
+            }]
+        };
 
-    const result = await db.query(aql`INSERT ${newBooking} INTO Bookings RETURN NEW`);
-    res.status(201).json(await result.next());
+        // Вставляем через транзакцию
+        const result = await db.query(aql`
+            INSERT ${newBooking} INTO Bookings 
+            RETURN NEW
+        `, {}, { transaction });
+        
+        const created = await result.next();
+        await transaction.commit();
+        
+        res.status(201).json(created);
+    } catch (error) {
+        await transaction.abort();
+        throw error;
+    }
 });
 
 export const getUserBookings = asyncHandler(async (req, res) => {
@@ -120,53 +136,83 @@ export const quickBook = asyncHandler(async (req, res) => {
     const interval = getPairInterval(date, pair);
     const tagList = tags ? tags.split(',').map(t => t.trim().toLowerCase()) : [];
 
-    const cursor = await db.query(aql`
-        FOR p IN Computers
-            FILTER p.status == 'active'
-            
-            // Фильтр по софту/тегам если указаны
-            FILTER ${tagList.length} == 0 OR (
-                FOR t IN ${tagList} 
-                FILTER t IN p.software OR t IN p.specs.gpu OR t IN p.specs.cpu
-                RETURN t
-            ) != []
+    // Открываем транзакцию. 
+    const transaction = await db.beginTransaction({
+        read: ['Computers'],
+        write: ['Bookings']
+    });
 
-            // Проверка занятости
-            LET isOccupied = FIRST(
-                FOR b IN Bookings
-                FILTER b._to == p._id
-                FILTER b.status != 'cancelled'
-                FILTER b.start_at == ${interval.start}
-                RETURN b
-            )
-            FILTER !isOccupied
-            
-            LIMIT 1
-            RETURN p
-    `);
+    try {
+        // Ищем свободный ПК внутри транзакции
+        const cursor = await db.query(aql`
+            FOR p IN Computers
+                FILTER p.status == 'active'
+                
+                // Фильтр по софту/тегам
+                FILTER ${tagList.length} == 0 OR (
+                    FOR t IN ${tagList} 
+                    FILTER t IN p.software OR t IN p.specs.gpu OR t IN p.specs.cpu
+                    RETURN t
+                ) != []
 
-    const freePC = await cursor.next();
-    if (!freePC) return res.status(404).json({ error: "Нет свободных ПК по вашему запросу" });
+                // Проверка занятости (важно делать это внутри транзакции!)
+                LET isOccupied = FIRST(
+                    FOR b IN Bookings
+                    FILTER b._to == p._id
+                    FILTER b.status != 'cancelled'
+                    FILTER b.start_at == ${interval.start}
+                    RETURN b
+                )
+                FILTER !isOccupied
+                
+                LIMIT 1
+                RETURN p
+        `, {}, { transaction });
 
-    const now = new Date().toISOString();
-    const newBooking = {
-        _from: `Users/${userId}`,
-        _to: freePC._id,
-        start_at: interval.start,
-        end_at: interval.end,
-        status: 'reserved',
-        total_work_time_minutes: 0,
-        meta: { created_at: now },
-        history: [
-            {
-                old_status: null,
-                new_status: 'reserved',
-                changed_at: now,
-                changed_by: `Users/${userId}`
-            }
-        ]
-    };
+        const freePC = await cursor.next();
 
-    await db.query(aql`INSERT ${newBooking} INTO Bookings`);
-    res.status(201).json({ message: "Успешно!", pc_name: freePC.name });
+        if (!freePC) {
+            await transaction.abort();
+            return res.status(404).json({ error: "Нет свободных ПК по вашему запросу" });
+        }
+
+        const now = new Date().toISOString();
+        const fromId = `Users/${userId}`;
+        const toId = freePC._id;
+
+        const newBooking = {
+            _from: fromId,
+            _to: toId,
+            start_at: interval.start,
+            end_at: interval.end,
+            status: 'reserved',
+            total_work_time_minutes: 0,
+            meta: { created_at: now },
+            history: [
+                {
+                    old_status: null,
+                    new_status: 'reserved',
+                    changed_at: now,
+                    changed_by: fromId
+                }
+            ]
+        };
+
+        // Вставляем запись
+        await db.query(aql`
+            INSERT ${newBooking} INTO Bookings
+        `, {}, { transaction });
+
+        // Фиксируем транзакцию
+        await transaction.commit();
+
+        res.status(201).json({ 
+            message: "Успешно забронировано!", 
+            pc_name: freePC.name 
+        });
+
+    } catch (error) {
+        await transaction.abort();
+        throw error;
+    }
 });

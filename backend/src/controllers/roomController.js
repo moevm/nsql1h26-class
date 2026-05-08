@@ -208,45 +208,76 @@ export const createRoom = asyncHandler(async (req, res) => {
     }
 });
 
-export const updateRoom = asyncHandler(async (req, res) => { //here
+export const updateRoom = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { layout, ...roomData } = req.body; 
-    const roomsColl = db.collection('Rooms');
-    const pcsColl = db.collection('Computers');
 
-    await roomsColl.update(id, roomData);
+    // Открываем транзакцию
+    const transaction = await db.beginTransaction({
+        write: ['Rooms', 'Computers']
+    });
 
-    if (layout) {
-        const fullRoomId = id.startsWith('Rooms/') ? id : `Rooms/${id}`;
+    try {
+        const roomsColl = db.collection('Rooms');
+        const pcsColl = db.collection('Computers');
+
+        const fullRoomId = id.includes('/') ? id : `Rooms/${id}`;
+        const roomKey = id.split('/').pop();
+
+
+        await roomsColl.update(roomKey, roomData, { transaction });
+
+        if (layout) {
+
+            await db.query(aql`
+                FOR p IN Computers
+                FILTER p.room_id == ${fullRoomId} || p.room_id == ${id}
+                UPDATE p WITH { room_id: null, seat_index: null } IN Computers
+            `, {}, { transaction });
+
+            for (const item of layout) {
+                const pcKey = item.pc_id.split('/').pop();
+                await pcsColl.update(pcKey, {
+                    room_id: fullRoomId,
+                    seat_index: item.seat_index
+                }, { transaction });
+            }
+        }
+
+        await transaction.commit();
+        res.json({ message: "Аудитория и оборудование успешно обновлены" });
+
+    } catch (error) {
+        // откатываем всё
+        await transaction.abort();
+        throw error; // asyncHandler отправит ошибку
+    }
+});
+
+export const deleteRoom = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const transaction = await db.beginTransaction({
+        write: ['Rooms', 'Computers']
+    });
+
+    try {
+        const roomsColl = db.collection('Rooms');
+        const fullRoomId = id.includes('/') ? id : `Rooms/${id}`;
 
         await db.query(aql`
             FOR p IN Computers
             FILTER p.room_id == ${fullRoomId} || p.room_id == ${id}
             UPDATE p WITH { room_id: null, seat_index: null } IN Computers
-        `);
+        `, {}, { transaction });
 
-        for (const item of layout) {
-            const pcKey = item.pc_id.split('/').pop();
-            await pcsColl.update(pcKey, {
-                room_id: fullRoomId,
-                seat_index: item.seat_index
-            });
-        }
+        await roomsColl.remove(id, { transaction });
+
+        await transaction.commit();
+        res.json({ message: "Аудитория удалена" });
+
+    } catch (error) {
+        await transaction.abort();
+        throw error;
     }
-
-    res.json({ message: "Аудитория и оборудование обновлены" });
-
-});
-
-export const deleteRoom = asyncHandler(async (req, res) => { // here
-    const { id } = req.params;
-    await db.query(aql`
-        FOR p IN Computers
-        FILTER p.room_id == CONCAT("Rooms/", ${id}) || p.room_id == ${id}
-        UPDATE p WITH { room_id: null, seat_index: null } IN Computers
-    `);
-    const roomsColl = db.collection('Rooms');
-    await roomsColl.remove(id);
-    res.json({ message: "Аудитория удалена" });
-
 });

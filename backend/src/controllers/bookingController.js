@@ -1,6 +1,6 @@
 import db from '../config/db.js';
 import { aql } from 'arangojs';
-import asyncHandler from '../services/asyncHandler.js';
+import asyncHandler from '../utils/asyncHandler.js';
 
 const getPairInterval = (date, pair) => {
     const timings = {

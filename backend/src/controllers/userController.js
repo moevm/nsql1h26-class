@@ -1,7 +1,7 @@
 import db from '../config/db.js';
 import { aql } from 'arangojs';
 import bcrypt from 'bcryptjs';
-import asyncHandler from '../services/asyncHandler.js';
+import asyncHandler from '../utils/asyncHandler.js';
 
 export const getAdminUsers = asyncHandler(async (req, res) => {
     const { 

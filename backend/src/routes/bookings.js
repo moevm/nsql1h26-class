@@ -1,6 +1,6 @@
 import express from 'express';
 import { getUserBookings, createBooking, quickBook, cancelBooking } from '../controllers/bookingController.js';
-import { verifyToken } from '../middleware/auth.js'; 
+import { verifyToken } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 

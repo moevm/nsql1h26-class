@@ -10,7 +10,7 @@ import {
     assignPCToRoom,
     unassignPC
 } from '../controllers/roomController.js';
-import { verifyToken, isAdmin } from '../middleware/auth.js';
+import { verifyToken, isAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 /**
  * authService.js
- * Business logic for authentication.
+ * Бизнес логика для работы с аунтефикацией
  */
 
 import jwt from 'jsonwebtoken';

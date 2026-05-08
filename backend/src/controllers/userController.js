@@ -1,106 +1,86 @@
-import db from '../config/db.js';
-import { aql } from 'arangojs';
-import bcrypt from 'bcryptjs';
+/**
+ * controllers/userController.js
+ * Обработка запросов пользователей (admin only)
+ */
+
 import asyncHandler from '../utils/asyncHandler.js';
+import userService from '../services/userService.js';
 
-export const getAdminUsers = asyncHandler(async (req, res) => {
-    const { 
-        full_name = "", 
-        email = "", 
-        group_code = "", 
-        role = "", 
-        page = 1, 
-        limit = 8 
-    } = req.query;
+class UserController {
+    /**
+     * Method: getAdminUsers
+     * Получить список пользователей с фильтрами и пагинацией
+     */
+    getAdminUsers = asyncHandler(async (req, res) => {
+        const {
+            full_name = "",
+            email = "",
+            group_code = "",
+            role = "",
+            page = 1,
+            limit = 8
+        } = req.query;
 
-    const offset = (Number(page) - 1) * Number(limit);
-    const countLimit = Number(limit);
+        const result = await userService.getAll({
+            full_name,
+            email,
+            group_code,
+            role,
+            page: Number(page),
+            limit: Number(limit)
+        });
 
-    const cursor = await db.query(aql`
-        LET filtered = (
-            FOR u IN Users
-                FILTER ${full_name} == "" OR CONTAINS(LOWER(u.full_name), LOWER(${full_name}))
-                FILTER ${email} == "" OR CONTAINS(LOWER(u.email), LOWER(${email}))
-                FILTER ${group_code} == "" OR CONTAINS(LOWER(u.group_code || ""), LOWER(${group_code}))
-                
-                FILTER ${role} == "" OR 
-                        (${role} == "admin" ? u.is_admin == true : u.is_admin == false)
-                
-                SORT u.full_name ASC
-                RETURN {
-                    id: u._key,
-                    full_name: u.full_name,
-                    email: u.email,
-                    group_code: u.group_code,
-                    is_admin: u.is_admin,
-                    last_login: u.meta.last_login
-                }
-        )
-        
-        RETURN {
-            total: LENGTH(filtered),
-            data: SLICE(filtered, ${offset}, ${countLimit})
-        }
-    `);
+        res.status(200).json(result);
+    });
 
-    const result = await cursor.next();
-    res.json(result || { total: 0, data: [] });
+    /**
+     * Method: createUser
+     * Создать нового пользователя
+     */
+    createUser = asyncHandler(async (req, res) => {
+        const newUser = await userService.create(req.body);
 
-});
+        res.status(201).json({
+            message: "Пользователь успешно создан",
+            user: newUser
+        });
+    });
 
-export const adminCreateUser = asyncHandler(async (req, res) => {
-    const { full_name, email, password, is_admin, group_code } = req.body;
+    /**
+     * Method: getUserById
+     * Получить пользователя по ID
+     */
+    getUserById = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const user = await userService.getById(id);
 
-    const checkCursor = await db.query(aql`
-        FOR u IN Users 
-        FILTER u.email == ${email} 
-        RETURN u
-    `);
-    
-    const existingUsers = await checkCursor.all();
-    if (existingUsers.length > 0) {
-        return res.status(400).json({ error: "Email уже занят" });
-    }
+        res.status(200).json(user);
+    });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
-    const newUser = {
-        full_name,
-        email,
-        password: hashedPassword,
-        group_code: group_code || "0000",
-        is_admin: Boolean(is_admin),
-        meta: {
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            last_login: null
-        }
-    };
+    /**
+     * Method: updateUser
+     * Обновить пользователя
+     */
+    updateUser = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const updated = await userService.update(id, req.body);
 
-    const result = await db.query(aql`INSERT ${newUser} INTO Users RETURN NEW`);
-    const user = await result.next();
-    delete user.password;
-    res.status(201).json(user);
+        res.status(200).json({
+            message: "Пользователь успешно обновлён",
+            user: updated
+        });
+    });
 
-});
+    /**
+     * Method: deleteUser
+     * Удалить пользователя
+     */
+    deleteUser = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        await userService.delete(id);
 
-export const getUserById = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const cursor = await db.query(aql`
-        FOR u IN Users 
-        FILTER u._key == ${id} 
-        RETURN {
-            id: u._key,
-            full_name: u.full_name,
-            email: u.email,
-            group_code: u.group_code,
-            is_admin: u.is_admin,
-            meta: u.meta
-        }
-    `);
-    
-    const user = await cursor.next();
-    if (!user) return res.status(404).json({ error: "Пользователь не найден" });
-    res.json(user);
+        res.status(204).send();
+    });
+}
 
-});
+export default new UserController();

@@ -42,23 +42,20 @@ const validateDatePair = (date, pair) => {
     return { targetDate: date, targetPair: p };
 };
 
-/**
- * Нормализует плоские grid_x/grid_y во вложенный объект grid.
- */
-const normalizeGrid = (grid_x, grid_y) => ({
-    rows: Number(grid_y) || 1,
-    cols: Number(grid_x) || 1
-});
-
-const validateGrid = (grid_x, grid_y) => {
-    const rows = Number(grid_y);
-    const cols = Number(grid_x);
-    if (!Number.isInteger(rows) || rows < 1 || !Number.isInteger(cols) || cols < 1) {
-        const e = new Error("grid_x и grid_y должны быть положительными целыми числами");
+const validateGrid = (grid) => {
+    if (!grid || typeof grid !== 'object' || grid.rows === undefined || grid.cols === undefined) {
+        const e = new Error("Поле grid с rows и cols обязательно");
         e.status = 400;
         throw e;
     }
-    return normalizeGrid(grid_x, grid_y);
+    const rows = Number(grid.rows);
+    const cols = Number(grid.cols);
+    if (!Number.isInteger(rows) || rows < 1 || !Number.isInteger(cols) || cols < 1) {
+        const e = new Error("grid.rows и grid.cols должны быть положительными целыми числами");
+        e.status = 400;
+        throw e;
+    }
+    return { rows, cols };
 };
 
 
@@ -243,7 +240,7 @@ class RoomService {
             throw e;
         }
 
-        const grid = validateGrid(grid_x, grid_y);
+        const grid = validateGrid(roomData.grid);
 
         if (tags !== undefined && !Array.isArray(tags)) {
             const e = new Error("tags должен быть массивом строк");
@@ -319,8 +316,8 @@ class RoomService {
             updateData.tags = tags;
         }
 
-        if (grid_x !== undefined || grid_y !== undefined) {
-            updateData.grid = validateGrid(grid_x, grid_y);
+        if (roomData.grid !== undefined) {
+            updateData.grid = validateGrid(roomData.grid);
         }
 
         if (layout) {

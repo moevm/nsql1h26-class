@@ -67,8 +67,7 @@ class RoomDao {
                     name: r.name,
                     description: r.description,
                     tags: r.tags || [],
-                    grid_x: r.grid.cols || null,
-                    grid_y: r.grid.rows || null,
+                    grid: r.grid || { rows: null, cols: null },
                     total_seats: LENGTH(room_pcs),
                     available_seats: LENGTH(room_pcs) - LENGTH(active_bookings) - LENGTH(broken_pcs)
                 }
@@ -110,7 +109,7 @@ class RoomDao {
     async findAvailablePCs() {
         const cursor = await db.query(aql`
             FOR p IN Computers
-            FILTER p.room_id == null || p.room_id == ""
+            FILTER (p.room_id == null || p.room_id == "") && p.status == "active"
             RETURN p
         `);
         return await cursor.all();

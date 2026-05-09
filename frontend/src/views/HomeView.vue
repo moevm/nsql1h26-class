@@ -13,10 +13,10 @@ const itemsPerPage = 2
 const selectedDate = ref(new Date().toISOString().substr(0, 10))
 const selectedPair = ref(1)
 
-const quickData = ref({ 
-  date: new Date().toISOString().substr(0, 10), 
-  pair: 1, 
-  tags: '' 
+const quickData = ref({
+  date: new Date().toISOString().substr(0, 10),
+  pair: 1,
+  tags: ''
 })
 
 const isModalOpen = ref(false)
@@ -74,9 +74,9 @@ const formatTime = (isoString) => {
 }
 
 
-watch([selectedDate, selectedPair], () => { 
-  currentPage.value = 1; 
-  fetchRooms(); 
+watch([selectedDate, selectedPair], () => {
+  currentPage.value = 1;
+  fetchRooms();
 })
 
 const openBooking = async (room) => {
@@ -87,6 +87,9 @@ const openBooking = async (room) => {
   })
     const data = await res.json()
     selectedRoom.value = data.room
+    if (!selectedRoom.value.grid) {
+      selectedRoom.value.grid = { rows: 1, cols: 1 }
+    }
     selectedRoomComputers.value = data.pcs
     selectedPC.value = null
     isModalOpen.value = true
@@ -99,33 +102,33 @@ const selectSeat = (pc) => {
 
 const confirmBooking = async () => {
   if (!selectedPC.value) return
-  
+
   const pcId = selectedPC.value._id || selectedPC.value.id || selectedPC.value._key;
 
   try {
     const res = await fetch('http://localhost:3000/api/bookings', {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${authStore.token}` 
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
       },
-      body: JSON.stringify({ 
-        pc_id: pcId, 
-        date: selectedDate.value, 
+      body: JSON.stringify({
+        pc_id: pcId,
+        date: selectedDate.value,
         pair: Number(selectedPair.value)
       })
     })
-    
+
     if (res.ok) {
       isModalOpen.value = false
-      await fetchAll() 
+      await fetchAll()
       alert('Успешно забронировано!')
     } else {
       const errorData = await res.json()
       alert('Ошибка: ' + errorData.error)
     }
-  } catch (e) { 
-    console.error(e) 
+  } catch (e) {
+    console.error(e)
   }
 }
 
@@ -162,11 +165,11 @@ const gridSeats = computed(() => {
 
   const { rows, cols } = selectedRoom.value.grid
   const totalSlots = rows * cols
-  
+
   const grid = []
   for (let i = 1; i <= totalSlots; i++) {
     const pc = selectedRoomComputers.value.find(p => p.seat_index === i)
-    grid.push(pc || { seat_index: i, isPlaceholder: true }) 
+    grid.push(pc || { seat_index: i, isPlaceholder: true })
   }
   return grid
 })
@@ -176,7 +179,7 @@ onMounted(fetchAll)
 
 <template>
   <div class="home-container" v-if="!loading">
-    
+
     <div class="main-column">
       <!-- ФИЛЬТРЫ -->
       <section class="filters-bar">
@@ -220,8 +223,8 @@ onMounted(fetchAll)
 
       <!-- ПАГИНАЦИЯ -->
       <div class="pagination" v-if="totalPages > 1">
-        <button 
-          v-for="p in totalPages" :key="p" 
+        <button
+          v-for="p in totalPages" :key="p"
           :class="['page-dot', { active: currentPage === p }]"
           @click="currentPage = p"
         >
@@ -265,7 +268,7 @@ onMounted(fetchAll)
         <div v-if="topBookings.length === 0" class="empty-state">
           У вас пока нет активных бронирований.
         </div>
-        
+
         <div v-for="b in topBookings" :key="b.booking_id" class="booking-ticket">
           <div class="ticket-content">
             <div class="b-header">
@@ -322,7 +325,7 @@ onMounted(fetchAll)
       </div>
     </div>
   </div>
-  
+
   <div v-else class="loader-container">
     <div class="spinner"></div>
     <p>Загрузка данных...</p>

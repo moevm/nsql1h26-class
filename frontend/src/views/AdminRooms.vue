@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/auth'
 const authStore = useAuthStore()
 const rooms = ref([])
 const availableComputers = ref([])
+const unassignedPool = ref([])
 const totalRooms = ref(0)
 const loading = ref(true)
 
@@ -37,8 +38,21 @@ watch(filters, () => {
 }, { deep: true })
 
 const filteredAvailableComputers = computed(() => {
-  const assignedIds = Object.values(roomLayout.value).map(pc => pc._key || pc.id)
-  return availableComputers.value.filter(pc => !assignedIds.includes(pc._key || pc.id))
+  const assignedIds = new Set(
+    Object.values(roomLayout.value).map(pc => pc._key || pc.id)
+  )
+
+  const all = [...availableComputers.value, ...unassignedPool.value]
+
+  const map = new Map()
+  for (const pc of all) {
+    const id = pc._key || pc.id
+    if (!assignedIds.has(id)) {
+      map.set(id, pc)
+    }
+  }
+
+  return Array.from(map.values())
 })
 
 const fetchRooms = async () => {
@@ -52,10 +66,10 @@ const fetchRooms = async () => {
       limit: filters.value.limit
     }).toString();
 
-    const res = await fetch(`http://localhost:3000/api/rooms/admin/list?${params}`, {
+    const res = await fetch(`http://localhost:3000/api/admin/rooms/list?${params}`, {
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
-    
+
     if (res.ok) {
       const result = await res.json()
       rooms.value = result.data || []
@@ -83,6 +97,7 @@ const fetchAvailableComputers = async () => {
 
 const openCreateModal = () => {
   isEditMode.value = false
+  unassignedPool.value = []
   currentRoom.value = {
     name: '',
     description: '',
@@ -96,9 +111,10 @@ const openCreateModal = () => {
 
 const openEditModal = async (room) => {
   isEditMode.value = true
+  unassignedPool.value = []
   currentRoom.value = JSON.parse(JSON.stringify(room))
   tagsInput.value = room.tags ? room.tags.join(', ') : ''
-  
+
   try {
     const res = await fetch(`http://localhost:3000/api/rooms/${room._key}`, {
       headers: { 'Authorization': `Bearer ${authStore.token}` }
@@ -137,6 +153,10 @@ const assignPC = (pc) => {
 
 const unassignPC = () => {
   const key = `${activeCell.value.r}-${activeCell.value.c}`
+  const pc = roomLayout.value[key]
+  if (pc) {
+    unassignedPool.value.push(pc)
+  }
   const newLayout = { ...roomLayout.value }
   delete newLayout[key]
   roomLayout.value = newLayout
@@ -156,14 +176,14 @@ const saveRoom = async () => {
     })
   }
 
-  const url = isEditMode.value 
-    ? `http://localhost:3000/api/rooms/admin/update/${currentRoom.value._key}`
-    : `http://localhost:3000/api/rooms/admin/create`
+  const url = isEditMode.value
+    ? `http://localhost:3000/api/admin/rooms/update/${currentRoom.value._key}`
+    : `http://localhost:3000/api/admin/rooms/create`
 
   try {
     const res = await fetch(url, {
       method: isEditMode.value ? 'PUT' : 'POST',
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${authStore.token}`,
         'Content-Type': 'application/json'
       },
@@ -186,7 +206,7 @@ const saveRoom = async () => {
 const deleteRoom = async (id) => {
   if (!confirm('Вы уверены, что хотите удалить аудиторию? Все компьютеры будут отвязаны.')) return
   try {
-    const res = await fetch(`http://localhost:3000/api/rooms/admin/delete/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/admin/rooms/delete/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
@@ -234,7 +254,7 @@ onMounted(() => {
 
     <!-- Сетка комнат -->
     <div v-if="loading" class="loading-state">Загрузка данных...</div>
-    
+
     <div v-else class="rooms-grid">
       <div v-for="room in rooms" :key="room._key" class="room-card">
         <div class="card-content">
@@ -252,7 +272,7 @@ onMounted(() => {
           <button class="btn-delete" @click="deleteRoom(room._key)">Удалить</button>
         </div>
       </div>
-      
+
       <div v-if="rooms.length === 0" class="empty-rooms">
         Аудитории не найдены. Попробуйте изменить фильтры.
       </div>
@@ -264,7 +284,7 @@ onMounted(() => {
         <!-- Левая панель настроек -->
         <div class="settings-sidebar">
           <h2>{{ isEditMode ? 'Редактирование' : 'Новая аудитория' }}</h2>
-          
+
           <div class="form-group">
             <label>Название аудитории</label>
             <input v-model="currentRoom.name" placeholder="Напр: 404 Кванториум" />
@@ -304,11 +324,14 @@ onMounted(() => {
             gridTemplateColumns: `repeat(${currentRoom.grid.cols}, 1fr)`
           }">
             <template v-for="r in currentRoom.grid.rows" :key="'row-'+r">
-              <div 
-                v-for="c in currentRoom.grid.cols" 
+              <div
+                v-for="c in currentRoom.grid.cols"
                 :key="'col-'+c"
                 class="seat-cell"
-                :class="{ 'has-pc': roomLayout[`${r-1}-${c-1}`] }"
+                :class="{
+                  'has-pc': roomLayout[`${r-1}-${c-1}`],
+                  'pc-broken': roomLayout[`${r-1}-${c-1}`]?.status && roomLayout[`${r-1}-${c-1}`].status !== 'active'
+                }"
                 @click="handleCellClick(r-1, c-1)"
               >
                 <span class="seat-index">{{ (r-1) * currentRoom.grid.cols + c }}</span>
@@ -350,19 +373,20 @@ onMounted(() => {
         <div v-else class="available-selection">
           <p class="section-label">Доступные устройства:</p>
           <div class="pc-items-list">
-            <div 
-              v-for="pc in filteredAvailableComputers" 
-              :key="pc._key" 
+            <div
+              v-for="pc in filteredAvailableComputers"
+              :key="pc._key"
               class="pc-list-item"
               @click="assignPC(pc)"
             >
               <div class="info">
                 <strong>{{ pc.name || pc._key }}</strong>
                 <span class="gpu-spec">{{ pc.specs?.gpu || 'No GPU' }}</span>
+                <span v-if="pc.status !== 'active'" :class="['status-badge', pc.status]">{{ pc.status }}</span>
               </div>
               <div class="plus">+</div>
             </div>
-            
+
             <div v-if="filteredAvailableComputers.length === 0" class="no-data">
               Нет свободных ПК в базе
             </div>

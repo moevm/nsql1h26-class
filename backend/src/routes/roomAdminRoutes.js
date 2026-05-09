@@ -13,7 +13,6 @@ router.post('/create', roomController.createRoom);
 router.put('/update/:id', roomController.updateRoom);
 router.delete('/delete/:id', roomController.deleteRoom);
 
-router.get('/available-pcs', roomController.getAvailablePCs);
 router.post('/assign-pc', roomController.assignPCToRoom);
 router.delete('/unassign-pc/:pc_key', roomController.unassignPC);
 

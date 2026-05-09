@@ -232,6 +232,25 @@
           background: rgba(v.$accent, 0.05);
         }
 
+        &.pc-broken {
+          border-color: v.$danger;
+          background: rgba(v.$danger, 0.05);
+
+          &::after {
+            content: '🔧';
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            font-size: 0.75rem;
+            opacity: 0.8;
+          }
+
+          .pc-name {
+            color: v.$danger;
+            font-size: 0.75rem;
+          }
+        }
+
         .seat-index { position: absolute; top: 8px; left: 8px; font-size: 0.7rem; color: v.$text-muted; font-weight: 800; }
         .pc-name { font-size: 0.8rem; font-weight: 800; color: v.$accent; text-align: center; padding: 0 5px; overflow: hidden; text-overflow: ellipsis; }
       }
@@ -285,6 +304,22 @@
       &:hover { border-color: v.$accent; }
       .info { display: flex; flex-direction: column; strong { font-size: 0.9rem; } .gpu-spec { font-size: 0.7rem; color: v.$text-muted; } }
       .plus { color: v.$accent; font-weight: 900; }
+      .status-badge {
+        font-size: 0.6rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: 800;
+        text-transform: uppercase;
+
+        &.broken {
+          background: rgba(v.$danger, 0.15);
+          color: v.$danger;
+        }
+        &.maintenance {
+          background: rgba(v.$warning, 0.15);
+          color: v.$warning;
+        }
+      }
     }
   }
 }

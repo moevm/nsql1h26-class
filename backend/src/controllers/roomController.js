@@ -57,7 +57,8 @@ class RoomController {
      * Привязать ПК к аудитории.
      */
     assignPCToRoom = asyncHandler(async (req, res) => {
-        const { pc_key, room_id, seat_index } = req.body;
+        const { pc_key } = req.params;
+        const { room_id, seat_index } = req.body;
         const result = await roomService.assignPC(pc_key, room_id, seat_index);
         res.json(result);
     });

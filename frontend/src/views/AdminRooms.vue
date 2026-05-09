@@ -66,7 +66,7 @@ const fetchRooms = async () => {
       limit: filters.value.limit
     }).toString();
 
-    const res = await fetch(`http://localhost:3000/api/admin/rooms/list?${params}`, {
+    const res = await fetch(`http://localhost:3000/api/admin/rooms?${params}`, {
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
 
@@ -84,7 +84,7 @@ const fetchRooms = async () => {
 
 const fetchAvailableComputers = async () => {
   try {
-    const res = await fetch(`http://localhost:3000/api/rooms/available-pcs`, {
+    const res = await fetch(`http://localhost:3000/api/rooms/pcs/available`, {
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
     if (res.ok) {
@@ -164,8 +164,9 @@ const unassignPC = () => {
 }
 
 const saveRoom = async () => {
+  const { _key, ...roomData } = currentRoom.value
   const payload = {
-    ...currentRoom.value,
+    ...roomData,
     tags: tagsInput.value.split(',').map(t => t.trim()).filter(t => t),
     layout: Object.entries(roomLayout.value).map(([coord, pc]) => {
       const [r, c] = coord.split('-').map(Number)
@@ -177,8 +178,8 @@ const saveRoom = async () => {
   }
 
   const url = isEditMode.value
-    ? `http://localhost:3000/api/admin/rooms/update/${currentRoom.value._key}`
-    : `http://localhost:3000/api/admin/rooms/create`
+    ? `http://localhost:3000/api/admin/rooms/${currentRoom.value._key}`
+    : `http://localhost:3000/api/admin/rooms`
 
   try {
     const res = await fetch(url, {
@@ -206,7 +207,7 @@ const saveRoom = async () => {
 const deleteRoom = async (id) => {
   if (!confirm('Вы уверены, что хотите удалить аудиторию? Все компьютеры будут отвязаны.')) return
   try {
-    const res = await fetch(`http://localhost:3000/api/admin/rooms/delete/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/admin/rooms/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })

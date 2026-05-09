@@ -8,12 +8,13 @@ import roomController from '../controllers/roomController.js';
 
 const router = Router();
 
-router.get('/list', roomController.getAdminRooms);
-router.post('/create', roomController.createRoom);
-router.put('/update/:id', roomController.updateRoom);
-router.delete('/delete/:id', roomController.deleteRoom);
+router.patch('/pcs/:pc_key', roomController.assignPCToRoom);
+router.delete('/pcs/:pc_key', roomController.unassignPC);
 
-router.post('/assign-pc', roomController.assignPCToRoom);
-router.delete('/unassign-pc/:pc_key', roomController.unassignPC);
+router.get('/', roomController.getAdminRooms);
+router.post('/', roomController.createRoom);
+router.put('/:id', roomController.updateRoom);
+router.delete('/:id', roomController.deleteRoom);
+
 
 export default router;

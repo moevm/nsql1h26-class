@@ -226,15 +226,15 @@ class RoomService {
      * Создать аудиторию + привязать ПК по layout.
      */
     async create(roomData, layout) {
-        const { name, description, tags, grid_x, grid_y } = roomData;
+        const { name, description, tags } = roomData;
 
         // --- Валидация ---
-        if (!name || typeof name !== 'string' || name.trim().length === 0) {
+        if (!name || name.trim().length === 0) {
             const e = new Error("Название аудитории обязательно");
             e.status = 400;
             throw e;
         }
-        if (grid_x === undefined || grid_y === undefined) {
+        if (!roomData.grid || roomData.grid.rows === undefined || roomData.grid.cols === undefined) {
             const e = new Error("grid_x и grid_y обязательны при создании");
             e.status = 400;
             throw e;
@@ -290,10 +290,7 @@ class RoomService {
             throw e;
         }
 
-        // Деструктуризация — IDE знает про все переменные
-        const { name, description, tags, grid_x, grid_y } = roomData;
-
-        // Собираем updateData явно (как в userService)
+        const { name, description, tags } = roomData;
         const updateData = {};
 
         if (name !== undefined) {

@@ -3,9 +3,11 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
-
-import roomRoutes from './routes/rooms.js';
+import roomPublicRoutes from './routes/roomPublicRoutes.js';
 import bookingRoutes from './routes/bookings.js';
+
+// Должен быть внутри dminRoutes, но пока тут для отладки в качестве алиаса до тех пор пока не обновят фронт
+import roomAdminRoutes from "./routes/roomAdminRoutes.js";
 
 dotenv.config();
 
@@ -20,10 +22,14 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
-
-app.use('/api/rooms', roomRoutes);
+app.use('/api/rooms', roomPublicRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/admin/rooms', roomRoutes);
+
+
+// Должен быть внутри dminRoutes, но пока тут для отладки в качестве алиаса до тех пор пока не обновят фронт
+app.use('/api/rooms/admin', roomAdminRoutes);
+
+
 
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500;

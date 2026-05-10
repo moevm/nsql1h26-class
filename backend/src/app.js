@@ -1,10 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { verifyToken } from './middlewares/authMiddleware.js';
+
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import roomPublicRoutes from './routes/roomPublicRoutes.js';
-import bookingRoutes from './routes/bookings.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 
 
 dotenv.config();
@@ -19,7 +21,10 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+
 app.use('/api/admin', adminRoutes);
+
+app.use(verifyToken);
 app.use('/api/rooms', roomPublicRoutes);
 app.use('/api/bookings', bookingRoutes);
 

@@ -33,7 +33,6 @@ const pairs = [
   { id: 7, time: '19:00 - 20:30' }
 ]
 
-
 const fetchAll = async () => {
   loading.value = true
   await Promise.all([fetchRooms(), fetchMyBookings()])
@@ -56,7 +55,7 @@ const fetchRooms = async () => {
 
 const fetchMyBookings = async () => {
   try {
-    const res = await fetch('http://localhost:3000/api/bookings/my', {
+    const res = await fetch('http://localhost:3000/api/bookings', {
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
     if (res.ok) {
@@ -65,7 +64,6 @@ const fetchMyBookings = async () => {
     }
   } catch (e) { console.error("Ошибка загрузки броней:", e) }
 }
-
 
 const topBookings = computed(() => myBookings.value.slice(0, 2))
 
@@ -76,7 +74,6 @@ const formatTime = (isoString) => {
   if (!isoString) return ''
   return isoString.split('T')[1]?.slice(0, 5) || ''
 }
-
 
 watch([selectedDate, selectedPair], () => {
   roomsPage.value = 1
@@ -89,8 +86,8 @@ const openBooking = async (room) => {
   try {
     const roomId = room._key || room.id
     const res = await fetch(`http://localhost:3000/api/rooms/${roomId}?date=${selectedDate.value}&pair=${selectedPair.value}`, {
-    headers: { 'Authorization': `Bearer ${authStore.token}` }
-  })
+      headers: { 'Authorization': `Bearer ${authStore.token}` }
+    })
     const data = await res.json()
     selectedRoom.value = data.room
     if (!selectedRoom.value.grid) {
@@ -102,6 +99,12 @@ const openBooking = async (room) => {
   } catch (e) { console.error(e) }
 }
 
+const isMyBooking = (pc) => {
+  if (!pc.booking) return false
+  const myId = authStore.user?._key || authStore.user?.id
+  return pc.booking.user_id === `Users/${myId}` || pc.booking.user_id === myId
+}
+
 const selectSeat = (pc) => {
   if (pc.status === 'active') selectedPC.value = pc
 }
@@ -109,7 +112,7 @@ const selectSeat = (pc) => {
 const confirmBooking = async () => {
   if (!selectedPC.value) return
 
-  const pcId = selectedPC.value._id || selectedPC.value.id || selectedPC.value._key;
+  const pcId = selectedPC.value._id || selectedPC.value.id || selectedPC.value._key
 
   try {
     const res = await fetch('http://localhost:3000/api/bookings', {
@@ -141,8 +144,8 @@ const confirmBooking = async () => {
 const cancelBooking = async (id) => {
   if (!confirm('Вы уверены, что хотите отменить бронь?')) return
   try {
-    const res = await fetch(`http://localhost:3000/api/bookings/${id}/cancel`, {
-      method: 'PATCH',
+    const res = await fetch(`http://localhost:3000/api/bookings/${id}`, {
+      method: 'DELETE',
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
     if (res.ok) await fetchAll()
@@ -175,10 +178,19 @@ const gridSeats = computed(() => {
   const grid = []
   for (let i = 1; i <= totalSlots; i++) {
     const pc = selectedRoomComputers.value.find(p => p.seat_index === i)
-    grid.push(pc || { seat_index: i, isPlaceholder: true })
+    grid.push(pc || { seat_index: i, isPlaceholder: true, status: 'empty' })
   }
   return grid
 })
+
+const getSeatTitle = (pc) => {
+  if (pc.isPlaceholder) return 'Пустое место'
+  if (isMyBooking(pc)) return `ПК №${pc.seat_index} — забронировано вами`
+  if (pc.status === 'occupied') return `ПК №${pc.seat_index} — уже забронировано другим`
+  if (pc.status === 'maintenance') return 'На техническом обслуживании'
+  if (pc.status === 'inactive') return 'Неактивно'
+  return `ПК №${pc.seat_index} — свободно, кликните для бронирования`
+}
 
 onMounted(fetchAll)
 </script>
@@ -213,7 +225,7 @@ onMounted(fetchAll)
             </div>
           </div>
           <div class="room-desc-container">
-             <p class="desc">{{ room.description }}</p>
+            <p class="desc">{{ room.description }}</p>
           </div>
           <div class="room-footer">
             <div class="status-info">
@@ -307,13 +319,25 @@ onMounted(fetchAll)
         <div v-else class="select-prompt">Выберите ПК на схеме</div>
 
         <div class="seats-layout">
-          <!-- <pre>{{ selectedRoomComputers }}</pre> -->
-          <div v-for="pc in gridSeats" :key="pc.id"
-            :class="['seat-unit', { selected: selectedPC?.id === pc.id, occupied: pc.status !== 'active' }]"
-            @click="selectSeat(pc)"
+          <div
+            v-for="pc in gridSeats"
+            :key="pc.id || pc.seat_index"
+            class="seat-unit"
+            :class="{
+              selected: selectedPC?.id === pc.id,
+              'my-booking': isMyBooking(pc),
+              'occupied-other': pc.status === 'occupied' && !isMyBooking(pc),
+              'pc-broken': pc.status === 'maintenance' || pc.status === 'inactive',
+              empty: pc.status === 'empty'
+            }"
+            :title="getSeatTitle(pc)"
+            @click="pc.status === 'active' && selectSeat(pc)"
           >
             <div class="monitor"></div>
             <span class="num">{{ pc.seat_index }}</span>
+            <span v-if="isMyBooking(pc)" class="seat-status mine">Ваше</span>
+            <span v-else-if="pc.status === 'occupied'" class="seat-status">Занято</span>
+            <span v-else-if="pc.status === 'maintenance'" class="seat-status">Ремонт</span>
           </div>
         </div>
 

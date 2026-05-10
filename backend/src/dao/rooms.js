@@ -93,16 +93,17 @@ class RoomDao {
             LET pcs = (
                 FOR p IN Computers
                 FILTER p.room_id == room._id || p.room_id == room._key || p.room_id == CONCAT("Rooms/", ${id})
-                LET has_booking = FIRST(
+                LET booking = FIRST(
                     FOR b IN Bookings
                     FILTER b._to == p._id
-                    FILTER b.status IN ['active', 'reserved', 'finished']
+                    FILTER b.status IN ['active', 'reserved']
                     FILTER b.start_at == ${startTime}
-                    RETURN b
+                    RETURN { user_id: b._from, status: b.status }
                 )
                 RETURN MERGE(p, { 
-                    status: has_booking ? "no" : (p.status || "active"),
-                    id: p._key 
+                    id: p._key,
+                    status: booking ? "occupied" : (p.status || "active"),
+                    booking: booking
                 })
             )
             RETURN { room, pcs }

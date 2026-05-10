@@ -215,17 +215,78 @@
 
 .seats-layout {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 40px 0;
+
   .seat-unit {
     background: v.$bg-main; border: 2px solid v.$border-color; border-radius: 20px;
     height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center;
     cursor: pointer; transition: v.$transition;
+    position: relative;
+
     .monitor { width: 35px; height: 22px; border: 3px solid #444; border-radius: 4px; margin-bottom: 10px; }
     .num { font-weight: 900; font-family: v.$font-mono; font-size: 0.9rem; }
+
     &.selected {
       border-color: v.$accent; background: rgba(v.$accent, 0.1);
       .monitor { border-color: v.$accent; background: v.$accent; }
     }
-    &.occupied { opacity: 0.15; cursor: not-allowed; filter: grayscale(1); }
+
+    &.empty {
+      opacity: 0.3;
+      cursor: default;
+      .monitor { border-color: #333; background: transparent; }
+      .num { color: #555; }
+    }
+
+    &.my-booking {
+      border-color: v.$success;
+      background: rgba(v.$success, 0.08);
+      cursor: default;
+
+      .monitor { border-color: v.$success; }
+      .num { color: v.$success; }
+
+      &:hover {
+        border-color: v.$success;
+        background: rgba(v.$success, 0.12);
+      }
+    }
+
+    &.occupied-other {
+      border-color: v.$danger;
+      background: rgba(v.$danger, 0.05);
+      cursor: not-allowed;
+      opacity: 0.55;
+
+      .monitor { border-color: #661111; background: #220000; }
+      .num { color: v.$danger; }
+
+      &:hover {
+        border-color: v.$danger;
+        background: rgba(v.$danger, 0.08);
+      }
+    }
+
+    &.pc-broken {
+      border-color: #444;
+      background: rgba(0,0,0,0.15);
+      cursor: not-allowed;
+      opacity: 0.25;
+
+      .monitor { border-color: #333; background: transparent; }
+      .num { color: #555; }
+    }
+
+    .seat-status {
+      position: absolute;
+      bottom: 6px;
+      font-size: 0.55rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      &.mine { color: v.$success; }
+      &:not(.mine) { color: v.$danger; }
+    }
   }
 }
 

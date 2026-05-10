@@ -84,8 +84,8 @@ const cancelBooking = async (bookingId) => {
   if (!confirm('Вы уверены, что хотите отменить это бронирование?')) return
 
   try {
-    const res = await fetch(`http://localhost:3000/api/bookings/${bookingId}/cancel`, {
-      method: 'PATCH',
+    const res = await fetch(`http://localhost:3000/api/bookings/${bookingId}`, {
+      method: 'DELETE',
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
 

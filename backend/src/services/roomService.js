@@ -7,55 +7,14 @@ import roomDao from '../dao/rooms.js';
 import equipmentDao from '../dao/equipments.js';
 import getPairInterval from '../utils/pairInterval.js';
 import withTransaction from '../utils/withTransaction.js';
-
-
-/**
- * Функции для валидации
- */
-
-const extractKey = (id) => id.includes('/') ? id.split('/').pop() : id;
-
-const toFullId = (id, collection = 'Rooms') =>
-    id.startsWith(`${collection}/`) ? id : `${collection}/${id}`;
-
-const assertStringId = (id, name = "ID") => {
-    if (!id) {
-        const e = new Error(`${name} обязателен`);
-        e.status = 400;
-        throw e;
-    }
-};
-
-const validateDatePair = (date, pair) => {
-    if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-        const e = new Error("Дата обязательна и должна быть в формате YYYY-MM-DD");
-        e.status = 400;
-        throw e;
-    }
-    const p = Number(pair);
-    if (!Number.isInteger(p) || p < 1 || p > 7) {
-        const e = new Error("Номер пары должен быть целым числом от 1 до 7");
-        e.status = 400;
-        throw e;
-    }
-    return { targetDate: date, targetPair: p };
-};
-
-const validateGrid = (grid) => {
-    if (!grid || typeof grid !== 'object' || grid.rows === undefined || grid.cols === undefined) {
-        const e = new Error("Поле grid с rows и cols обязательно");
-        e.status = 400;
-        throw e;
-    }
-    const rows = Number(grid.rows);
-    const cols = Number(grid.cols);
-    if (!Number.isInteger(rows) || rows < 1 || !Number.isInteger(cols) || cols < 1) {
-        const e = new Error("grid.rows и grid.cols должны быть положительными целыми числами");
-        e.status = 400;
-        throw e;
-    }
-    return { rows, cols };
-};
+import {
+    extractKey,
+    toFullId,
+    assertStringId,
+    validateDatePair,
+    validateGrid,
+    validatePagination
+} from '../utils/validators.js';
 
 
 const validateLayout = async (layout, checkExists = true) => {
@@ -87,26 +46,6 @@ const validateLayout = async (layout, checkExists = true) => {
     }
 };
 
-const validatePagination = (page, limit) => {
-    const p = Number(page);
-    const l = Number(limit);
-
-    if (!Number.isInteger(p) || p < 1) {
-        const error = new Error("page должен быть положительным целым числом");
-        error.status = 400;
-        throw error;
-    }
-
-    if (!Number.isInteger(l) || l < 1 || l > 100) {
-        const error = new Error("limit должен быть от 1 до 100");
-        error.status = 400;
-        throw error;
-    }
-
-    return { page: p, limit: l };
-};
-
-
 class RoomService {
 
     /**
@@ -130,16 +69,16 @@ class RoomService {
      */
     async getAllPublic(filters) {
         const { date, pair, page = 1, limit = 8 } = filters;
-        const { targetDate, targetPair } = validateDatePair(
-            date || new Date().toISOString().slice(0, 10),
-            pair || 1
-        );
+
+        const targetDate = date || new Date().toISOString().slice(0, 10);
+        const targetPair = pair || 1;
+        validateDatePair(targetDate, targetPair);
 
         const pagination = validatePagination(page, limit);
 
         return await roomDao.findAllPublic({
-            date: targetDate,
-            pair: targetPair,
+            targetDate,
+            targetPair,
             page: pagination.page,
             limit: pagination.limit
         });
@@ -153,15 +92,16 @@ class RoomService {
 
         assertStringId(id, "ID аудитории");
 
-        const { targetDate, targetPair } = validateDatePair(
-            date || new Date().toISOString().slice(0, 10),
-            pair || 1
-        );
+        const targetDate = date || new Date().toISOString().slice(0, 10);
+        const targetPair = pair || 1;
+        validateDatePair(targetDate, targetPair);
 
         const interval = getPairInterval(targetDate, targetPair);
         const result = await roomDao.findById(id, interval.start);
 
-        if (!result || !result.room) {
+        const { room } = result || {};
+
+        if (!room) {
             const error = new Error("Аудитория не найдена");
             error.status = 404;
             throw error;

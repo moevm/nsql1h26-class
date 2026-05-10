@@ -5,6 +5,7 @@
 
 import bcrypt from 'bcryptjs';
 import UserDao from '../dao/users.js';
+import { validateEmail, validatePassword, validatePagination } from '../utils/validators.js';
 
 class UserService {
 
@@ -15,17 +16,7 @@ class UserService {
     async getAll(filters) {
         const { page = 1, limit = 8, role, ...otherFilters } = filters;
 
-        if (page !== undefined && (!Number.isInteger(Number(page)) || Number(page) < 1)) {
-            const error = new Error("page должен быть положительным целым числом");
-            error.status = 400;
-            throw error;
-        }
-
-        if (limit !== undefined && (!Number.isInteger(Number(limit)) || Number(limit) < 1 || Number(limit) > 100)) {
-            const error = new Error("limit должен быть от 1 до 100");
-            error.status = 400;
-            throw error;
-        }
+        const pagination = validatePagination(page, limit);
 
         // Маппинг строковой роли в boolean для DAO
         let isAdminFilter = null;
@@ -35,8 +26,8 @@ class UserService {
         return await UserDao.findAll({
             ...otherFilters,
             is_admin: isAdminFilter,
-            page: Number(page),
-            limit: Number(limit)
+            page: pagination.page,
+            limit: pagination.limit
         });
     }
 
@@ -57,7 +48,7 @@ class UserService {
     }
 
     /**
-     * Method: createUser
+     * Method: create
      * Создать нового пользователя.
      * */
     async create(data) {
@@ -70,23 +61,11 @@ class UserService {
             throw error;
         }
 
-        // Валидация email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            const error = new Error("Некорректный формат email");
-            error.status = 400;
-            throw error;
-        }
-
-        // Валидация длины пароля
-        if (password.length < 3) {
-            const error = new Error("Пароль должен содержать минимум 3 символа");
-            error.status = 400;
-            throw error;
-        }
+        const cleanEmail = validateEmail(email);
+        validatePassword(password);
 
         // Проверка уникальности email
-        const emailExists = await UserDao.existsByEmail(email);
+        const emailExists = await UserDao.existsByEmail(cleanEmail);
         if (emailExists) {
             const error = new Error("Пользователь с таким email уже существует");
             error.status = 409;
@@ -137,16 +116,8 @@ class UserService {
         if (group_code !== undefined) updateData.group_code = group_code;
         if (is_admin !== undefined) updateData.is_admin = Boolean(is_admin);
 
-        // Валидация и проверка email при смене
         if (email !== undefined) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                const error = new Error("Некорректный формат email");
-                error.status = 400;
-                throw error;
-            }
-
-            const cleanEmail = email.toLowerCase().trim();
+            const cleanEmail = validateEmail(email);
             if (cleanEmail !== user.email) {
                 const emailExists = await UserDao.existsByEmail(cleanEmail);
                 if (emailExists) {
@@ -160,11 +131,7 @@ class UserService {
 
         // Хеширование пароля при смене
         if (password !== undefined) {
-            if (password.length < 3) {
-                const error = new Error("Пароль должен содержать минимум 3 символа");
-                error.status = 400;
-                throw error;
-            }
+            validatePassword(password);
             updateData.password = await bcrypt.hash(password, 10);
         }
 

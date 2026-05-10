@@ -1,17 +1,19 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import BasePagination from '@/components/BasePagination.vue'
 
 const authStore = useAuthStore()
 const rooms = ref([])
 const myBookings = ref([])
 const loading = ref(true)
 
-const currentPage = ref(1)
-const itemsPerPage = 2
-
 const selectedDate = ref(new Date().toISOString().substr(0, 10))
 const selectedPair = ref(1)
+
+const totalRooms = ref(0)
+const roomsPage = ref(1)
+const roomsLimit = 6
 
 const quickData = ref({
   date: new Date().toISOString().substr(0, 10),
@@ -40,11 +42,16 @@ const fetchAll = async () => {
 
 const fetchRooms = async () => {
   try {
-    const res = await fetch(`http://localhost:3000/api/rooms?date=${selectedDate.value}&pair=${selectedPair.value}`, {
-      headers: { 'Authorization': `Bearer ${authStore.token}` }
-    })
-    rooms.value = await res.json()
-  } catch (e) { console.error("Ошибка загрузки комнат:", e) }
+    const res = await fetch(
+      `http://localhost:3000/api/rooms?date=${selectedDate.value}&pair=${selectedPair.value}&page=${roomsPage.value}&limit=${roomsLimit}`,
+      { headers: { 'Authorization': `Bearer ${authStore.token}` } }
+    )
+    const result = await res.json()
+    rooms.value = result.data || []
+    totalRooms.value = result.total || 0
+  } catch (e) {
+    console.error("Ошибка загрузки комнат:", e)
+  }
 }
 
 const fetchMyBookings = async () => {
@@ -62,11 +69,8 @@ const fetchMyBookings = async () => {
 
 const topBookings = computed(() => myBookings.value.slice(0, 2))
 
-const totalPages = computed(() => Math.ceil(rooms.value.length / itemsPerPage))
-const displayedRooms = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  return rooms.value.slice(start, start + itemsPerPage)
-})
+const totalPages = computed(() => Math.ceil(totalRooms.value / roomsLimit))
+const displayedRooms = computed(() => rooms.value)
 
 const formatTime = (isoString) => {
   if (!isoString) return ''
@@ -75,9 +79,11 @@ const formatTime = (isoString) => {
 
 
 watch([selectedDate, selectedPair], () => {
-  currentPage.value = 1;
-  fetchRooms();
+  roomsPage.value = 1
+  fetchRooms()
 })
+
+watch(roomsPage, fetchRooms)
 
 const openBooking = async (room) => {
   try {
@@ -222,15 +228,7 @@ onMounted(fetchAll)
       </div>
 
       <!-- ПАГИНАЦИЯ -->
-      <div class="pagination" v-if="totalPages > 1">
-        <button
-          v-for="p in totalPages" :key="p"
-          :class="['page-dot', { active: currentPage === p }]"
-          @click="currentPage = p"
-        >
-          {{ p }}
-        </button>
-      </div>
+      <BasePagination :page="roomsPage" :totalPages="totalPages" @update:page="roomsPage = $event" />
 
       <!-- БЫСТРОЕ БРОНИРОВАНИЕ -->
       <section class="quick-book-form">

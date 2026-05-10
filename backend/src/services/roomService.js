@@ -3,7 +3,6 @@
  * Бизнес-логика для работы с аудиториями.
  */
 
-import db from '../config/db.js';
 import roomDao from '../dao/rooms.js';
 import equipmentDao from '../dao/equipments.js';
 import getPairInterval from '../utils/pairInterval.js';
@@ -88,6 +87,26 @@ const validateLayout = async (layout, checkExists = true) => {
     }
 };
 
+const validatePagination = (page, limit) => {
+    const p = Number(page);
+    const l = Number(limit);
+
+    if (!Number.isInteger(p) || p < 1) {
+        const error = new Error("page должен быть положительным целым числом");
+        error.status = 400;
+        throw error;
+    }
+
+    if (!Number.isInteger(l) || l < 1 || l > 100) {
+        const error = new Error("limit должен быть от 1 до 100");
+        error.status = 400;
+        throw error;
+    }
+
+    return { page: p, limit: l };
+};
+
+
 class RoomService {
 
     /**
@@ -96,23 +115,12 @@ class RoomService {
      */
     async getAll(filters) {
         const { page = 1, limit = 8, ...filterFields } = filters;
-
-        if (!Number.isInteger(Number(page)) || Number(page) < 1) {
-            const error = new Error("page должен быть положительным целым числом");
-            error.status = 400;
-            throw error;
-        }
-
-        if (!Number.isInteger(Number(limit)) || Number(limit) < 1 || Number(limit) > 100) {
-            const error = new Error("limit должен быть от 1 до 100");
-            error.status = 400;
-            throw error;
-        }
+        const pagination = validatePagination(page, limit);
 
         return await roomDao.findAll({
             ...filterFields,
-            page: Number(page),
-            limit: Number(limit)
+            page: pagination.page,
+            limit: pagination.limit
         });
     }
 
@@ -120,13 +128,21 @@ class RoomService {
      * Публичный список аудиторий с подсчётом свободных мест.
      * Только чтение.
      */
-    async getAllPublic(date, pair) {
+    async getAllPublic(filters) {
+        const { date, pair, page = 1, limit = 8 } = filters;
         const { targetDate, targetPair } = validateDatePair(
             date || new Date().toISOString().slice(0, 10),
             pair || 1
         );
 
-        return await roomDao.findAllPublic(targetDate, targetPair);
+        const pagination = validatePagination(page, limit);
+
+        return await roomDao.findAllPublic({
+            date: targetDate,
+            pair: targetPair,
+            page: pagination.page,
+            limit: pagination.limit
+        });
     }
 
     /**
@@ -253,7 +269,7 @@ class RoomService {
         }
 
         // --- Транзакция ---
-        return withTransaction(db, { write: ['Rooms', 'Computers'] }, async (transaction) => {
+        return withTransaction({ write: ['Rooms', 'Computers'] }, async (transaction) => {
 
             const documentToInsert = {
                 name: name.trim(),
@@ -329,7 +345,7 @@ class RoomService {
 
 
         // --- Транзакция ---
-        return withTransaction(db, { write: ['Rooms', 'Computers'] }, async (transaction) => {
+        return withTransaction({ write: ['Rooms', 'Computers'] }, async (transaction) => {
             const fullRoomId = toFullId(id);
 
             if (Object.keys(updateData).length > 0) {
@@ -362,7 +378,7 @@ class RoomService {
         }
 
         // --- Транзакция ---
-        return withTransaction(db, { write: ['Rooms', 'Computers'] }, async (transaction) => {
+        return withTransaction({ write: ['Rooms', 'Computers'] }, async (transaction) => {
             const fullRoomId = toFullId(id);
             await roomDao.unassignAllPCs(fullRoomId, transaction);
             await roomDao.remove(roomKey, transaction);

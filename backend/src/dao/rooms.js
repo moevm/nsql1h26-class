@@ -38,42 +38,50 @@ class RoomDao {
     /**
      * Публичный список аудиторий с подсчётом свободных мест.
      */
-    async findAllPublic(targetDate, targetPair) {
+    async findAllPublic({ targetDate, targetPair, page = 1, limit = 8 }) {
+        const offset = (page - 1) * limit;
         const timings = { 1: "08:00", 2: "09:50", 3: "11:40", 4: "13:40", 5: "15:30", 6: "17:20", 7: "19:00" };
         const startTime = `${targetDate}T${timings[targetPair] || "08:00"}:00Z`;
 
         const cursor = await db.query(aql`
-            FOR r IN Rooms
-                LET room_pcs = (
-                    FOR p IN Computers 
-                    FILTER p.room_id == r._id || p.room_id == r._key
-                    RETURN p._id
-                )
-                LET broken_pcs = (
-                    FOR p IN Computers
-                    FILTER p.room_id == r._id || p.room_id == r._key
-                    FILTER p.status != "active"
-                    RETURN p._id
-                )
-                LET active_bookings = (
-                    FOR b IN Bookings 
-                    FILTER b._to IN room_pcs
-                    FILTER b.status IN ['active', 'reserved']
-                    FILTER b.start_at == ${startTime}
-                    RETURN b
-                )
-                RETURN {
-                    id: r._key,
-                    name: r.name,
-                    description: r.description,
-                    tags: r.tags || [],
-                    grid: r.grid || { rows: null, cols: null },
-                    total_seats: LENGTH(room_pcs),
-                    available_seats: LENGTH(room_pcs) - LENGTH(active_bookings) - LENGTH(broken_pcs)
-                }
+            LET all_rooms = (
+                FOR r IN Rooms
+                    LET room_pcs = (
+                        FOR p IN Computers 
+                        FILTER p.room_id == r._id || p.room_id == r._key
+                        RETURN p._id
+                    )
+                    LET broken_pcs = (
+                        FOR p IN Computers
+                        FILTER p.room_id == r._id || p.room_id == r._key
+                        FILTER p.status != "active"
+                        RETURN p._id
+                    )
+                    LET active_bookings = (
+                        FOR b IN Bookings 
+                        FILTER b._to IN room_pcs
+                        FILTER b.status IN ['active', 'reserved']
+                        FILTER b.start_at == ${startTime}
+                        RETURN b
+                    )
+                    RETURN {
+                        id: r._key,
+                        name: r.name,
+                        description: r.description,
+                        tags: r.tags || [],
+                        grid: r.grid || { rows: null, cols: null },
+                        total_seats: LENGTH(room_pcs),
+                        available_seats: LENGTH(room_pcs) - LENGTH(active_bookings) - LENGTH(broken_pcs)
+                    }
+            )
+            
+            RETURN {
+                total: LENGTH(all_rooms),
+                data: SLICE(all_rooms, ${offset}, ${limit})
+            }
         `);
 
-        return await cursor.all();
+        return await cursor.next();
     }
 
     /**

@@ -13,8 +13,8 @@ class RoomController {
      * Публичный список аудиторий с подсчётом свободных мест.
      */
     getAllRooms = asyncHandler(async (req, res) => {
-        const { date, pair } = req.query;
-        const result = await roomService.getAllPublic(date, pair);
+        const { date, pair, page = 1, limit = 8 } = req.query;
+        const result = await roomService.getAllPublic({ date, pair, page, limit });
         res.json(result);
     });
 

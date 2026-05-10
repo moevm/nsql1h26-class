@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import BasePagination from '@/components/BasePagination.vue'
 
 const authStore = useAuthStore()
 const rooms = ref([])
@@ -32,6 +33,8 @@ const filters = ref({
   page: 1,
   limit: 8
 })
+
+const totalPages = computed(() => Math.ceil(totalRooms.value / filters.value.limit))
 
 watch(filters, () => {
   fetchRooms()
@@ -279,6 +282,9 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- ПАГИНАЦИЯ -->
+    <BasePagination :page="filters.page" :totalPages="totalPages" @update:page="filters.page = $event" />
+
     <!-- Основное модальное окно (Редактор) -->
     <div v-if="isModalOpen" class="modal-overlay" @click.self="isModalOpen = false">
       <div class="editor-modal">
@@ -397,6 +403,7 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/admin-rooms";
 </style>

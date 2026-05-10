@@ -23,16 +23,6 @@ const router = createRouter({
           name: 'home',
           component: () => import('../views/HomeView.vue')
         }
-        // {
-        //   path: 'my-bookings',
-        //   name: 'my-bookings',
-        //   component: () => import('../views/MyBookings.vue')
-        // },
-        // {
-        //   path: 'profile',
-        //   name: 'profile',
-        //   component: () => import('../views/ProfileView.vue')
-        // }
       ]
     },
     {
@@ -49,8 +39,7 @@ const router = createRouter({
           path: 'users',
           name: 'admin-users',
           component: () => import('../views/AdminUsers.vue')
-        }
-        ,
+        },
         {
           path: 'rooms',
           name: 'admin-rooms',
@@ -70,32 +59,26 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
   const isAdmin = authStore.isAdmin
 
-  // Если пользователь не вошел и пытается зайти куда-то кроме логина
   if (!isAuthenticated && to.name !== 'login') {
-    return next({ name: 'login' })
+    return { name: 'login' }
   }
 
-  // Если пользователь вошел и пытается зайти на страницу логина
   if (isAuthenticated && to.meta.guestOnly) {
-    return next(isAdmin ? { name: 'admin-dashboard' } : { name: 'home' })
+    return isAdmin ? { name: 'admin-dashboard' } : { name: 'home' }
   }
 
-  // Защита пользовательских страниц от админа
   if (isAuthenticated && to.meta.role === 'user' && isAdmin) {
-    return next({ name: 'admin-dashboard' })
+    return { name: 'admin-dashboard' }
   }
 
-  // Защита админских страниц от обычного пользователя
   if (isAuthenticated && to.meta.role === 'admin' && !isAdmin) {
-    return next({ name: 'home' })
+    return { name: 'home' }
   }
-
-  next()
 })
 
 export default router

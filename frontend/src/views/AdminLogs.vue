@@ -1,6 +1,7 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import BasePagination from '@/components/BasePagination.vue'
 
 const authStore = useAuthStore()
 const logs = ref([])
@@ -21,6 +22,8 @@ const filters = ref({
   page: 1,
   limit: 10
 })
+
+const totalPages = computed(() => Math.ceil(totalLogs.value / filters.value.limit))
 
 const formatDate = (isoString) => {
   if (!isoString) return '—'
@@ -57,14 +60,14 @@ const fetchLogs = async () => {
         params.append(key, filters.value[key])
       }
     })
-    
+
     const res = await fetch(`http://localhost:3000/api/admin/logs?${params}`, {
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${authStore.token}`,
         'Content-Type': 'application/json'
       }
     })
-    
+
     if (res.ok) {
       const result = await res.json()
       logs.value = result.data || []
@@ -88,7 +91,7 @@ const cancelBooking = async (bookingId) => {
 
     if (res.ok) {
       alert('Бронирование успешно отменено')
-      fetchLogs() 
+      fetchLogs()
     } else {
       const err = await res.json()
       alert('Ошибка: ' + (err.error || 'Не удалось отменить'))
@@ -102,7 +105,7 @@ let timeout = null
 watch(filters, (newVal, oldVal) => {
   const pageChanged = newVal.page !== oldVal?.page
   clearTimeout(timeout)
-  
+
   if (pageChanged) {
     fetchLogs()
   } else {
@@ -168,15 +171,16 @@ onMounted(fetchLogs)
     <div class="table-container">
       <table class="logs-table">
         <thead>
-          <tr>
-            <th>ID / ДАТА</th>
-            <th>ПОЛЬЗОВАТЕЛЬ</th>
-            <th>АУДИТОРИЯ</th>
-            <th>СТАТУС</th>
-            <th class="text-right">ДЕЙСТВИЕ</th>
-          </tr>
+        <tr>
+          <th>ID / ДАТА</th>
+          <th>ПОЛЬЗОВАТЕЛЬ</th>
+          <th>АУДИТОРИЯ</th>
+          <th>СТАТУС</th>
+          <th class="text-right">ДЕЙСТВИЕ</th>
+        </tr>
         </thead>
-        <tbody v-for="log in logs" :key="log.id">
+        <tbody>
+        <template v-for="log in logs" :key="log.id">
           <tr :class="{ 'is-expanded': expandedLogIds.includes(log.id) }">
             <td class="id-cell">
               <span class="date-text">{{ formatDate(log.date) }}</span>
@@ -210,7 +214,6 @@ onMounted(fetchLogs)
               <div class="timeline-container">
                 <div class="timeline-item creation">
                   <div class="t-time">{{ formatTime(log.created_at) }}</div>
-                  <div class="t-dot start"></div>
                   <div class="t-content">
                     <strong>Бронирование создано</strong>
                     <span class="t-author">Дата создания: {{ formatDate(log.created_at) }}</span>
@@ -219,13 +222,12 @@ onMounted(fetchLogs)
 
                 <div v-for="(event, idx) in log.history" :key="idx" class="timeline-item">
                   <div class="t-time">{{ formatTime(event.changed_at) }}</div>
-                  <div class="t-dot"></div>
                   <div class="t-content">
-                    <span class="t-status">
-                      <span class="old-st">{{ event.old_status }}</span> 
-                      <span class="arrow-right">→</span> 
-                      <strong class="new-st">{{ event.new_status }}</strong>
-                    </span>
+                      <span class="t-status">
+                        <span class="old-st">{{ event.old_status }}</span>
+                        <span class="arrow-right">→</span>
+                        <strong class="new-st">{{ event.new_status }}</strong>
+                      </span>
                     <span class="t-author">Кем: {{ event.changed_by.split('/')[1] }}</span>
                   </div>
                 </div>
@@ -241,20 +243,16 @@ onMounted(fetchLogs)
               </div>
             </td>
           </tr>
+        </template>
         </tbody>
       </table>
       <div v-if="loading" class="table-loading">Загрузка...</div>
     </div>
 
-    <div class="pagination">
-      <button :disabled="filters.page === 1" @click="filters.page--">Назад</button>
-      <span class="page-info">Стр. {{ filters.page }}</span>
-      <button :disabled="logs.length < filters.limit" @click="filters.page++">Вперед</button>
-    </div>
+    <BasePagination :page="filters.page" :totalPages="totalPages" @update:page="filters.page = $event" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/admin-logs";
-
 </style>

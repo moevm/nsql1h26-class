@@ -1,14 +1,31 @@
 @use '../variables' as v;
 
 .dashboard-container {
-  max-width: 1300px;
-  margin: 40px auto;
-  padding: 0 40px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: v.$font-mont;
+  color: v.$text-main;
 
   .page-header {
-    margin-bottom: 30px;
-    .page-title { font-size: 2.2rem; font-weight: 800; font-family: v.$font-mont; }
-    .page-subtitle { color: v.$text-muted; }
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+
+    .title-block {
+      h1 {
+        font-size: 2.2rem;
+        font-weight: 900;
+        margin: 0 0 5px 0;
+        color: white;
+      }
+      p {
+        color: v.$text-muted;
+        font-size: 1rem;
+        margin: 0;
+      }
+    }
   }
 }
 
@@ -27,6 +44,7 @@
     font-family: v.$font-mont;
     transition: v.$transition;
     position: relative;
+    font-size: 0.95rem;
 
     &:hover { color: white; }
     &.active {
@@ -37,68 +55,136 @@
         bottom: -1px; left: 0; right: 0;
         height: 3px;
         background-color: v.$accent;
+        border-radius: 3px 3px 0 0;
       }
     }
   }
+}
+
+// Контент табов
+.tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 // Карточки KPI
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 25px;
   margin-bottom: 40px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 
   .kpi-card {
     background: v.$bg-surface;
     border: 1px solid v.$border-color;
-    border-radius: 12px;
-    padding: 25px;
+    border-radius: 24px;
+    padding: 30px;
+    transition: v.$transition;
 
-    .kpi-label { font-size: 0.8rem; color: v.$text-muted; text-transform: uppercase; font-weight: 600; }
-    .kpi-val { font-size: 2.2rem; font-weight: 800; font-family: v.$font-mont; margin: 10px 0; }
+    &:hover {
+      border-color: v.$accent;
+      transform: translateY(-5px);
+    }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      color: v.$text-muted;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .kpi-val {
+      font-size: 2.4rem;
+      font-weight: 900;
+      font-family: v.$font-mont;
+      margin-top: 15px;
+      line-height: 1;
+    }
   }
 }
 
-// Таблицы
-.table-wrap {
+// Сетка графиков
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card {
+    background: v.$bg-surface;
+    border: 1px solid v.$border-color;
+    border-radius: 24px;
+    padding: 30px;
+    transition: v.$transition;
+
+    &:hover {
+      border-color: v.$accent;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+
+      h3 {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin: 0;
+        color: white;
+      }
+
+      .chart-badge {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 8px;
+        background: rgba(v.$accent, 0.1);
+        color: v.$accent;
+      }
+    }
+
+    .chart-body {
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: v.$bg-main;
+      border-radius: 16px;
+      border: 1px dashed v.$border-color;
+
+      .chart-placeholder {
+        color: v.$text-muted;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Пустое состояние
+.empty-state {
   background: v.$bg-surface;
   border: 1px solid v.$border-color;
-  border-radius: 12px;
-  overflow: hidden;
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    
-    th {
-      background: rgba(0,0,0,0.2);
-      color: v.$text-muted;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      padding: 15px 25px;
-      text-align: left;
-    }
-
-    td {
-      padding: 16px 25px;
-      border-bottom: 1px solid v.$border-color;
-      font-size: 0.9rem;
-      
-      &.mono { font-family: v.$font-mono; color: v.$text-muted; font-size: 0.85rem; }
-    }
-  }
-}
-
-// Бейджи статусов
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-
-  &.done { background: rgba(16, 185, 129, 0.1); color: v.$success; border: 1px solid rgba(16, 185, 129, 0.2); }
-  &.miss { background: rgba(239, 68, 68, 0.1); color: v.$danger; border: 1px solid rgba(239, 68, 68, 0.2); }
+  border-radius: 24px;
+  padding: 80px;
+  text-align: center;
+  color: v.$text-muted;
+  font-size: 1.1rem;
+  font-weight: 600;
 }

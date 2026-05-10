@@ -1,6 +1,7 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import BasePagination from "@/components/BasePagination.vue";
 
 const authStore = useAuthStore()
 const users = ref([])
@@ -17,13 +18,15 @@ const filters = ref({
 const currentPage = ref(1)
 const itemsPerPage = 3
 
+const totalPages = computed(() => Math.ceil(totalUsers.value / itemsPerPage))
+
 const isModalOpen = ref(false)
 const newUser = ref({
   full_name: '',
   email: '',
   password: '',
-  is_admin: false, 
-  group_code: ''   
+  is_admin: false,
+  group_code: ''
 })
 
 const fetchUsers = async () => {
@@ -37,14 +40,14 @@ const fetchUsers = async () => {
       page: currentPage.value.toString(),
       limit: itemsPerPage.toString()
     })
-    
+
     const res = await fetch(`http://localhost:3000/api/admin/users?${params}`, {
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${authStore.token}`,
         'Content-Type': 'application/json'
       }
     })
-    
+
     if (res.ok) {
       const result = await res.json()
       users.value = result.data || []
@@ -133,48 +136,46 @@ onMounted(fetchUsers)
     <div class="table-wrapper">
       <table v-if="!loading">
         <thead>
-          <tr>
-            <th>ПОЛЬЗОВАТЕЛЬ</th>
-            <th>ГРУППА</th>
-            <th>РОЛЬ</th>
-            <th>ПОСЛЕДНИЙ ВХОД</th>
-            <th class="actions-head"></th>
-          </tr>
+        <tr>
+          <th>ПОЛЬЗОВАТЕЛЬ</th>
+          <th>ГРУППА</th>
+          <th>РОЛЬ</th>
+          <th>ПОСЛЕДНИЙ ВХОД</th>
+          <th class="actions-head"></th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="user in users" :key="user.id">
-            <td>
-              <div class="user-cell">
-                <div class="user-avatar">{{ user.full_name ? user.full_name[0] : '?' }}</div>
-                <div class="user-meta">
-                  <div class="full-name">{{ user.full_name }}</div>
-                  <div class="email">{{ user.email }}</div>
-                </div>
+        <tr v-for="user in users" :key="user.id">
+          <td>
+            <div class="user-cell">
+              <div class="user-avatar">{{ user.full_name ? user.full_name[0] : '?' }}</div>
+              <div class="user-meta">
+                <div class="full-name">{{ user.full_name }}</div>
+                <div class="email">{{ user.email }}</div>
               </div>
-            </td>
-            <td><span class="group-code">{{ user.group_code || '—' }}</span></td>
-            <td>
+            </div>
+          </td>
+          <td><span class="group-code">{{ user.group_code || '—' }}</span></td>
+          <td>
               <span :class="['role-badge', user.is_admin ? 'is-admin' : 'is-user']">
                 {{ user.is_admin ? 'Администратор' : 'Студент' }}
               </span>
-            </td>
-            <td class="date-cell">
-              {{ user.last_login ? new Date(user.last_login).toLocaleString() : 'Нет данных' }}
-            </td>
-            <td class="actions-cell">
-              <router-link :to="'/admin/users/' + user.id" class="btn-profile">
-                Открыть профиль
-              </router-link>
-            </td>
-          </tr>
+          </td>
+          <td class="date-cell">
+            {{ user.last_login ? new Date(user.last_login).toLocaleString() : 'Нет данных' }}
+          </td>
+          <td class="actions-cell">
+            <router-link :to="'/admin/users/' + user.id" class="btn-profile">
+              Открыть профиль
+            </router-link>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
-     <div class="pagination" v-if="totalUsers > itemsPerPage">
-      <button :disabled="currentPage === 1" @click="currentPage--">назад</button>
-      <span class="page-num">{{ currentPage }}</span>
-      <button :disabled="currentPage * itemsPerPage >= totalUsers" @click="currentPage++">вперед</button>
-    </div>
+
+    <!-- ПАГИНАЦИЯ -->
+    <BasePagination :page="currentPage" :totalPages="totalPages" @update:page="currentPage = $event" />
 
     <div v-if="isModalOpen" class="modal-overlay" @click.self="isModalOpen = false">
       <div class="modal-content">

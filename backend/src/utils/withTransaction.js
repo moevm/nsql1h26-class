@@ -1,13 +1,14 @@
+import db from '../config/db.js';
+
+
 /**
- * utils/withTransaction.js
  * Функция для работы с ArangoDB транзакциями.
  *
  * db — объект базы данных arangojs
  * collections — { write: [...], read: [...] }
  * callback — async-функция, получающая объект транзакции
  */
-
-const withTransaction = async (db, collections, callback) => {
+const withTransaction = async (collections, callback) => {
     const transaction = await db.beginTransaction(collections);
     try {
         const result = await callback(transaction);

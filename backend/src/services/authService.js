@@ -96,17 +96,6 @@ class AuthService {
         return { user: userWithoutPassword, token };
     }
 
-    /**
-     * Method: getAllUsers
-     * Возвращает всех пользователей (debag, admin only)
-     */
-    async getAllUsers() {
-        const users = await UserDao.getAll();
-        return users.map(user => {
-            const { password, ...safeUser } = user;
-            return safeUser;
-        });
-    }
 }
 
 export default new AuthService();

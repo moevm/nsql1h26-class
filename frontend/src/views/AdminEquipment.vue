@@ -1,6 +1,7 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import BasePagination from '@/components/BasePagination.vue'
 
 const authStore = useAuthStore()
 const equipment = ref([])
@@ -26,7 +27,13 @@ const filters = ref({
   status: '',
   room_id: '',
   page: 1,
-  limit: 999
+  limit: 8
+})
+
+const totalPages = computed(() => Math.ceil(totalEquipment.value / filters.value.limit))
+
+watch(() => [filters.value.search, filters.value.status, filters.value.room_id], () => {
+  filters.value.page = 1
 })
 
 watch(filters, () => {
@@ -55,8 +62,8 @@ const fetchEquipment = async () => {
     }
 
     const result = await response.json()
-equipment.value = result.data || []
-totalEquipment.value = result.total || 0
+    equipment.value = result.data || []
+    totalEquipment.value = result.total || 0
   } catch (error) {
     console.error('Error fetching equipment:', error)
     equipment.value = []
@@ -195,6 +202,9 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- ПАГИНАЦИЯ -->
+    <BasePagination :page="filters.page" :totalPages="totalPages" @update:page="filters.page = $event" />
 
     <!-- Модальное окно для создания/редактирования -->
     <div v-if="isModalOpen" class="modal-overlay" @click="closeModal">

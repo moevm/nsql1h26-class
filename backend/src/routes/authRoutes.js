@@ -15,11 +15,5 @@ const router = Router();
 // router.post('/register', authController.register);
 router.post('/login', authController.login);
 
-/**
- * Защищенный роут для отладки.
- * Сначала проверяем токен (verifyToken),
- * потом проверяем, что это Админ (isAdmin).
- */
-router.get('/debug-users', verifyToken, isAdmin, authController.getDebugUsers);
 
 export default router;

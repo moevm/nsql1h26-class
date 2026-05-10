@@ -58,19 +58,6 @@ class AuthController {
             }
         });
     });
-
-    /**
-     * Method: getDebugUsers
-     * Обработка запроса админа на получение всех пользователей для отладки
-     */
-    getDebugUsers = asyncHandler(async (req, res) => {
-        const users = await authService.getAllUsers();
-
-        res.status(200).json({
-            count: users.length,
-            data: users
-        });
-    });
 }
 
 export default new AuthController();

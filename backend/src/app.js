@@ -23,7 +23,6 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/rooms', roomPublicRoutes);
 app.use('/api/bookings', bookingRoutes);
 
-
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500;
     const message = err.message || 'Internal Server Error';

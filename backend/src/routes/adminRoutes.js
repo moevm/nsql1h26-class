@@ -8,7 +8,7 @@ import { verifyToken, isAdmin } from '../middlewares/authMiddleware.js'
 import userRoutes from './userRoutes.js';
 import equipmentRoutes from './equipmentRoutes.js';
 import roomAdminRoutes from './roomAdminRoutes.js';
-import { getBookingLogs } from '../controllers/logController.js';
+import logController from '../controllers/logController.js';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.use('/users', userRoutes);
 router.use('/equipment', equipmentRoutes);
 router.use('/rooms', roomAdminRoutes);
 
-router.get('/logs', getBookingLogs);
+router.get('/logs', logController.getBookingLogs);
 
 
 export default router;

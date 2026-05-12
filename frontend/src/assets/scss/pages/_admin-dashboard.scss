@@ -188,3 +188,60 @@
   font-size: 1.1rem;
   font-weight: 600;
 }
+
+.mass-operations-section {
+  margin-bottom: 24px;
+
+  .ops-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .ops-info {
+      h3 { margin: 0 0 8px 0; font-size: 1.2rem; color: #fff; }
+      p { margin: 0; color: #888; font-size: 0.9rem; line-height: 1.4; }
+    }
+
+    .ops-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+
+      .import-zone {
+        border: 2px dashed #333;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+
+        .import-placeholder {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          color: #aaa;
+          .icon { font-size: 1.5rem; }
+        }
+      }
+
+      .btn-export-all {
+        width: 100%;
+        height: 100%;
+        background: #2a2a2a;
+        border: 1px solid #444;
+        color: #fff;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        &:hover { background: #333; }
+      }
+    }
+  }
+}

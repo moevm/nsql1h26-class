@@ -60,7 +60,7 @@ const fetchMyBookings = async () => {
     })
     if (res.ok) {
       const data = await res.json()
-      myBookings.value = data.filter(b => b.status !== 'cancelled')
+      myBookings.value = data.filter(b => b.status !== 'cancelled' && b.status !== 'finished')
     }
   } catch (e) { console.error("Ошибка загрузки броней:", e) }
 }
@@ -69,6 +69,26 @@ const topBookings = computed(() => myBookings.value.slice(0, 2))
 
 const totalPages = computed(() => Math.ceil(totalRooms.value / roomsLimit))
 const displayedRooms = computed(() => rooms.value)
+
+const formatDate = (isoString) => {
+  if (!isoString) return '—'
+  const date = new Date(isoString)
+  return date.toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  })
+}
+
+const getPairFromTime = (isoString) => {
+  if (!isoString) return '?'
+  const time = isoString.split('T')[1].substring(0, 5)
+  const map = { 
+    '08:00': 1, '09:50': 2, '11:40': 3, 
+    '13:40': 4, '15:30': 5, '17:20': 6, '19:00': 7 
+  }
+  return map[time] || '?'
+}
 
 const formatTime = (isoString) => {
   if (!isoString) return ''
@@ -272,7 +292,7 @@ onMounted(fetchAll)
       <div class="side-card">
         <div class="side-header">
           <h3>БЛИЖАЙШИЕ ЗАПИСИ</h3>
-          <router-link to="/profile" class="link-all">Все</router-link>
+          <router-link to="/bookings" class="link-all">Все</router-link>
         </div>
 
         <div v-if="topBookings.length === 0" class="empty-state">
@@ -286,7 +306,9 @@ onMounted(fetchAll)
               <span class="b-time">{{ formatTime(b.start_at) }}</span>
             </div>
             <div class="b-details">
-              <span class="pc-label">Место:</span> {{ b.seat_index || b.pc_name }}
+              <span class="pc-label">Место: {{ b.seat_index || b.pc_name }}</span> 
+              <span class="b-date">{{ formatDate(b.start_at) }}</span>
+              
             </div>
           </div>
           <button class="btn-cancel" @click="cancelBooking(b.booking_id)">ОТМЕНИТЬ</button>

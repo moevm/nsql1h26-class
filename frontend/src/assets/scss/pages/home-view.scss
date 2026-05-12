@@ -156,21 +156,56 @@
   }
 
   .booking-ticket {
-    background: v.$bg-main;
-    border-radius: 18px;
-    border: 1px solid v.$border-color;
-    margin-bottom: 20px;
-    overflow: hidden;
+  background: v.$bg-main;
+  border-radius: 18px;
+  border: 1px solid v.$border-color;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: v.$transition;
 
-    .ticket-content {
-      padding: 20px;
-      .b-header {
-        display: flex; justify-content: space-between; margin-bottom: 8px;
-        .b-room { font-weight: 900; font-size: 1.1rem; }
-        .b-pair { color: v.$accent; font-weight: 800; font-size: 0.8rem; }
+  .ticket-content {
+    padding: 20px;
+
+    .b-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .b-room {
+        font-weight: 900;
+        font-size: 1.1rem;
+        color: white;
       }
-      .b-details { font-size: 0.9rem; color: v.$text-muted; .pc-label { font-weight: 800; } }
+
+      .b-time {
+        font-weight: 800;
+        font-size: 1.1rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
     }
+
+    .b-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: v.$text-muted;
+
+      .pc-label {
+        font-weight: 800;
+        color: v.$text-main;
+        margin-right: 4px;
+      }
+
+      .b-date {
+        font-weight: 700;
+        font-size: 0.8rem;
+        color: v.$text-muted;
+      }
+    }
+  }
 
     .btn-cancel {
       width: 100%; padding: 12px; border: none; font-weight: 900; font-size: 0.7rem;

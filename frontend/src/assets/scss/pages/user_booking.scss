@@ -1,0 +1,178 @@
+@use "../variables" as v;
+
+.my-bookings-page {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: v.$font-mont;
+  color: v.$text-main;
+
+  // --- Сетка фильтров ---
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    background: v.$bg-surface;
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid v.$border-color;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      label {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: v.$text-muted;
+        letter-spacing: 1px;
+      }
+
+      input, select {
+        background: v.$bg-main;
+        border: 1px solid v.$border-color;
+        padding: 12px;
+        border-radius: 12px;
+        color: white;
+        outline: none;
+        font-family: v.$font-mont;
+        font-size: 0.9rem;
+        transition: v.$transition;
+
+        &:focus {
+          border-color: v.$accent;
+          box-shadow: 0 0 0 2px rgba(v.$accent, 0.2);
+        }
+      }
+    }
+  }
+
+  // --- Навигация вкладок ---
+  .tabs-nav {
+    display: flex;
+    gap: 30px;
+    border-bottom: 1px solid v.$border-color;
+    margin-bottom: 30px;
+    padding-left: 10px;
+
+    button {
+      background: none;
+      border: none;
+      padding: 12px 0;
+      color: v.$text-muted;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: v.$font-mont;
+      font-size: 0.95rem;
+      transition: v.$transition;
+      position: relative;
+
+      &:hover {
+        color: white;
+      }
+
+      &.active {
+        color: v.$accent;
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          background: v.$accent;
+          border-radius: 3px 3px 0 0;
+        }
+      }
+    }
+  }
+
+  // --- Таблица ---
+  .table-container {
+    background: v.$bg-surface;
+    border-radius: 24px;
+    border: 1px solid v.$border-color;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th {
+        text-align: left;
+        padding: 20px 24px;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: v.$text-muted;
+        background: rgba(white, 0.02);
+        border-bottom: 1px solid v.$border-color;
+      }
+
+      td {
+        padding: 18px 24px;
+        border-bottom: 1px solid v.$border-color;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      tr:hover td {
+        background: rgba(white, 0.01);
+      }
+    }
+  }
+
+  // --- Статусы и Кнопки ---
+  .status-pill {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &.reserved { background: rgba(v.$accent, 0.1); color: v.$accent; }
+    &.active { background: rgba(v.$success, 0.1); color: v.$success; }
+    &.finished { background: rgba(v.$text-muted, 0.1); color: v.$text-muted; }
+    &.cancelled { background: rgba(v.$danger, 0.1); color: v.$danger; }
+    &.missed { background: rgba(v.$warning, 0.1); color: v.$warning; }
+  }
+
+  .btn-cancel {
+    background: rgba(v.$danger, 0.1);
+    border: 1px solid rgba(v.$danger, 0.3);
+    color: v.$danger;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: v.$transition;
+
+    &:hover {
+      background: v.$danger;
+      color: white;
+      border-color: v.$danger;
+    }
+  }
+
+  .loader {
+    padding: 60px;
+    text-align: center;
+    color: v.$accent;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+}

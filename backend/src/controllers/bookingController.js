@@ -54,6 +54,12 @@ class BookingController {
         const result = await bookingService.quickBook(userId, date, pair, tags);
         res.status(201).json(result);
     });
+
+    getUserBookingsPaged = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+    const result = await bookingService.getUserBookingsPaged(userId, req.query);
+    res.json(result);
+});
 }
 
 export default new BookingController();

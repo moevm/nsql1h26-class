@@ -171,6 +171,31 @@ class BookingService {
             return { message: "Успешно забронировано!", pc_name: freePC.name };
         });
     }
+
+    async getUserBookingsPaged(userId, query) {
+    const { 
+        type = 'active', 
+        page = 1, 
+        limit = 10,
+        dateFrom = '',
+        dateTo = '',
+        pairNumber = '',
+        roomName = ''
+    } = query;
+
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    
+    const statuses = type === 'active' 
+        ? ['reserved', 'active'] 
+        : ['finished', 'cancelled', 'missed'];
+
+    const filters = { dateFrom, dateTo, pairNumber, roomName };
+
+    return await BookingDao.findUserBookingsPaged(userId, statuses, filters, { 
+        offset, 
+        limit: parseInt(limit) 
+    });
+}
 }
 
 export default new BookingService();

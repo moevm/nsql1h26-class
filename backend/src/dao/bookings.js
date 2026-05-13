@@ -16,28 +16,59 @@ class BookingDao {
      * Method: findAll
      * Получить бронирования пользователя
      */
-    async findAll({ userId }) {
+    async findAll(userId, statuses, filters, { offset, limit }) {
         const fromId = userId.includes('/') ? userId : `Users/${userId}`;
 
-        const cursor = await db.query(aql`
-            FOR b IN Bookings
-                FILTER b._from == ${fromId}
-                FILTER b.status != 'cancelled'
-                SORT b.start_at ASC
-                LET pc = DOCUMENT(b._to)
-                LET room = DOCUMENT(pc.room_id)
-                RETURN {
-                    booking_id: b._key,
-                    start_at: b.start_at,
-                    end_at: b.end_at,
-                    status: b.status,
-                    pc_name: pc.name,
-                    seat_index: pc.seat_index,
-                    room_name: room ? room.name : "Аудитория"
-                }
-        `);
+        const dateFrom = filters.dateFrom || "";
+        const dateTo = filters.dateTo || "";
+        const roomName = filters.roomName || "";
+        const pairNumber = filters.pairNumber || "";
 
-        return await cursor.all();
+        const cursor = await db.query(aql`
+            LET all_matches = (
+                FOR b IN Bookings
+                    FILTER b._from == ${fromId}
+                    FILTER b.status IN ${statuses}
+                    
+                    LET pc = DOCUMENT(b._to)
+                    LET room = DOCUMENT(pc.room_id)
+                    
+                    // Фильтр по дате
+                    FILTER ${dateFrom} == "" OR b.start_at >= ${dateFrom}
+                    FILTER ${dateTo} == "" OR b.start_at <= ${dateTo}
+                    
+                    // Фильтр по аудитории
+                    FILTER ${roomName} == "" OR CONTAINS(LOWER(room.name || ""), LOWER(${roomName}))
+                    
+                    // Фильтр по номеру пары (сравнение времени HH:mm)
+                    LET b_time = SUBSTRING(b.start_at, 11, 5)
+                    LET target_time = ${pairNumber} == "1" ? "08:00" :
+                                      ${pairNumber} == "2" ? "09:50" :
+                                      ${pairNumber} == "3" ? "11:40" :
+                                      ${pairNumber} == "4" ? "13:40" :
+                                      ${pairNumber} == "5" ? "15:30" :
+                                      ${pairNumber} == "6" ? "17:20" :
+                                      ${pairNumber} == "7" ? "19:00" : ""
+                    
+                    FILTER ${pairNumber} == "" OR b_time == target_time
+                    
+                    SORT b.start_at DESC
+                    RETURN {
+                        id: b._key,
+                        start_at: b.start_at,
+                        status: b.status,
+                        room_name: room ? room.name : "Аудитория",
+                        seat_index: pc.seat_index,
+                        pc_name: pc.name
+                    }
+            )
+            
+            RETURN {
+                total: LENGTH(all_matches),
+                data: SLICE(all_matches, ${offset}, ${limit})
+            }
+        `);
+        return await cursor.next();
     }
 
     /**
@@ -136,61 +167,6 @@ class BookingDao {
         const cursor = transaction ? await transaction.step(queryFn) : await queryFn();
         return await cursor.next();
     }
-
-    async findUserBookingsPaged(userId, statuses, filters, { offset, limit }) {
-    const fromId = userId.includes('/') ? userId : `Users/${userId}`;
-    
-    const dateFrom = filters.dateFrom || "";
-    const dateTo = filters.dateTo || "";
-    const roomName = filters.roomName || "";
-    const pairNumber = filters.pairNumber || "";
-
-    const cursor = await db.query(aql`
-        LET all_matches = (
-            FOR b IN Bookings
-                FILTER b._from == ${fromId}
-                FILTER b.status IN ${statuses}
-                
-                LET pc = DOCUMENT(b._to)
-                LET room = DOCUMENT(pc.room_id)
-                
-                // Фильтр по дате (сравнение строк ГГГГ-ММ-ДД)
-                FILTER ${dateFrom} == "" OR b.start_at >= ${dateFrom}
-                FILTER ${dateTo} == "" OR b.start_at <= ${dateTo}
-                
-                // Фильтр по аудитории (подстрока, регистронезависимо)
-                FILTER ${roomName} == "" OR CONTAINS(LOWER(room.name || ""), LOWER(${roomName}))
-                
-                // Фильтр по номеру пары (сравнение времени HH:mm)
-                LET b_time = SUBSTRING(b.start_at, 11, 5)
-                LET target_time = ${pairNumber} == "1" ? "08:00" :
-                                  ${pairNumber} == "2" ? "09:50" :
-                                  ${pairNumber} == "3" ? "11:40" :
-                                  ${pairNumber} == "4" ? "13:40" :
-                                  ${pairNumber} == "5" ? "15:30" :
-                                  ${pairNumber} == "6" ? "17:20" :
-                                  ${pairNumber} == "7" ? "19:00" : ""
-                
-                FILTER ${pairNumber} == "" OR b_time == target_time
-                
-                SORT b.start_at DESC
-                RETURN {
-                    id: b._key,
-                    start_at: b.start_at,
-                    status: b.status,
-                    room_name: room ? room.name : "Аудитория",
-                    seat_index: pc.seat_index,
-                    pc_name: pc.name
-                }
-        )
-        
-        RETURN {
-            total: LENGTH(all_matches),
-            data: SLICE(all_matches, ${offset}, ${limit})
-        }
-    `);
-    return await cursor.next();
-}
 }
 
 export default new BookingDao();

@@ -16,8 +16,36 @@ class BookingService {
      * Получить список бронирований пользователя.
      * Только чтение
      */
-    async getAll({ userId }) {
-        return await BookingDao.findAll({ userId });
+    async getAll(userId, query = {}) {
+        const {
+            type = 'all',
+            page = 1,
+            limit = 10,
+            dateFrom = '',
+            dateTo = '',
+            pairNumber = '',
+            roomName = ''
+        } = query;
+
+        const offset = (Number(page) - 1) * Number(limit);
+
+        // Статусы в зависимости от типа
+        let statuses;
+        if (type === 'active') {
+            statuses = ['reserved', 'active'];
+        } else if (type === 'archive') {
+            statuses = ['finished', 'cancelled', 'missed'];
+        } else {
+            // 'all' — максимально близко к старому поведению findAll (всё, кроме cancelled)
+            statuses = ['reserved', 'active', 'finished', 'missed'];
+        }
+
+        const filters = { dateFrom, dateTo, pairNumber, roomName };
+
+        return await BookingDao.findAll(userId, statuses, filters, {
+            offset,
+            limit: Number(limit)
+        });
     }
 
     /**
@@ -171,31 +199,6 @@ class BookingService {
             return { message: "Успешно забронировано!", pc_name: freePC.name };
         });
     }
-
-    async getUserBookingsPaged(userId, query) {
-    const { 
-        type = 'active', 
-        page = 1, 
-        limit = 10,
-        dateFrom = '',
-        dateTo = '',
-        pairNumber = '',
-        roomName = ''
-    } = query;
-
-    const offset = (parseInt(page) - 1) * parseInt(limit);
-    
-    const statuses = type === 'active' 
-        ? ['reserved', 'active'] 
-        : ['finished', 'cancelled', 'missed'];
-
-    const filters = { dateFrom, dateTo, pairNumber, roomName };
-
-    return await BookingDao.findUserBookingsPaged(userId, statuses, filters, { 
-        offset, 
-        limit: parseInt(limit) 
-    });
-}
 }
 
 export default new BookingService();

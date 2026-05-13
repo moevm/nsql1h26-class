@@ -23,7 +23,7 @@ sudo docker compose build --no-cache && sudo docker compose up
 cd backend
 npm run docker:seed (для заполнения бд тестовыми данными, включая логины)
 
-http://localhost:5173/
+http://localhost/
 
 ivanov@uni.edu - логин пользователя
 admin - пароль пользователя

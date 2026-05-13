@@ -7,7 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import roomPublicRoutes from './routes/roomPublicRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
-
+import { seedDatabase } from './config/initDB.js';
 
 dotenv.config();
 
@@ -36,7 +36,7 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-
+await seedDatabase();
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`[server]: Server is running at http://localhost:${PORT}`);
 });

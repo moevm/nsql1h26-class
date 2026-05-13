@@ -82,12 +82,61 @@ async function setup() {
                 description: 'Коворкинг', 
                 grid: { rows: 2, cols: 5 },
                 tags: ["WiFi", "Chill zone"] 
+            },
+            { 
+                _key: 'room_102', 
+                name: '102', 
+                description: 'Класс для групповых занятий', 
+                grid: { rows: 2, cols: 3 },
+                tags: ["WiFi", "Chill zone", "Projector", "Whiteboard"] 
+            },
+            { 
+                _key: 'room_103', 
+                name: '103', 
+                description: 'Лаборатория для практических занятий', 
+                grid: { rows: 3, cols: 2 },
+                tags: ["WiFi", "PyTorch", "TensorFlow", "CUDA"] 
+            },
+            { 
+                _key: 'room_104', 
+                name: '104', 
+                description: 'Тут должно быть описание', 
+                grid: { rows: 3, cols: 3 },
+                tags: ["WiFi", "ТЕГ"] 
+            },
+            { 
+                _key: 'room_105', 
+                name: '105', 
+                description: 'Кабинет с компьютерами для самостоятельной работы', 
+                grid: { rows: 2, cols: 2 },
+                tags: ["vsCode", "Jupyter Notebook", "WiFi"] 
+            },
+            { 
+                _key: 'room_106', 
+                name: '106', 
+                description: 'ОПИСАНИЕ', 
+                grid: { rows: 1, cols: 4 },
+                tags: ["WiFi", "vsCode", "Jupyter Notebook"] 
+            },
+            { 
+                _key: 'room_107', 
+                name: '107', 
+                description: 'Зал', 
+                grid: { rows: 4, cols: 1 },
+                tags: ["WiFi", "Docker", "Kubernetes", "OpenShift"] 
+            },
+            { 
+                _key: 'room_108', 
+                name: '108', 
+                description: 'lalalalalla', 
+                grid: { rows: 3, cols: 2 },
+                tags: ["WiFi", "ТЕГ", "ПРОЕКТОР"] 
             }
         ];
         await db.collection('Rooms').import(roomsData);
 
         const computers = [];
-        const softwarePool = ["Python 3.12", "CUDA 12.1", "PyTorch", "VS Code", "Docker"];
+        const softwarePool = ["Python 3.12", "CUDA 12.1", "PyTorch", "VS Code", "Docker", "Jupyter Notebook", "TensorFlow", "Anaconda", "Git", "Node.js", "R", "MATLAB", "Scala", "Go", "Rust", "Julia", "PHP", "Ruby", "Perl", "Swift", "Kotlin", "SQL Server", "MongoDB", "ArangoDB", "Neo4j", "Redis", "ElasticSearch", "Grafana", "Kibana", "Prometheus", "OpenCV", "Blender", "Unity3D", "Unreal Engine", "AutoCAD", "SolidWorks", "VMware", "VirtualBox", "Postman", "Figma", "Adobe Photoshop", "Adobe Illustrator", "Adobe Premiere Pro", "Adobe After Effects", "Microsoft Office", "LibreOffice", "Notepad++", "Sublime Text", "Atom", "Eclipse", "IntelliJ IDEA", "WebStorm", "PyCharm", "CLion", "Rider", "DataGrip"];
         
         roomsData.forEach(room => {
             const count = room.grid.rows * room.grid.cols;
@@ -96,10 +145,10 @@ async function setup() {
                     _key: `pc_${room._key}_${i}`,
                     room_id: `Rooms/${room._key}`,
                     seat_index: i,
-                    inv_number: `INV-2026-100${i}`,
-                    mac_address: `00:1A:2B:3C:4D:5${i}`,
+                    inv_number: `INV-2026-${Math.floor(Math.random() * (1000 - 100 + 1)) + 100}${i}`,
+                    mac_address: `${i}${Math.floor(Math.random() * (9 + 1))}:${Math.floor(Math.random() * (9 + 1))}A:${Math.floor(Math.random() * (9 + 1))}B:${Math.floor(Math.random() * (9 + 1))}C:${Math.floor(Math.random() * (9 + 1))}D:5${i}`,
                     status: i % 5 === 0 ? 'maintenance' : 'active',
-                    software: softwarePool.slice(0, 3),
+                    software: softwarePool.slice(0, 7),
                     specs: {
                         cpu: "Intel Core i5-13600K",
                         ram: "16 GB",

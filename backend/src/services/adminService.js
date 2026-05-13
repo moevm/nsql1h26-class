@@ -35,7 +35,7 @@ class AdminService {
 
         for (const colName of this.collections) {
             if (!data[colName]) continue;
-            
+            console.log(`Импорт коллекции ${colName} (${data[colName].length} записей)...`);
             const collection = db.collection(colName);
             if (await collection.exists()) {
                 await collection.truncate();

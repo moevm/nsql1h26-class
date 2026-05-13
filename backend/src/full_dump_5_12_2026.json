@@ -1,0 +1,2643 @@
+{
+  "Users": [
+    {
+      "_key": "ivan_i0000",
+      "_id": "Users/ivan_i0000",
+      "_rev": "_lgGto5y---",
+      "full_name": "Иван Иванов",
+      "email": "ivanov@uni.edu",
+      "password": "$2a$10$F8dcjWshPEaU4NNnhpRw.uwHwCao8U8HKHKvB.eJwH1xPfOCAl6rq",
+      "group_code": "0000",
+      "is_admin": false,
+      "meta": {
+        "created_at": "2026-03-01T10:00:00Z",
+        "last_login": "2026-05-13T16:33:30.035Z"
+      }
+    },
+    {
+      "_key": "admin_vasya",
+      "_id": "Users/admin_vasya",
+      "_rev": "_lgGwcf----",
+      "full_name": "Василий Админов",
+      "email": "admin@uni.edu",
+      "password": "$2a$10$F8dcjWshPEaU4NNnhpRw.uwHwCao8U8HKHKvB.eJwH1xPfOCAl6rq",
+      "group_code": "STAFF",
+      "is_admin": true,
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "last_login": "2026-05-13T16:36:33.934Z"
+      }
+    },
+    {
+      "_key": "341",
+      "_id": "Users/341",
+      "_rev": "_lgGxWry---",
+      "full_name": "Пользователь Пользователич",
+      "email": "user@gmail.com",
+      "password": "$2a$10$piJKWbQsLykELMaiHvi0deiRehOT.n0YqWk.YBwVB5ZMwN2aSZ6oW",
+      "group_code": "0000",
+      "is_admin": false,
+      "meta": {
+        "created_at": "2026-05-13T16:37:33.532Z",
+        "updated_at": null,
+        "last_login": null
+      }
+    },
+    {
+      "_key": "368",
+      "_id": "Users/368",
+      "_rev": "_lgGyKjO---",
+      "full_name": "Админ Админыч",
+      "email": "newadmin@gmail.com",
+      "password": "$2a$10$ylfqaU5/iNsCSCLxauaNL.ygEgQ/Hoq7oH6B2MyuTV6Ubp.MbD2tO",
+      "group_code": "0000",
+      "is_admin": true,
+      "meta": {
+        "created_at": "2026-05-13T16:38:26.642Z",
+        "updated_at": null,
+        "last_login": null
+      }
+    },
+    {
+      "_key": "395",
+      "_id": "Users/395",
+      "_rev": "_lgGyroO---",
+      "full_name": "Тестер Тестерович",
+      "email": "teser@gmail.com",
+      "password": "$2a$10$i2LSHMLhdHMgLdDYEyI6J.uiZDZ1vutHjWhZjFJQnE/r2Ohywc/3i",
+      "group_code": "0000",
+      "is_admin": false,
+      "meta": {
+        "created_at": "2026-05-13T16:39:00.514Z",
+        "updated_at": null,
+        "last_login": null
+      }
+    },
+    {
+      "_key": "428",
+      "_id": "Users/428",
+      "_rev": "_lgGzpHG---",
+      "full_name": "Куратор Кураторович",
+      "email": "kurator@gmail.com",
+      "password": "$2a$10$.sOJCNH/xo7Yof4hUmjiP.ze55EaCiGw7FFmVBsyv4kzHECuKY0KW",
+      "group_code": "0000",
+      "is_admin": true,
+      "meta": {
+        "created_at": "2026-05-13T16:40:03.473Z",
+        "updated_at": null,
+        "last_login": null
+      }
+    },
+    {
+      "_key": "447",
+      "_id": "Users/447",
+      "_rev": "_lgG0B0O---",
+      "full_name": "Студент Студентович",
+      "email": "student@gmail.com",
+      "password": "$2a$10$bdBfhcCSedXbg2QRYBD1ge23Fmf0EkwYJv.w4DGuVKbwhE9/HUP1i",
+      "group_code": "7777",
+      "is_admin": false,
+      "meta": {
+        "created_at": "2026-05-13T16:40:28.770Z",
+        "updated_at": null,
+        "last_login": null
+      }
+    },
+    {
+      "_key": "481",
+      "_id": "Users/481",
+      "_rev": "_lgG096q---",
+      "full_name": "Неопознанный Енот",
+      "email": "animal@gmail.com",
+      "password": "$2a$10$sq/gvoeF4AjS.kV6WsnK3uQ626K6Ao51CDkZ9pYZrUOiYyfEEfjKC",
+      "group_code": "0000",
+      "is_admin": false,
+      "meta": {
+        "created_at": "2026-05-13T16:41:30.314Z",
+        "updated_at": null,
+        "last_login": null
+      }
+    },
+    {
+      "_key": "508",
+      "_id": "Users/508",
+      "_rev": "_lgG12Oy---",
+      "full_name": "Ученик Ученикович",
+      "email": "schoolchild@gmail.com",
+      "password": "$2a$10$81VWw0r76tdKMfTsyPY6xOlX9aKfU7Zd6GbMS2PWqlhLlkqoHQrva",
+      "group_code": "1234",
+      "is_admin": false,
+      "meta": {
+        "created_at": "2026-05-13T16:42:27.980Z",
+        "updated_at": null,
+        "last_login": null
+      }
+    },
+    {
+      "_key": "539",
+      "_id": "Users/539",
+      "_rev": "_lgG2ooe---",
+      "full_name": "Неопознанная Улитка",
+      "email": "snail@gmail.com",
+      "password": "$2a$10$Bz7Cwgtw2nKkqmJQEpQHWe1ssYMxrDT0At/q7/HP.3V2cCYByTDPu",
+      "group_code": "8712",
+      "is_admin": false,
+      "meta": {
+        "created_at": "2026-05-13T16:43:19.590Z",
+        "updated_at": null,
+        "last_login": null
+      }
+    }
+  ],
+  "Rooms": [
+    {
+      "_key": "room_405b",
+      "_id": "Rooms/room_405b",
+      "_rev": "_lgITv3----",
+      "name": "405-Б",
+      "description": "Основная лаборатория для занятий по нейросетям",
+      "grid": {
+        "rows": 4,
+        "cols": 4
+      },
+      "tags": [
+        "Машинное обучение",
+        "GPU RTX 4090",
+        "Проектор"
+      ]
+    },
+    {
+      "_key": "room_101",
+      "_id": "Rooms/room_101",
+      "_rev": "_lgITv3---_",
+      "name": "101",
+      "description": "Коворкинг",
+      "grid": {
+        "rows": 2,
+        "cols": 5
+      },
+      "tags": [
+        "WiFi",
+        "Chill zone"
+      ]
+    },
+    {
+      "_key": "room_102",
+      "_id": "Rooms/room_102",
+      "_rev": "_lgITv3---A",
+      "name": "102",
+      "description": "Класс для групповых занятий",
+      "grid": {
+        "rows": 2,
+        "cols": 3
+      },
+      "tags": [
+        "WiFi",
+        "Chill zone",
+        "Projector",
+        "Whiteboard"
+      ]
+    },
+    {
+      "_key": "room_103",
+      "_id": "Rooms/room_103",
+      "_rev": "_lgITv3---B",
+      "name": "103",
+      "description": "Лаборатория для практических занятий",
+      "grid": {
+        "rows": 3,
+        "cols": 2
+      },
+      "tags": [
+        "WiFi",
+        "PyTorch",
+        "TensorFlow",
+        "CUDA"
+      ]
+    },
+    {
+      "_key": "room_104",
+      "_id": "Rooms/room_104",
+      "_rev": "_lgITv3---C",
+      "name": "104",
+      "description": "Тут должно быть описание",
+      "grid": {
+        "rows": 3,
+        "cols": 3
+      },
+      "tags": [
+        "WiFi",
+        "ТЕГ"
+      ]
+    },
+    {
+      "_key": "room_105",
+      "_id": "Rooms/room_105",
+      "_rev": "_lgITv3---D",
+      "name": "105",
+      "description": "Кабинет с компьютерами для самостоятельной работы",
+      "grid": {
+        "rows": 2,
+        "cols": 2
+      },
+      "tags": [
+        "vsCode",
+        "Jupyter Notebook",
+        "WiFi"
+      ]
+    },
+    {
+      "_key": "room_106",
+      "_id": "Rooms/room_106",
+      "_rev": "_lgITv3---E",
+      "name": "106",
+      "description": "ОПИСАНИЕ",
+      "grid": {
+        "rows": 1,
+        "cols": 4
+      },
+      "tags": [
+        "WiFi",
+        "vsCode",
+        "Jupyter Notebook"
+      ]
+    },
+    {
+      "_key": "room_107",
+      "_id": "Rooms/room_107",
+      "_rev": "_lgITv3---F",
+      "name": "107",
+      "description": "Зал",
+      "grid": {
+        "rows": 4,
+        "cols": 1
+      },
+      "tags": [
+        "WiFi",
+        "Docker",
+        "Kubernetes",
+        "OpenShift"
+      ]
+    },
+    {
+      "_key": "room_108",
+      "_id": "Rooms/room_108",
+      "_rev": "_lgITv3---G",
+      "name": "108",
+      "description": "lalalalalla",
+      "grid": {
+        "rows": 3,
+        "cols": 2
+      },
+      "tags": [
+        "WiFi",
+        "ТЕГ",
+        "ПРОЕКТОР"
+      ]
+    }
+  ],
+  "Computers": [
+    {
+      "_key": "pc_room_405b_1",
+      "_id": "Computers/pc_room_405b_1",
+      "_rev": "_lgITv3O---",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 1,
+      "inv_number": "INV-2026-7171",
+      "mac_address": "16:5A:1B:3C:2D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_2",
+      "_id": "Computers/pc_room_405b_2",
+      "_rev": "_lgITv3O--_",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 2,
+      "inv_number": "INV-2026-2512",
+      "mac_address": "21:0A:9B:8C:6D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_3",
+      "_id": "Computers/pc_room_405b_3",
+      "_rev": "_lgITv3O--A",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 3,
+      "inv_number": "INV-2026-6043",
+      "mac_address": "32:9A:1B:2C:1D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_4",
+      "_id": "Computers/pc_room_405b_4",
+      "_rev": "_lgITv3O--B",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 4,
+      "inv_number": "INV-2026-6204",
+      "mac_address": "40:8A:4B:0C:8D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_5",
+      "_id": "Computers/pc_room_405b_5",
+      "_rev": "_lgITv3O--C",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 5,
+      "inv_number": "INV-2026-4445",
+      "mac_address": "56:4A:4B:2C:5D:55",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_6",
+      "_id": "Computers/pc_room_405b_6",
+      "_rev": "_lgITv3O--D",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 6,
+      "inv_number": "INV-2026-6786",
+      "mac_address": "61:2A:6B:1C:8D:56",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_7",
+      "_id": "Computers/pc_room_405b_7",
+      "_rev": "_lgITv3O--E",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 7,
+      "inv_number": "INV-2026-7117",
+      "mac_address": "75:6A:7B:2C:4D:57",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_8",
+      "_id": "Computers/pc_room_405b_8",
+      "_rev": "_lgITv3O--F",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 8,
+      "inv_number": "INV-2026-2018",
+      "mac_address": "81:4A:7B:2C:9D:58",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_9",
+      "_id": "Computers/pc_room_405b_9",
+      "_rev": "_lgITv3O--G",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 9,
+      "inv_number": "INV-2026-4119",
+      "mac_address": "94:6A:2B:9C:6D:59",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_10",
+      "_id": "Computers/pc_room_405b_10",
+      "_rev": "_lgITv3O--H",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 10,
+      "inv_number": "INV-2026-25210",
+      "mac_address": "108:8A:6B:0C:6D:510",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_11",
+      "_id": "Computers/pc_room_405b_11",
+      "_rev": "_lgITv3O--I",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 11,
+      "inv_number": "INV-2026-80211",
+      "mac_address": "114:4A:2B:1C:5D:511",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_12",
+      "_id": "Computers/pc_room_405b_12",
+      "_rev": "_lgITv3O--J",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 12,
+      "inv_number": "INV-2026-73212",
+      "mac_address": "125:5A:4B:3C:9D:512",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_13",
+      "_id": "Computers/pc_room_405b_13",
+      "_rev": "_lgITv3O--K",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 13,
+      "inv_number": "INV-2026-61113",
+      "mac_address": "134:4A:3B:6C:8D:513",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_14",
+      "_id": "Computers/pc_room_405b_14",
+      "_rev": "_lgITv3O--L",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 14,
+      "inv_number": "INV-2026-47614",
+      "mac_address": "147:5A:2B:3C:3D:514",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_15",
+      "_id": "Computers/pc_room_405b_15",
+      "_rev": "_lgITv3O--M",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 15,
+      "inv_number": "INV-2026-11215",
+      "mac_address": "155:9A:9B:4C:5D:515",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_405b_16",
+      "_id": "Computers/pc_room_405b_16",
+      "_rev": "_lgITv3O--N",
+      "room_id": "Rooms/room_405b",
+      "seat_index": 16,
+      "inv_number": "INV-2026-58916",
+      "mac_address": "167:3A:0B:7C:7D:516",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_1",
+      "_id": "Computers/pc_room_101_1",
+      "_rev": "_lgITv3O--O",
+      "room_id": "Rooms/room_101",
+      "seat_index": 1,
+      "inv_number": "INV-2026-4571",
+      "mac_address": "12:0A:6B:7C:5D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_2",
+      "_id": "Computers/pc_room_101_2",
+      "_rev": "_lgITv3O--P",
+      "room_id": "Rooms/room_101",
+      "seat_index": 2,
+      "inv_number": "INV-2026-4052",
+      "mac_address": "28:9A:2B:0C:0D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_3",
+      "_id": "Computers/pc_room_101_3",
+      "_rev": "_lgITv3O--Q",
+      "room_id": "Rooms/room_101",
+      "seat_index": 3,
+      "inv_number": "INV-2026-3603",
+      "mac_address": "34:2A:5B:7C:4D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_4",
+      "_id": "Computers/pc_room_101_4",
+      "_rev": "_lgITv3O--R",
+      "room_id": "Rooms/room_101",
+      "seat_index": 4,
+      "inv_number": "INV-2026-1964",
+      "mac_address": "42:2A:8B:7C:3D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_5",
+      "_id": "Computers/pc_room_101_5",
+      "_rev": "_lgITv3O--S",
+      "room_id": "Rooms/room_101",
+      "seat_index": 5,
+      "inv_number": "INV-2026-8145",
+      "mac_address": "53:3A:7B:9C:5D:55",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_6",
+      "_id": "Computers/pc_room_101_6",
+      "_rev": "_lgITv3O--T",
+      "room_id": "Rooms/room_101",
+      "seat_index": 6,
+      "inv_number": "INV-2026-5866",
+      "mac_address": "64:5A:4B:3C:4D:56",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_7",
+      "_id": "Computers/pc_room_101_7",
+      "_rev": "_lgITv3O--U",
+      "room_id": "Rooms/room_101",
+      "seat_index": 7,
+      "inv_number": "INV-2026-9617",
+      "mac_address": "70:9A:2B:9C:3D:57",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_8",
+      "_id": "Computers/pc_room_101_8",
+      "_rev": "_lgITv3O--V",
+      "room_id": "Rooms/room_101",
+      "seat_index": 8,
+      "inv_number": "INV-2026-9248",
+      "mac_address": "83:4A:3B:4C:0D:58",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_9",
+      "_id": "Computers/pc_room_101_9",
+      "_rev": "_lgITv3O--W",
+      "room_id": "Rooms/room_101",
+      "seat_index": 9,
+      "inv_number": "INV-2026-7949",
+      "mac_address": "97:0A:1B:2C:4D:59",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_101_10",
+      "_id": "Computers/pc_room_101_10",
+      "_rev": "_lgITv3O--X",
+      "room_id": "Rooms/room_101",
+      "seat_index": 10,
+      "inv_number": "INV-2026-19010",
+      "mac_address": "100:9A:2B:6C:1D:510",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_102_1",
+      "_id": "Computers/pc_room_102_1",
+      "_rev": "_lgITv3O--Y",
+      "room_id": "Rooms/room_102",
+      "seat_index": 1,
+      "inv_number": "INV-2026-4371",
+      "mac_address": "11:9A:6B:3C:3D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_102_2",
+      "_id": "Computers/pc_room_102_2",
+      "_rev": "_lgITv3O--Z",
+      "room_id": "Rooms/room_102",
+      "seat_index": 2,
+      "inv_number": "INV-2026-2162",
+      "mac_address": "28:0A:1B:2C:6D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_102_3",
+      "_id": "Computers/pc_room_102_3",
+      "_rev": "_lgITv3O--a",
+      "room_id": "Rooms/room_102",
+      "seat_index": 3,
+      "inv_number": "INV-2026-1793",
+      "mac_address": "31:3A:0B:1C:9D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_102_4",
+      "_id": "Computers/pc_room_102_4",
+      "_rev": "_lgITv3O--b",
+      "room_id": "Rooms/room_102",
+      "seat_index": 4,
+      "inv_number": "INV-2026-5514",
+      "mac_address": "46:0A:4B:8C:1D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_102_5",
+      "_id": "Computers/pc_room_102_5",
+      "_rev": "_lgITv3O--c",
+      "room_id": "Rooms/room_102",
+      "seat_index": 5,
+      "inv_number": "INV-2026-3315",
+      "mac_address": "54:3A:6B:1C:4D:55",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_102_6",
+      "_id": "Computers/pc_room_102_6",
+      "_rev": "_lgITv3O--d",
+      "room_id": "Rooms/room_102",
+      "seat_index": 6,
+      "inv_number": "INV-2026-5876",
+      "mac_address": "61:1A:4B:9C:6D:56",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_103_1",
+      "_id": "Computers/pc_room_103_1",
+      "_rev": "_lgITv3O--e",
+      "room_id": "Rooms/room_103",
+      "seat_index": 1,
+      "inv_number": "INV-2026-5361",
+      "mac_address": "13:9A:4B:8C:2D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_103_2",
+      "_id": "Computers/pc_room_103_2",
+      "_rev": "_lgITv3O--f",
+      "room_id": "Rooms/room_103",
+      "seat_index": 2,
+      "inv_number": "INV-2026-7892",
+      "mac_address": "23:6A:0B:5C:0D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_103_3",
+      "_id": "Computers/pc_room_103_3",
+      "_rev": "_lgITv3O--g",
+      "room_id": "Rooms/room_103",
+      "seat_index": 3,
+      "inv_number": "INV-2026-2853",
+      "mac_address": "39:1A:0B:8C:8D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_103_4",
+      "_id": "Computers/pc_room_103_4",
+      "_rev": "_lgITv3O--h",
+      "room_id": "Rooms/room_103",
+      "seat_index": 4,
+      "inv_number": "INV-2026-5124",
+      "mac_address": "48:6A:8B:9C:1D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_103_5",
+      "_id": "Computers/pc_room_103_5",
+      "_rev": "_lgITv3O--i",
+      "room_id": "Rooms/room_103",
+      "seat_index": 5,
+      "inv_number": "INV-2026-5185",
+      "mac_address": "50:7A:6B:1C:2D:55",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_103_6",
+      "_id": "Computers/pc_room_103_6",
+      "_rev": "_lgITv3O--j",
+      "room_id": "Rooms/room_103",
+      "seat_index": 6,
+      "inv_number": "INV-2026-7596",
+      "mac_address": "69:7A:0B:7C:0D:56",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_1",
+      "_id": "Computers/pc_room_104_1",
+      "_rev": "_lgITv3O--k",
+      "room_id": "Rooms/room_104",
+      "seat_index": 1,
+      "inv_number": "INV-2026-2451",
+      "mac_address": "16:5A:3B:5C:3D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_2",
+      "_id": "Computers/pc_room_104_2",
+      "_rev": "_lgITv3O--l",
+      "room_id": "Rooms/room_104",
+      "seat_index": 2,
+      "inv_number": "INV-2026-1582",
+      "mac_address": "27:8A:4B:8C:9D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_3",
+      "_id": "Computers/pc_room_104_3",
+      "_rev": "_lgITv3O--m",
+      "room_id": "Rooms/room_104",
+      "seat_index": 3,
+      "inv_number": "INV-2026-5333",
+      "mac_address": "35:5A:2B:9C:6D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_4",
+      "_id": "Computers/pc_room_104_4",
+      "_rev": "_lgITv3O--n",
+      "room_id": "Rooms/room_104",
+      "seat_index": 4,
+      "inv_number": "INV-2026-2954",
+      "mac_address": "40:1A:1B:0C:9D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_5",
+      "_id": "Computers/pc_room_104_5",
+      "_rev": "_lgITv3O--o",
+      "room_id": "Rooms/room_104",
+      "seat_index": 5,
+      "inv_number": "INV-2026-7935",
+      "mac_address": "58:9A:2B:8C:5D:55",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_6",
+      "_id": "Computers/pc_room_104_6",
+      "_rev": "_lgITv3O--p",
+      "room_id": "Rooms/room_104",
+      "seat_index": 6,
+      "inv_number": "INV-2026-4246",
+      "mac_address": "60:4A:0B:4C:2D:56",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_7",
+      "_id": "Computers/pc_room_104_7",
+      "_rev": "_lgITv3O--q",
+      "room_id": "Rooms/room_104",
+      "seat_index": 7,
+      "inv_number": "INV-2026-4447",
+      "mac_address": "76:0A:3B:2C:4D:57",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_8",
+      "_id": "Computers/pc_room_104_8",
+      "_rev": "_lgITv3S---",
+      "room_id": "Rooms/room_104",
+      "seat_index": 8,
+      "inv_number": "INV-2026-4718",
+      "mac_address": "85:1A:3B:6C:3D:58",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_104_9",
+      "_id": "Computers/pc_room_104_9",
+      "_rev": "_lgITv3S--_",
+      "room_id": "Rooms/room_104",
+      "seat_index": 9,
+      "inv_number": "INV-2026-8149",
+      "mac_address": "94:0A:6B:5C:3D:59",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_105_1",
+      "_id": "Computers/pc_room_105_1",
+      "_rev": "_lgITv3S--A",
+      "room_id": "Rooms/room_105",
+      "seat_index": 1,
+      "inv_number": "INV-2026-3991",
+      "mac_address": "19:6A:7B:0C:9D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_105_2",
+      "_id": "Computers/pc_room_105_2",
+      "_rev": "_lgITv3S--B",
+      "room_id": "Rooms/room_105",
+      "seat_index": 2,
+      "inv_number": "INV-2026-8842",
+      "mac_address": "27:3A:3B:9C:5D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_105_3",
+      "_id": "Computers/pc_room_105_3",
+      "_rev": "_lgITv3S--C",
+      "room_id": "Rooms/room_105",
+      "seat_index": 3,
+      "inv_number": "INV-2026-7553",
+      "mac_address": "39:0A:6B:0C:6D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_105_4",
+      "_id": "Computers/pc_room_105_4",
+      "_rev": "_lgITv3S--D",
+      "room_id": "Rooms/room_105",
+      "seat_index": 4,
+      "inv_number": "INV-2026-7784",
+      "mac_address": "46:0A:8B:7C:5D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_106_1",
+      "_id": "Computers/pc_room_106_1",
+      "_rev": "_lgITv3S--E",
+      "room_id": "Rooms/room_106",
+      "seat_index": 1,
+      "inv_number": "INV-2026-7221",
+      "mac_address": "17:2A:8B:6C:3D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_106_2",
+      "_id": "Computers/pc_room_106_2",
+      "_rev": "_lgITv3S--F",
+      "room_id": "Rooms/room_106",
+      "seat_index": 2,
+      "inv_number": "INV-2026-3792",
+      "mac_address": "24:9A:2B:3C:1D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_106_3",
+      "_id": "Computers/pc_room_106_3",
+      "_rev": "_lgITv3S--G",
+      "room_id": "Rooms/room_106",
+      "seat_index": 3,
+      "inv_number": "INV-2026-6633",
+      "mac_address": "38:4A:3B:1C:0D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_106_4",
+      "_id": "Computers/pc_room_106_4",
+      "_rev": "_lgITv3S--H",
+      "room_id": "Rooms/room_106",
+      "seat_index": 4,
+      "inv_number": "INV-2026-9254",
+      "mac_address": "41:9A:2B:9C:3D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_107_1",
+      "_id": "Computers/pc_room_107_1",
+      "_rev": "_lgITv3S--I",
+      "room_id": "Rooms/room_107",
+      "seat_index": 1,
+      "inv_number": "INV-2026-7671",
+      "mac_address": "19:4A:9B:4C:6D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_107_2",
+      "_id": "Computers/pc_room_107_2",
+      "_rev": "_lgITv3S--J",
+      "room_id": "Rooms/room_107",
+      "seat_index": 2,
+      "inv_number": "INV-2026-7262",
+      "mac_address": "29:2A:5B:4C:0D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_107_3",
+      "_id": "Computers/pc_room_107_3",
+      "_rev": "_lgITv3S--K",
+      "room_id": "Rooms/room_107",
+      "seat_index": 3,
+      "inv_number": "INV-2026-3913",
+      "mac_address": "36:6A:7B:1C:7D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_107_4",
+      "_id": "Computers/pc_room_107_4",
+      "_rev": "_lgITv3S--L",
+      "room_id": "Rooms/room_107",
+      "seat_index": 4,
+      "inv_number": "INV-2026-2344",
+      "mac_address": "48:6A:2B:5C:8D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_108_1",
+      "_id": "Computers/pc_room_108_1",
+      "_rev": "_lgITv3S--M",
+      "room_id": "Rooms/room_108",
+      "seat_index": 1,
+      "inv_number": "INV-2026-6141",
+      "mac_address": "19:1A:7B:4C:6D:51",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_108_2",
+      "_id": "Computers/pc_room_108_2",
+      "_rev": "_lgITv3S--N",
+      "room_id": "Rooms/room_108",
+      "seat_index": 2,
+      "inv_number": "INV-2026-6552",
+      "mac_address": "24:0A:9B:0C:0D:52",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_108_3",
+      "_id": "Computers/pc_room_108_3",
+      "_rev": "_lgITv3S--O",
+      "room_id": "Rooms/room_108",
+      "seat_index": 3,
+      "inv_number": "INV-2026-9323",
+      "mac_address": "38:6A:9B:6C:3D:53",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_108_4",
+      "_id": "Computers/pc_room_108_4",
+      "_rev": "_lgITv3S--P",
+      "room_id": "Rooms/room_108",
+      "seat_index": 4,
+      "inv_number": "INV-2026-8964",
+      "mac_address": "48:2A:1B:8C:4D:54",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_108_5",
+      "_id": "Computers/pc_room_108_5",
+      "_rev": "_lgITv3S--Q",
+      "room_id": "Rooms/room_108",
+      "seat_index": 5,
+      "inv_number": "INV-2026-2855",
+      "mac_address": "51:4A:9B:1C:0D:55",
+      "status": "maintenance",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    },
+    {
+      "_key": "pc_room_108_6",
+      "_id": "Computers/pc_room_108_6",
+      "_rev": "_lgITv3S--R",
+      "room_id": "Rooms/room_108",
+      "seat_index": 6,
+      "inv_number": "INV-2026-5236",
+      "mac_address": "62:6A:6B:4C:1D:56",
+      "status": "active",
+      "software": [
+        "Python 3.12",
+        "CUDA 12.1",
+        "PyTorch",
+        "VS Code",
+        "Docker",
+        "Jupyter Notebook",
+        "TensorFlow"
+      ],
+      "specs": {
+        "cpu": "Intel Core i5-13600K",
+        "ram": "16 GB",
+        "gpu": "RTX 4090"
+      },
+      "meta": {
+        "created_at": "2026-04-01T12:00:00Z",
+        "created_by": "Users/admin_vasya"
+      }
+    }
+  ],
+  "Bookings": [
+    {
+      "_key": "book_8492",
+      "_id": "Bookings/book_8492",
+      "_from": "Users/ivan_i0000",
+      "_to": "Computers/pc_room_405b_1",
+      "_rev": "_lgIXBa2---",
+      "start_at": "2026-10-12T08:00:00Z",
+      "end_at": "2026-10-12T09:30:00Z",
+      "status": "finished",
+      "total_work_time_minutes": 85,
+      "meta": {
+        "created_at": "2026-05-12T16:15:27.684Z"
+      },
+      "history": [
+        {
+          "old_status": "reserved",
+          "new_status": "active",
+          "changed_at": "2026-10-12T10:05:00Z",
+          "changed_by": "Users/ivan_i0000"
+        }
+      ]
+    },
+    {
+      "_key": "11221",
+      "_id": "Bookings/11221",
+      "_from": "Users/ivan_i0000",
+      "_to": "Computers/pc_room_405b_1",
+      "_rev": "_lgIXBa2--_",
+      "start_at": "2026-05-28T08:00:00Z",
+      "end_at": "2026-05-28T09:30:00Z",
+      "status": "cancelled",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-12T16:25:48.604Z",
+        "updated_at": "2026-05-12T16:26:12.589Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-12T16:25:48.604Z",
+          "changed_by": "Users/ivan_i0000"
+        },
+        {
+          "old_status": "reserved",
+          "new_status": "cancelled",
+          "changed_at": "2026-05-12T16:26:12.589Z",
+          "changed_by": "Users/admin_vasya"
+        }
+      ]
+    },
+    {
+      "_key": "11222",
+      "_id": "Bookings/11222",
+      "_from": "Users/ivan_i0000",
+      "_to": "Computers/pc_room_106_1",
+      "_rev": "_lgIYaLK---",
+      "start_at": "2026-05-13T08:00:00Z",
+      "end_at": "2026-05-13T09:30:00Z",
+      "status": "cancelled",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:30:01.667Z",
+        "updated_at": "2026-05-13T18:30:07.312Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:30:01.667Z",
+          "changed_by": "Users/ivan_i0000"
+        },
+        {
+          "old_status": "reserved",
+          "new_status": "cancelled",
+          "changed_at": "2026-05-13T18:30:07.312Z",
+          "changed_by": "Users/ivan_i0000"
+        }
+      ]
+    },
+    {
+      "_key": "11223",
+      "_id": "Bookings/11223",
+      "_from": "Users/ivan_i0000",
+      "_to": "Computers/pc_room_108_1",
+      "_rev": "_lgIYgb2---",
+      "start_at": "2026-05-13T08:00:00Z",
+      "end_at": "2026-05-13T09:30:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:30:13.724Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:30:13.724Z",
+          "changed_by": "Users/ivan_i0000"
+        }
+      ]
+    },
+    {
+      "_key": "11224",
+      "_id": "Bookings/11224",
+      "_from": "Users/ivan_i0000",
+      "_to": "Computers/pc_room_102_2",
+      "_rev": "_lgIaF6e---",
+      "start_at": "2026-05-13T13:40:00Z",
+      "end_at": "2026-05-13T15:10:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:31:57.638Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:31:57.638Z",
+          "changed_by": "Users/ivan_i0000"
+        }
+      ]
+    },
+    {
+      "_key": "11225",
+      "_id": "Bookings/11225",
+      "_from": "Users/ivan_i0000",
+      "_to": "Computers/pc_room_405b_1",
+      "_rev": "_lgIaPEm---",
+      "start_at": "2026-05-20T13:40:00Z",
+      "end_at": "2026-05-20T15:10:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:32:07.017Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:32:07.017Z",
+          "changed_by": "Users/ivan_i0000"
+        }
+      ]
+    },
+    {
+      "_key": "11226",
+      "_id": "Bookings/11226",
+      "_from": "Users/ivan_i0000",
+      "_to": "Computers/pc_room_101_3",
+      "_rev": "_lgIabdS---",
+      "start_at": "2026-05-18T13:40:00Z",
+      "end_at": "2026-05-18T15:10:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:32:19.699Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:32:19.699Z",
+          "changed_by": "Users/ivan_i0000"
+        }
+      ]
+    },
+    {
+      "_key": "11227",
+      "_id": "Bookings/11227",
+      "_from": "Users/341",
+      "_to": "Computers/pc_room_405b_1",
+      "_rev": "_lgIbb_S---",
+      "start_at": "2026-05-13T08:00:00Z",
+      "end_at": "2026-05-13T09:30:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:33:24.755Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:33:24.755Z",
+          "changed_by": "Users/341"
+        }
+      ]
+    },
+    {
+      "_key": "11228",
+      "_id": "Bookings/11228",
+      "_from": "Users/341",
+      "_to": "Computers/pc_room_101_1",
+      "_rev": "_lgIcYE6---",
+      "start_at": "2026-05-18T13:40:00Z",
+      "end_at": "2026-05-18T15:10:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:34:27.310Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:34:27.310Z",
+          "changed_by": "Users/341"
+        }
+      ]
+    },
+    {
+      "_key": "11229",
+      "_id": "Bookings/11229",
+      "_from": "Users/341",
+      "_to": "Computers/pc_room_405b_16",
+      "_rev": "_lgIcjnm---",
+      "start_at": "2026-05-28T17:20:00Z",
+      "end_at": "2026-05-28T18:50:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:34:39.128Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:34:39.128Z",
+          "changed_by": "Users/341"
+        }
+      ]
+    },
+    {
+      "_key": "11230",
+      "_id": "Bookings/11230",
+      "_from": "Users/341",
+      "_to": "Computers/pc_room_105_1",
+      "_rev": "_lgIcvry---",
+      "start_at": "2026-05-28T08:00:00Z",
+      "end_at": "2026-05-28T09:30:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:34:51.484Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:34:51.484Z",
+          "changed_by": "Users/341"
+        }
+      ]
+    },
+    {
+      "_key": "11231",
+      "_id": "Bookings/11231",
+      "_from": "Users/395",
+      "_to": "Computers/pc_room_405b_2",
+      "_rev": "_lgIdb16---",
+      "start_at": "2026-05-13T08:00:00Z",
+      "end_at": "2026-05-13T09:30:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:35:36.702Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:35:36.702Z",
+          "changed_by": "Users/395"
+        }
+      ]
+    },
+    {
+      "_key": "11232",
+      "_id": "Bookings/11232",
+      "_from": "Users/395",
+      "_to": "Computers/pc_room_101_2",
+      "_rev": "_lgIdkEO---",
+      "start_at": "2026-05-29T08:00:00Z",
+      "end_at": "2026-05-29T09:30:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:35:45.123Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:35:45.123Z",
+          "changed_by": "Users/395"
+        }
+      ]
+    },
+    {
+      "_key": "11233",
+      "_id": "Bookings/11233",
+      "_from": "Users/395",
+      "_to": "Computers/pc_room_102_2",
+      "_rev": "_lgIdrW6---",
+      "start_at": "2026-05-29T13:40:00Z",
+      "end_at": "2026-05-29T15:10:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:35:52.589Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:35:52.589Z",
+          "changed_by": "Users/395"
+        }
+      ]
+    },
+    {
+      "_key": "11234",
+      "_id": "Bookings/11234",
+      "_from": "Users/395",
+      "_to": "Computers/pc_room_405b_13",
+      "_rev": "_lgId1ae---",
+      "start_at": "2026-05-15T13:40:00Z",
+      "end_at": "2026-05-15T15:10:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:36:02.886Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:36:02.886Z",
+          "changed_by": "Users/395"
+        }
+      ]
+    },
+    {
+      "_key": "11235",
+      "_id": "Bookings/11235",
+      "_from": "Users/395",
+      "_to": "Computers/pc_room_103_4",
+      "_rev": "_lgIeACS---",
+      "start_at": "2026-05-14T09:50:00Z",
+      "end_at": "2026-05-14T11:20:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:36:13.764Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:36:13.764Z",
+          "changed_by": "Users/395"
+        }
+      ]
+    },
+    {
+      "_key": "11236",
+      "_id": "Bookings/11236",
+      "_from": "Users/508",
+      "_to": "Computers/pc_room_405b_3",
+      "_rev": "_lgIeYcC---",
+      "start_at": "2026-05-13T08:00:00Z",
+      "end_at": "2026-05-13T09:30:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:36:38.752Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:36:38.752Z",
+          "changed_by": "Users/508"
+        }
+      ]
+    },
+    {
+      "_key": "11237",
+      "_id": "Bookings/11237",
+      "_from": "Users/508",
+      "_to": "Computers/pc_room_101_6",
+      "_rev": "_lgIehRi---",
+      "start_at": "2026-05-14T13:40:00Z",
+      "end_at": "2026-05-14T15:10:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:36:47.800Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:36:47.800Z",
+          "changed_by": "Users/508"
+        }
+      ]
+    },
+    {
+      "_key": "11238",
+      "_id": "Bookings/11238",
+      "_from": "Users/508",
+      "_to": "Computers/pc_room_101_8",
+      "_rev": "_lgIepGG---",
+      "start_at": "2026-05-14T15:30:00Z",
+      "end_at": "2026-05-14T17:00:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:36:55.809Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:36:55.809Z",
+          "changed_by": "Users/508"
+        }
+      ]
+    },
+    {
+      "_key": "11239",
+      "_id": "Bookings/11239",
+      "_from": "Users/508",
+      "_to": "Computers/pc_room_103_6",
+      "_rev": "_lgIeyjG---",
+      "start_at": "2026-05-18T15:30:00Z",
+      "end_at": "2026-05-18T17:00:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:37:05.489Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:37:05.489Z",
+          "changed_by": "Users/508"
+        }
+      ]
+    },
+    {
+      "_key": "11240",
+      "_id": "Bookings/11240",
+      "_from": "Users/508",
+      "_to": "Computers/pc_room_106_1",
+      "_rev": "_lgIe8RS---",
+      "start_at": "2026-05-18T08:00:00Z",
+      "end_at": "2026-05-18T09:30:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:37:15.444Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:37:15.444Z",
+          "changed_by": "Users/508"
+        }
+      ]
+    },
+    {
+      "_key": "11241",
+      "_id": "Bookings/11241",
+      "_from": "Users/508",
+      "_to": "Computers/pc_room_108_1",
+      "_rev": "_lgIfGSS---",
+      "start_at": "2026-05-19T08:00:00Z",
+      "end_at": "2026-05-19T09:30:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:37:25.699Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:37:25.699Z",
+          "changed_by": "Users/508"
+        }
+      ]
+    },
+    {
+      "_key": "11242",
+      "_id": "Bookings/11242",
+      "_from": "Users/508",
+      "_to": "Computers/pc_room_107_1",
+      "_rev": "_lgIfRwO---",
+      "start_at": "2026-05-19T11:40:00Z",
+      "end_at": "2026-05-19T13:10:00Z",
+      "status": "reserved",
+      "total_work_time_minutes": 0,
+      "meta": {
+        "created_at": "2026-05-13T18:37:37.443Z"
+      },
+      "history": [
+        {
+          "old_status": null,
+          "new_status": "reserved",
+          "changed_at": "2026-05-13T18:37:37.443Z",
+          "changed_by": "Users/508"
+        }
+      ]
+    }
+  ]
+}

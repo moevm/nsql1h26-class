@@ -8,6 +8,12 @@ services:
       - "127.0.0.1:8529:8529"
     volumes:
       - db_data:/var/lib/arangodb3
+    healthcheck:
+      test: ["CMD", "arangosh", "--server.endpoint", "tcp://127.0.0.1:8529", "--server.password", "${DB_PASSWORD}", "--javascript.execute-string", "db._version()"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   backend:
     build: ./backend
@@ -16,7 +22,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build: ./frontend

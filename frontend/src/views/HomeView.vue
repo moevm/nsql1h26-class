@@ -198,9 +198,25 @@ const gridSeats = computed(() => {
   const grid = []
   for (let i = 1; i <= totalSlots; i++) {
     const pc = selectedRoomComputers.value.find(p => p.seat_index === i)
-    grid.push(pc || { seat_index: i, isPlaceholder: true, status: 'empty' })
+      grid.push(pc || { 
+      seat_index: i, 
+      isPlaceholder: true, 
+      status: 'empty' 
+    })
   }
   return grid
+})
+
+const gridStyles = computed(() => {
+  if (!selectedRoom.value?.grid) return {}
+  
+  const { rows, cols } = selectedRoom.value.grid
+  return {
+    display: 'grid',
+    gridTemplateColumns: `repeat(${cols}, 1fr)`,
+    gridTemplateRows: `repeat(${rows}, auto)`,
+    gap: '10px'
+  }
 })
 
 const getSeatTitle = (pc) => {
@@ -340,7 +356,7 @@ onMounted(fetchAll)
         </div>
         <div v-else class="select-prompt">Выберите ПК на схеме</div>
 
-        <div class="seats-layout">
+        <div class="seats-layout" :style="gridStyles">
           <div
             v-for="pc in gridSeats"
             :key="pc.id || pc.seat_index"
@@ -350,16 +366,19 @@ onMounted(fetchAll)
               'my-booking': isMyBooking(pc),
               'occupied-other': pc.status === 'occupied' && !isMyBooking(pc),
               'pc-broken': pc.status === 'maintenance' || pc.status === 'inactive',
+              'is-placeholder': pc.isPlaceholder,
               empty: pc.status === 'empty'
             }"
             :title="getSeatTitle(pc)"
-            @click="pc.status === 'active' && selectSeat(pc)"
+            @click="!pc.isPlaceholder && pc.status === 'active' && selectSeat(pc)"
           >
             <div class="monitor"></div>
-            <span class="num">{{ pc.seat_index }}</span>
-            <span v-if="isMyBooking(pc)" class="seat-status mine">Ваше</span>
-            <span v-else-if="pc.status === 'occupied'" class="seat-status">Занято</span>
-            <span v-else-if="pc.status === 'maintenance'" class="seat-status">Ремонт</span>
+            <span class="num">{{ pc.seat_index }}</span>            
+            <template v-if="!pc.isPlaceholder">
+              <span v-if="isMyBooking(pc)" class="seat-status mine">Ваше</span>
+              <span v-else-if="pc.status === 'occupied'" class="seat-status">Занято</span>
+              <span v-else-if="pc.status === 'maintenance'" class="seat-status">Ремонт</span>
+            </template>
           </div>
         </div>
 

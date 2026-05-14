@@ -184,3 +184,57 @@
     }
   }
 }
+// Добавьте это в файл user_profile.scss
+
+.title-area {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .user-fullname {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: v.$accent; // Или любой другой цвет из ваших переменных
+    margin: 0;
+  }
+}
+
+.info-grid {
+  margin-bottom: 30px;
+}
+
+.info-card {
+  background: v.$bg-surface;
+  border: 1px solid v.$border-color;
+  padding: 25px;
+  border-radius: 20px;
+
+  h3 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: v.$text-muted;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(white, 0.05);
+
+    &:last-child { border-bottom: none; }
+
+    label {
+      font-size: 0.9rem;
+      color: v.$text-muted;
+    }
+
+    span {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: v.$text-main;
+    }
+  }
+}

@@ -8,6 +8,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import roomPublicRoutes from './routes/roomPublicRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import { seedDatabase } from './config/initDB.js';
+import profileRoutes from './routes/profileRoutes.js';
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ app.use('/api/admin', adminRoutes);
 app.use(verifyToken);
 app.use('/api/rooms', roomPublicRoutes);
 app.use('/api/bookings', bookingRoutes);
-
+app.use('/api/profile', profileRoutes);
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500;
     const message = err.message || 'Internal Server Error';

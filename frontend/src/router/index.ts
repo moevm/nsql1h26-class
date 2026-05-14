@@ -24,6 +24,12 @@ const router = createRouter({
           component: () => import('../views/HomeView.vue')
         },
         {
+          path: '/profile',
+          name: 'profile',
+          component: () => import('@/views/UserProfile.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
           path: 'bookings',
           name: 'bookings',
           component: () => import('../views/UserBookings.vue')
@@ -54,7 +60,12 @@ const router = createRouter({
           path: 'equipment',
           name: 'admin-equipment',
           component: () => import('../views/AdminEquipment.vue')
-        }
+        },
+        {
+        path: 'profile',
+        name: 'admin-profile',
+        component: () => import('@/views/UserProfile.vue')
+      }
       ]
     },
     {

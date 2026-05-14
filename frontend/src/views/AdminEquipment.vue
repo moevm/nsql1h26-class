@@ -349,8 +349,8 @@ onMounted(() => {
 
           <div class="form-row dual">
             <div class="form-group">
-              <label>Аудитория <span class="req">*</span></label>
-              <select v-model="currentEquipment.room_id" required>
+              <label>Аудитория </label>
+              <select v-model="currentEquipment.room_id">
                 <option value="">Выберите аудиторию</option>
                 <option v-for="room in rooms" :key="room.id" :value="`Rooms/${room.id}`">
                   {{ room.name }}
@@ -358,8 +358,8 @@ onMounted(() => {
               </select>
             </div>
             <div class="form-group">
-              <label>Номер места <span class="req">*</span></label>
-              <input v-model.number="currentEquipment.seat_index" type="number" min="0" required>
+              <label>Номер места <span></span></label>
+              <input v-model.number="currentEquipment.seat_index" type="number" min="0">
             </div>
           </div>
 

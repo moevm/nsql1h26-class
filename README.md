@@ -20,8 +20,6 @@
 
 Для запуска:
 sudo docker compose build --no-cache && sudo docker compose up
-cd backend
-npm run docker:seed (для заполнения бд тестовыми данными, включая логины)
 
 http://localhost/
 
@@ -30,3 +28,5 @@ admin - пароль пользователя
 
 admin@uni.edu - логин админа
 admin - пароль админа
+
+Для всех остальных тестовых пользователей пароль "12345"

@@ -29,6 +29,7 @@ app.use(verifyToken);
 app.use('/api/rooms', roomPublicRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/profile', profileRoutes);
+
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500;
     const message = err.message || 'Internal Server Error';

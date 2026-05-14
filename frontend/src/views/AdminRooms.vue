@@ -26,10 +26,24 @@ const roomLayout = ref({})
 const isSelectingPC = ref(false)
 const activeCell = ref(null)
 
+const roomTagFilters = ref([])
+const roomTagInput = ref('')
+
+const addRoomFilterTag = () => {
+  const val = roomTagInput.value.trim()
+  if (val && !roomTagFilters.value.includes(val)) {
+    roomTagFilters.value.push(val)
+  }
+  roomTagInput.value = ''
+}
+
+const removeRoomFilterTag = (idx) => {
+  roomTagFilters.value.splice(idx, 1)
+}
+
 const filters = ref({
   name: '',
   description: '',
-  tag: '',
   page: 1,
   limit: 8
 })
@@ -37,6 +51,11 @@ const filters = ref({
 const totalPages = computed(() => Math.ceil(totalRooms.value / filters.value.limit))
 
 watch(filters, () => {
+  fetchRooms()
+}, { deep: true })
+
+watch(roomTagFilters, () => {
+  filters.value.page = 1
   fetchRooms()
 }, { deep: true })
 
@@ -64,7 +83,7 @@ const fetchRooms = async () => {
     const params = new URLSearchParams({
       name: filters.value.name,
       description: filters.value.description,
-      tag: filters.value.tag,
+      tag: roomTagFilters.value.join(','),
       page: filters.value.page,
       limit: filters.value.limit
     }).toString();
@@ -127,7 +146,7 @@ const openEditModal = async (room) => {
       const layout = {}
       if (data.pcs) {
         data.pcs.forEach(pc => {
-          if (pc.seat_index) {
+          if (pc.seat_index !== undefined && pc.seat_index !== null) {
             const r = Math.floor((pc.seat_index - 1) / currentRoom.value.grid.cols)
             const c = (pc.seat_index - 1) % currentRoom.value.grid.cols
             layout[`${r}-${c}`] = pc
@@ -167,6 +186,11 @@ const unassignPC = () => {
 }
 
 const saveRoom = async () => {
+  if (!currentRoom.value.name?.trim()) {
+    alert('Название аудитории обязательно')
+    return
+  }
+
   const { _key, ...roomData } = currentRoom.value
   const payload = {
     ...roomData,
@@ -227,9 +251,8 @@ onMounted(() => {
 })
 </script>
 
-<template>
+<<template>
   <div class="admin-rooms-page">
-    <!-- Шапка страницы -->
     <div class="page-header">
       <div class="title-block">
         <h1>Управление аудиториями</h1>
@@ -240,23 +263,33 @@ onMounted(() => {
       </button>
     </div>
 
-    <!-- Панель фильтров -->
-    <div class="filters-bar">
-      <div class="filter-group">
-        <label>Название</label>
-        <input v-model="filters.name" type="text" placeholder="Поиск по названию..." />
-      </div>
-      <div class="filter-group">
-        <label>Описание</label>
-        <input v-model="filters.description" type="text" placeholder="Поиск по описанию..." />
-      </div>
-      <div class="filter-group">
-        <label>Тег</label>
-        <input v-model="filters.tag" type="text" placeholder="Напр: RTX 3060" />
+    <div class="filters">
+      <input
+        v-model="filters.name"
+        placeholder="Поиск по названию..."
+        class="filter-input"
+      />
+      <input
+        v-model="filters.description"
+        placeholder="Поиск по описанию..."
+        class="filter-input"
+      />
+      <div class="chips-filter">
+        <div class="chips-list">
+          <span v-for="(tag, idx) in roomTagFilters" :key="tag" class="chip">
+            {{ tag }}
+            <button @click="removeRoomFilterTag(idx)" class="chip-remove">×</button>
+          </span>
+          <input
+            v-model="roomTagInput"
+            @keydown.enter.prevent="addRoomFilterTag"
+            placeholder="Фильтр по тегам (Enter)"
+            class="chip-input"
+          />
+        </div>
       </div>
     </div>
 
-    <!-- Сетка комнат -->
     <div v-if="loading" class="loading-state">Загрузка данных...</div>
 
     <div v-else class="rooms-grid">
@@ -282,18 +315,15 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- ПАГИНАЦИЯ -->
     <BasePagination :page="filters.page" :totalPages="totalPages" @update:page="filters.page = $event" />
 
-    <!-- Основное модальное окно (Редактор) -->
     <div v-if="isModalOpen" class="modal-overlay" @click.self="isModalOpen = false">
       <div class="editor-modal">
-        <!-- Левая панель настроек -->
         <div class="settings-sidebar">
           <h2>{{ isEditMode ? 'Редактирование' : 'Новая аудитория' }}</h2>
 
           <div class="form-group">
-            <label>Название аудитории</label>
+            <label>Название аудитории <span class="req">*</span></label>
             <input v-model="currentRoom.name" placeholder="Напр: 404 Кванториум" />
           </div>
 
@@ -309,11 +339,11 @@ onMounted(() => {
 
           <div class="grid-inputs">
             <div class="form-group">
-              <label>Ряды</label>
+              <label>Ряды <span class="req">*</span></label>
               <input type="number" v-model.number="currentRoom.grid.rows" min="1" max="10" />
             </div>
             <div class="form-group">
-              <label>Столбцы</label>
+              <label>Столбцы <span class="req">*</span></label>
               <input type="number" v-model.number="currentRoom.grid.cols" min="1" max="10" />
             </div>
           </div>
@@ -324,7 +354,6 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- Правая панель с интерактивной сеткой -->
         <div class="grid-preview">
           <div class="matrix-container" :style="{
             gridTemplateRows: `repeat(${currentRoom.grid.rows}, 1fr)`,
@@ -343,7 +372,8 @@ onMounted(() => {
               >
                 <span class="seat-index">{{ (r-1) * currentRoom.grid.cols + c }}</span>
                 <div v-if="roomLayout[`${r-1}-${c-1}`]" class="pc-indicator">
-                  <span class="pc-name">{{ roomLayout[`${r-1}-${c-1}`].name }}</span>
+                  <span class="pc-name">{{ roomLayout[`${r-1}-${c-1}`].inv_number || roomLayout[`${r-1}-${c-1}`]._key }}</span>
+                  <span class="pc-status" :class="roomLayout[`${r-1}-${c-1}`].status">{{ roomLayout[`${r-1}-${c-1}`].status || 'active' }}</span>
                 </div>
               </div>
             </template>
@@ -352,7 +382,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Всплывающее окно выбора ПК -->
     <div v-if="isSelectingPC" class="modal-overlay dark" @click.self="isSelectingPC = false">
       <div class="pc-selector-card">
         <div class="selector-header">
@@ -360,23 +389,32 @@ onMounted(() => {
           <button class="close-icon" @click="isSelectingPC = false">✕</button>
         </div>
 
-        <!-- Информация о уже привязанном ПК -->
         <div v-if="roomLayout[`${activeCell.r}-${activeCell.c}`]" class="current-assignment">
           <div class="pc-card-detailed">
             <div class="header">
-              <span class="pc-id-label">ID: {{ roomLayout[`${activeCell.r}-${activeCell.c}`]._key }}</span>
-              <h4>{{ roomLayout[`${activeCell.r}-${activeCell.c}`].name }}</h4>
+              <span class="pc-id-label">Инв. №</span>
+              <h4>{{ roomLayout[`${activeCell.r}-${activeCell.c}`].inv_number || roomLayout[`${activeCell.r}-${activeCell.c}`]._key }}</h4>
             </div>
-            <div class="specs">
-              <p><span>CPU:</span> {{ roomLayout[`${activeCell.r}-${activeCell.c}`].specs?.cpu || '—' }}</p>
-              <p><span>GPU:</span> {{ roomLayout[`${activeCell.r}-${activeCell.c}`].specs?.gpu || '—' }}</p>
-              <p><span>MAC:</span> {{ roomLayout[`${activeCell.r}-${activeCell.c}`].mac_address || '—' }}</p>
+            <div class="specs-summary">
+              <div class="spec-pill"><span>ID</span>{{ roomLayout[`${activeCell.r}-${activeCell.c}`]._key }}</div>
+              <div class="spec-pill"><span>Статус</span>{{ roomLayout[`${activeCell.r}-${activeCell.c}`].status || 'active' }}</div>
+              <div class="spec-pill" v-if="roomLayout[`${activeCell.r}-${activeCell.c}`].mac_address">
+                <span>MAC</span>{{ roomLayout[`${activeCell.r}-${activeCell.c}`].mac_address }}
+              </div>
+              <div class="spec-pill" v-if="roomLayout[`${activeCell.r}-${activeCell.c}`].specs?.cpu">
+                <span>CPU</span>{{ roomLayout[`${activeCell.r}-${activeCell.c}`].specs.cpu }}
+              </div>
+              <div class="spec-pill" v-if="roomLayout[`${activeCell.r}-${activeCell.c}`].specs?.gpu">
+                <span>GPU</span>{{ roomLayout[`${activeCell.r}-${activeCell.c}`].specs.gpu }}
+              </div>
+              <div class="spec-pill" v-if="roomLayout[`${activeCell.r}-${activeCell.c}`].specs?.ram">
+                <span>RAM</span>{{ roomLayout[`${activeCell.r}-${activeCell.c}`].specs.ram }}
+              </div>
             </div>
             <button class="btn-detach" @click="unassignPC">Отвязать устройство</button>
           </div>
         </div>
 
-        <!-- Список доступных ПК для привязки -->
         <div v-else class="available-selection">
           <p class="section-label">Доступные устройства:</p>
           <div class="pc-items-list">
@@ -387,9 +425,9 @@ onMounted(() => {
               @click="assignPC(pc)"
             >
               <div class="info">
-                <strong>{{ pc.name || pc._key }}</strong>
-                <span class="gpu-spec">{{ pc.specs?.gpu || 'No GPU' }}</span>
-                <span v-if="pc.status !== 'active'" :class="['status-badge', pc.status]">{{ pc.status }}</span>
+                <strong>{{ pc.inv_number || pc._key }}</strong>
+                <span class="id-line">ID: {{ pc._key }} · Статус: <span :class="['status-badge', pc.status]">{{ pc.status }}</span></span>
+                <span class="specs-line">{{ pc.specs?.cpu || '—' }} · {{ pc.specs?.gpu || '—' }} · {{ pc.specs?.ram || '—' }}</span>
               </div>
               <div class="plus">+</div>
             </div>

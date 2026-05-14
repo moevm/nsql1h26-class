@@ -6,7 +6,8 @@
 import BookingDao from '../dao/bookings.js';
 import EquipmentDao from '../dao/equipments.js';
 import withTransaction from '../utils/withTransaction.js';
-import { assertStringId, validateDatePair } from '../utils/validators.js';
+import getPairInterval from '../utils/pairInterval.js';
+import { assertStringId, validateDatePair, validatePagination } from '../utils/validators.js';
 
 
 class BookingService {
@@ -27,24 +28,39 @@ class BookingService {
             roomName = ''
         } = query;
 
-        const offset = (Number(page) - 1) * Number(limit);
+        const pagination = validatePagination(page, limit);
+        const offset = (pagination.page - 1) * pagination.limit;
 
-        // Статусы в зависимости от типа
         let statuses;
         if (type === 'active') {
             statuses = ['reserved', 'active'];
-        } else if (type === 'archive') {
+        } else if (type === 'archive' || type === 'history') {
             statuses = ['finished', 'cancelled', 'missed'];
         } else {
-            // 'all' — максимально близко к старому поведению findAll (всё, кроме cancelled)
             statuses = ['reserved', 'active', 'finished', 'missed'];
         }
 
-        const filters = { dateFrom, dateTo, pairNumber, roomName };
+        let normalizedDateTo = dateTo;
+        if (dateTo && !dateTo.includes('T')) {
+            normalizedDateTo = `${dateTo}T23:59:59Z`;
+        }
+
+        let startTime = null;
+        if (pairNumber && dateFrom) {
+            const interval = getPairInterval(dateFrom, pairNumber);
+            startTime = interval.start;
+        } else if (pairNumber) {
+            // Если дата не указана, берём сегодня
+            const today = new Date().toISOString().slice(0, 10);
+            const interval = getPairInterval(today, pairNumber);
+            startTime = interval.start;
+        }
+
+        const filters = { dateFrom, dateTo: normalizedDateTo, startTime, roomName };
 
         return await BookingDao.findAll(userId, statuses, filters, {
             offset,
-            limit: Number(limit)
+            limit: pagination.limit
         });
     }
 

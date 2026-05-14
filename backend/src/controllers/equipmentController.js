@@ -12,24 +12,8 @@ class EquipmentController {
      * Получить список компьютеров с фильтрами и пагинацией
      */
     getAllEquipment = asyncHandler(async (req, res) => {
-        const {
-            search = "",
-            status = "",
-            room_id = "",
-            page = 1,
-            limit = 8
-        } = req.query;
-
-        const result = await equipmentService.getAll({
-            search,
-            status,
-            room_id,
-            page: Number(page),
-            limit: Number(limit)
-        });
-
+        const result = await equipmentService.getAll(req.query);
         res.status(200).json(result);
-
     });
 
     /**

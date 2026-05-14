@@ -76,10 +76,10 @@ class UserService {
 
         const documentToInsert = {
             full_name: full_name.trim(),
-            email: email.toLowerCase().trim(),
+            email: cleanEmail,
             password: hashedPassword,
             group_code: group_code || "0000",
-            is_admin: Boolean(is_admin),
+            is_admin: is_admin === true || is_admin === 'true' || is_admin === 1,
             meta: {
                 created_at: new Date().toISOString(),
                 updated_at: null,

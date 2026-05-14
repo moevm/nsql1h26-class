@@ -28,33 +28,34 @@
     </div>
 
     <div class="table-container">
-      <table v-if="!loading">
+      <table v-if="!loading && bookings.length > 0">
         <thead>
-          <tr>
-            <th>ДАТА</th>
-            <th>ПАРА</th>
-            <th>ВРЕМЯ</th>
-            <th>АУДИТОРИЯ</th>
-            <th>МЕСТО</th>
-            <th>СТАТУС</th>
-            <th></th>
-          </tr>
+        <tr>
+          <th>ДАТА</th>
+          <th>ПАРА</th>
+          <th>ВРЕМЯ</th>
+          <th>АУДИТОРИЯ</th>
+          <th>МЕСТО</th>
+          <th>СТАТУС</th>
+          <th></th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="b in bookings" :key="b.id">
-            <td>{{ formatDbDate(b.start_at) }}</td>
-            <td>№ {{ getPairNumber(b.start_at) }}</td>
-            <td>{{ getPairRange(b.start_at) }}</td>
-            <td>{{ b.room_name }}</td>
-            <td>{{ b.seat_index }}</td>
-            <td><span :class="['status-pill', b.status]">{{ b.status }}</span></td>
-            <td>
-              <button v-if="b.status === 'reserved'" @click="cancel(b.id)" class="btn-cancel">Отмена</button>
-            </td>
-          </tr>
+        <tr v-for="b in bookings" :key="b.id">
+          <td>{{ formatDbDate(b.start_at) }}</td>
+          <td>№ {{ getPairNumber(b.start_at) }}</td>
+          <td>{{ getPairRange(b.start_at) }}</td>
+          <td>{{ b.room_name }}</td>
+          <td>{{ b.seat_index }}</td>
+          <td><span :class="['status-pill', b.status]">{{ b.status }}</span></td>
+          <td>
+            <button v-if="b.status === 'reserved'" @click="cancel(b.id)" class="btn-cancel">Отмена</button>
+          </td>
+        </tr>
         </tbody>
       </table>
-      <div v-else class="loader">Загрузка...</div>
+      <div v-else-if="loading" class="loader">Загрузка...</div>
+      <div v-else class="empty-state">Бронирований не найдено</div>
     </div>
 
     <BasePagination :page="filters.page" :totalPages="totalPages" @update:page="handlePageChange" />
@@ -101,37 +102,66 @@ const getPairRange = (s) => {
   return map[t] || t
 }
 
+const buildQuery = () => {
+  const params = new URLSearchParams()
+  params.append('type', currentTab.value)
+  params.append('page', filters.value.page.toString())
+  params.append('limit', filters.value.limit.toString())
+  if (filters.value.dateFrom) params.append('dateFrom', filters.value.dateFrom)
+  if (filters.value.dateTo) params.append('dateTo', filters.value.dateTo)
+  if (filters.value.pairNumber) params.append('pairNumber', filters.value.pairNumber)
+  if (filters.value.roomName) params.append('roomName', filters.value.roomName)
+  return params.toString()
+}
+
 const load = async () => {
   loading.value = true
-  const query = new URLSearchParams({ type: currentTab.value, ...filters.value }).toString()
   try {
-    const res = await fetch(`http://localhost:3000/api/bookings/mybookings?${query}`, {
+    const res = await fetch(`http://localhost:3000/api/bookings?${buildQuery()}`, {
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
-    const data = await res.json()
-    bookings.value = data.data
-    total.value = data.total
+    if (res.ok) {
+      const data = await res.json()
+      bookings.value = data.data || []
+      total.value = data.total || 0
+    } else {
+      bookings.value = []
+      total.value = 0
+    }
+  } catch (e) {
+    console.error('Ошибка загрузки бронирований:', e)
+    bookings.value = []
+    total.value = 0
   } finally {
     loading.value = false
   }
 }
 
-const handleFilter = () => { filters.value.page = 1; load(); }
-const handlePageChange = (p) => { filters.value.page = p; load(); }
-const setTab = (t) => { currentTab.value = t; handleFilter(); }
+const handleFilter = () => { filters.value.page = 1; load() }
+const handlePageChange = (p) => { filters.value.page = p; load() }
+const setTab = (t) => { currentTab.value = t; handleFilter() }
 
 const cancel = async (id) => {
-  if (confirm('Удалить бронь?')) {
-    await fetch(`http://localhost:3000/api/bookings/${id}`, {
+  if (!confirm('Удалить бронь?')) return
+  try {
+    const res = await fetch(`http://localhost:3000/api/bookings/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
-    load()
+    if (res.ok) load()
+    else {
+      const err = await res.json()
+      alert('Ошибка: ' + (err.message || err.error))
+    }
+  } catch (e) {
+    console.error(e)
+    alert('Ошибка сети')
   }
 }
 
 onMounted(load)
 </script>
+
 <style lang="scss" scoped>
-  @use "@/assets/scss/pages/user_booking";
+@use "@/assets/scss/pages/user_booking";
 </style>

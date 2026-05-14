@@ -24,7 +24,7 @@ const onLogout = () => {
       </div>
 
       <div class="header-right">
-        <RouterLink to="/profile" class="profile-link" title="Профиль">
+        <RouterLink to="/admin/profile" class="profile-link" title="Профиль">
             Я
         </RouterLink>
         <button @click="onLogout" class="logout-icon" title="Выйти">

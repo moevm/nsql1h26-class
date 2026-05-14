@@ -7,7 +7,6 @@ const authStore = useAuthStore()
 const logs = ref([])
 const totalLogs = ref(0)
 const loading = ref(true)
-
 const expandedLogIds = ref([])
 
 const filters = ref({
@@ -29,11 +28,7 @@ const formatDate = (isoString) => {
   if (!isoString) return '—'
   const date = new Date(isoString)
   return date.toLocaleString('ru-RU', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
   })
 }
 
@@ -43,12 +38,9 @@ const formatTime = (isoString) => {
 }
 
 const toggleDetails = (id) => {
-  const index = expandedLogIds.value.indexOf(id)
-  if (index > -1) {
-    expandedLogIds.value.splice(index, 1)
-  } else {
-    expandedLogIds.value.push(id)
-  }
+  const idx = expandedLogIds.value.indexOf(id)
+  if (idx > -1) expandedLogIds.value.splice(idx, 1)
+  else expandedLogIds.value.push(id)
 }
 
 const fetchLogs = async () => {
@@ -56,65 +48,67 @@ const fetchLogs = async () => {
   try {
     const params = new URLSearchParams()
     Object.keys(filters.value).forEach(key => {
-      if (filters.value[key]) {
-        params.append(key, filters.value[key])
-      }
+      const val = filters.value[key]
+      if (val !== '' && val !== null && val !== undefined) params.append(key, val)
     })
 
     const res = await fetch(`http://localhost:3000/api/admin/logs?${params}`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.token}`,
-        'Content-Type': 'application/json'
-      }
+      headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
 
     if (res.ok) {
       const result = await res.json()
       logs.value = result.data || []
       totalLogs.value = result.total || 0
+    } else {
+      logs.value = []
+      totalLogs.value = 0
     }
   } catch (e) {
     console.error('Ошибка загрузки журнала:', e)
+    logs.value = []
+    totalLogs.value = 0
   } finally {
     loading.value = false
   }
 }
 
-const cancelBooking = async (bookingId) => {
-  if (!confirm('Вы уверены, что хотите отменить это бронирование?')) return
+const handlePageChange = (newPage) => {
+  filters.value.page = newPage
+  fetchLogs()
+}
 
+const cancelBooking = async (bookingId) => {
+  if (!confirm('Отменить бронирование?')) return
   try {
     const res = await fetch(`http://localhost:3000/api/bookings/${bookingId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
-
-    if (res.ok) {
-      alert('Бронирование успешно отменено')
-      fetchLogs()
-    } else {
+    if (res.ok) { alert('Отменено'); fetchLogs() }
+    else {
       const err = await res.json()
-      alert('Ошибка: ' + (err.error || 'Не удалось отменить'))
+      alert('Ошибка: ' + (err.message || err.error))
     }
-  } catch (e) {
-    console.error('Ошибка при отмене:', e)
-  }
+  } catch (e) { console.error(e) }
 }
 
+// Debounce только для фильтров, НЕ для страницы
 let timeout = null
-watch(filters, (newVal, oldVal) => {
-  const pageChanged = newVal.page !== oldVal?.page
-  clearTimeout(timeout)
-
-  if (pageChanged) {
-    fetchLogs()
-  } else {
+watch(
+  () => [
+    filters.value.dateFrom, filters.value.dateTo, filters.value.status,
+    filters.value.fullName, filters.value.groupCode, filters.value.bookingId,
+    filters.value.email, filters.value.roomName
+  ],
+  () => {
+    clearTimeout(timeout)
     timeout = setTimeout(() => {
       filters.value.page = 1
       fetchLogs()
-    }, 500)
+    }, 400)
   }
-}, { deep: true })
+)
 
 onMounted(fetchLogs)
 </script>
@@ -169,7 +163,7 @@ onMounted(fetchLogs)
     </div>
 
     <div class="table-container">
-      <table class="logs-table">
+      <table class="logs-table" v-if="logs.length > 0">
         <thead>
         <tr>
           <th>ID / ДАТА</th>
@@ -224,11 +218,11 @@ onMounted(fetchLogs)
                   <div class="t-time">{{ formatTime(event.changed_at) }}</div>
                   <div class="t-content">
                       <span class="t-status">
-                        <span class="old-st">{{ event.old_status }}</span>
+                        <span class="old-st">{{ event.old_status || '—' }}</span>
                         <span class="arrow-right">→</span>
                         <strong class="new-st">{{ event.new_status }}</strong>
                       </span>
-                    <span class="t-author">Кем: {{ event.changed_by.split('/')[1] }}</span>
+                    <span class="t-author">Кем: {{ event.changed_by ? event.changed_by.split('/')[1] : '—' }}</span>
                   </div>
                 </div>
 
@@ -246,10 +240,12 @@ onMounted(fetchLogs)
         </template>
         </tbody>
       </table>
+
       <div v-if="loading" class="table-loading">Загрузка...</div>
+      <div v-if="!loading && logs.length === 0" class="table-empty">Записей не найдено</div>
     </div>
 
-    <BasePagination :page="filters.page" :totalPages="totalPages" @update:page="filters.page = $event" />
+    <BasePagination :page="filters.page" :totalPages="totalPages" @update:page="handlePageChange" />
   </div>
 </template>
 

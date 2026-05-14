@@ -272,3 +272,10 @@
   &.active    { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
   &.finished  { background: rgba(16, 185, 129, 0.2); color: #10B981; }
 }
+
+.table-empty {
+  padding: 60px;
+  text-align: center;
+  color: #6B7280;
+  font-weight: 600;
+}

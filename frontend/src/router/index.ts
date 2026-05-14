@@ -14,6 +14,12 @@ const router = createRouter({
       meta: { guestOnly: true }
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterPage.vue'),
+
+    },
+    {
       path: '/',
       component: UserLayout,
       meta: { requiresAuth: true, role: 'user' },
@@ -22,6 +28,12 @@ const router = createRouter({
           path: '',
           name: 'home',
           component: () => import('../views/HomeView.vue')
+        },
+        {
+          path: '/profile',
+          name: 'profile',
+          component: () => import('@/views/UserProfile.vue'),
+          meta: { requiresAuth: true }
         },
         {
           path: 'bookings',
@@ -54,7 +66,18 @@ const router = createRouter({
           path: 'equipment',
           name: 'admin-equipment',
           component: () => import('../views/AdminEquipment.vue')
-        }
+        },
+        {
+        path: 'profile',
+        name: 'admin-profile',
+        component: () => import('@/views/UserProfile.vue')
+      },
+      {
+        path: 'users/:id',
+        name: 'admin-user-detail',
+        component: () => import('@/views/UserProfile.vue'),
+        props: true
+      }
       ]
     },
     {
@@ -69,7 +92,8 @@ router.beforeEach((to) => {
   const isAuthenticated = authStore.isAuthenticated
   const isAdmin = authStore.isAdmin
 
-  if (!isAuthenticated && to.name !== 'login') {
+  const publicPages = ['login', 'register'];
+  if (!isAuthenticated && !publicPages.includes(to.name as string)) {
     return { name: 'login' }
   }
 

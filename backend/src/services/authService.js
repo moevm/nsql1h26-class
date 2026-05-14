@@ -11,42 +11,38 @@ import UserDao from '../dao/users.js';
 class AuthService {
 
 
-    // async registerUser(userData) {
-    //
-    //     if (!userData.email || !userData.password || !userData.full_name) {
-    //         const error = new Error("Отсутствуют обязательные данные");
-    //         error.status = 400;
-    //         throw error;
-    //     }
-    //
-    //     // Проверяем, нет ли уже такого email в нашем массиве
-    //     const existingUser = this.users.find(u => u.email === userData.email);
-    //     if (existingUser) {
-    //         const error = new Error("Этот Email уже занят");
-    //         error.status = 400;
-    //         throw error;
-    //     }
-    //
-    //     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    //
-    //     // Mock user (test)
-    //     const newUser = {
-    //         _key: `user_${Date.now()}`,
-    //         full_name: userData.full_name,
-    //         email: userData.email,
-    //         password: hashedPassword,
-    //         group_code: userData.group_code || "0000",
-    //         is_admin: false,
-    //         meta: {
-    //             created_at: new Date().toISOString()
-    //         }
-    //     };
-    //
-    //     this.users.push(newUser);
-    //     console.log("[Mock DB]: Новый пользователь добавлен. Всего:", this.users.length);
-    //
-    //     return newUser;
-    // }
+    async registerUser(userData) {
+    const { full_name, email, password, group_code } = userData;
+
+    if (!email || !password || !full_name) {
+        const error = new Error("Отсутствуют обязательные данные");
+        error.status = 400;
+        throw error;
+    }
+
+    const existingUser = await UserDao.findByEmail(email);
+    if (existingUser) {
+        const error = new Error("Этот Email уже занят");
+        error.status = 400;
+        throw error;
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = {
+        full_name,
+        email,
+        password: hashedPassword,
+        group_code: group_code || "0000",
+        is_admin: false,
+        meta: {
+            created_at: new Date().toISOString(),
+            last_login: null
+        }
+    };
+
+    return await UserDao.insert(newUser); 
+}
 
 
 

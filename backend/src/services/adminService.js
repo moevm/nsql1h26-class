@@ -7,7 +7,7 @@ class AdminService {
     schema = {
         Users: ['email', 'full_name', 'is_admin', 'password', 'meta'],
         Rooms: ['name', 'grid', 'description', 'tags'],
-        Computers: ['room_id', 'status', 'seat_index', 'inv_number', 'mac_address', 'status', 'software', 'specs', 'meta'],
+        Computers: ['room_id', 'status', 'seat_index', 'inv_number', 'mac_address', 'software', 'specs', 'meta'],
         Bookings: ['_from', '_to', 'start_at', 'end_at', 'status', 'meta', 'history']
     };
 

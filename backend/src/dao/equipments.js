@@ -16,32 +16,28 @@ class EquipmentDao {
      * Method: findAll
      * Получить список компьютеров с фильтрами и пагинацией.
      */
-    async findAll({ search = "", status = "", room_id = "", page = 1, limit = 8 }) {
+    async findAll({ search = "", status = "", room_id = "", software = "", page = 1, limit = 8 }) {
         const offset = (page - 1) * limit;
 
         const cursor = await db.query(aql`
+            LET swParts = ${software} == "" ? [] : SPLIT(LOWER(${software}), ",")
             LET filtered = (
                 FOR c IN Computers
-                    // Фильтр по статусу (если указан)
                     FILTER ${status} == "" OR c.status == ${status}
-                    
-                    // Фильтр по аудитории (если указан)
                     FILTER ${room_id} == "" OR c.room_id == ${room_id}
-                    
-                    // Поиск по подстроке (инвентарный номер, MAC или ПО)
                     FILTER ${search} == "" OR (
                         CONTAINS(LOWER(c.inv_number), LOWER(${search})) OR
                         CONTAINS(LOWER(c.mac_address), LOWER(${search})) OR
                         ${search} IN c.software
                     )
-                    
-                    // Подтягиваем аудиторию по ссылке
+                    FILTER LENGTH(swParts) == 0 OR LENGTH(swParts) == LENGTH(
+                        FOR p IN swParts
+                            FILTER p != ""
+                            FILTER LENGTH(FOR s IN c.software FILTER CONTAINS(LOWER(s), TRIM(p)) RETURN s) > 0
+                        RETURN p
+                    )
                     LET room = DOCUMENT(c.room_id)
-                    
-                    // Сортируем по инвентарному номеру
                     SORT c.inv_number ASC
-                    
-                    // Выбираем поля для ответа
                     RETURN {
                         id: c._key,
                         inv_number: c.inv_number,

@@ -23,7 +23,7 @@ const onLogin = async () => {
     if (!response.ok) throw new Error('Неверный логин или пароль')
 
     const data = await response.json()
-    
+
     // Сохраняем данные в store
     authStore.setAuth(data.token, data.user)
 
@@ -45,7 +45,7 @@ const onLogin = async () => {
       <div class="form-container">
         <h2>ВХОД В СИСТЕМУ</h2>
         <p v-if="error" style="color: red;">{{ error }}</p>
-        
+
         <form @submit.prevent="onLogin">
           <div class="input-group">
             <label>EMAIL</label>
@@ -57,6 +57,9 @@ const onLogin = async () => {
           </div>
           <button type="submit" class="btn-submit">ВОЙТИ</button>
         </form>
+        <div class="register-link">
+          <p>Нет аккаунта? <RouterLink to="/register">Зарегистрироваться</RouterLink></p>
+        </div>
       </div>
     </div>
   </div>

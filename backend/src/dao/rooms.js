@@ -22,7 +22,13 @@ class RoomDao {
                 FOR r IN Rooms
                     FILTER ${name} == "" || CONTAINS(LOWER(r.name), LOWER(${name}))
                     FILTER ${description} == "" || CONTAINS(LOWER(r.description), LOWER(${description}))
-                    FILTER ${tag} == "" || ${tag} IN r.tags
+                    LET tagParts = ${tag} == "" ? [] : SPLIT(LOWER(${tag}), ",")
+                    FILTER LENGTH(tagParts) == 0 OR LENGTH(tagParts) == LENGTH(
+                        FOR p IN tagParts
+                            FILTER p != ""
+                            FILTER LENGTH(FOR t IN r.tags FILTER CONTAINS(LOWER(t), TRIM(p)) RETURN t) > 0
+                        RETURN p
+                    )
                     SORT r.name ASC
                     RETURN r
             )
@@ -38,10 +44,8 @@ class RoomDao {
     /**
      * Публичный список аудиторий с подсчётом свободных мест.
      */
-    async findAllPublic({ targetDate, targetPair, page = 1, limit = 8 }) {
+    async findAllPublic({ startTime, page = 1, limit = 8 }) {
         const offset = (page - 1) * limit;
-        const timings = { 1: "08:00", 2: "09:50", 3: "11:40", 4: "13:40", 5: "15:30", 6: "17:20", 7: "19:00" };
-        const startTime = `${targetDate}T${timings[targetPair] || "08:00"}:00Z`;
 
         const cursor = await db.query(aql`
             LET all_rooms = (

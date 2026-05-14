@@ -5,6 +5,7 @@
 
 import bcrypt from 'bcryptjs';
 import UserDao from '../dao/users.js';
+import BookingService from './bookingService.js';
 import { validateEmail, validatePassword, validatePagination } from '../utils/validators.js';
 
 class UserService {
@@ -76,10 +77,10 @@ class UserService {
 
         const documentToInsert = {
             full_name: full_name.trim(),
-            email: email.toLowerCase().trim(),
+            email: cleanEmail,
             password: hashedPassword,
             group_code: group_code || "0000",
-            is_admin: Boolean(is_admin),
+            is_admin: is_admin === true || is_admin === 'true' || is_admin === 1,
             meta: {
                 created_at: new Date().toISOString(),
                 updated_at: null,
@@ -158,6 +159,39 @@ class UserService {
         }
 
         return deleted;
+    }
+
+    async getProfileStats(userId) {
+    const [all, active, cancelled] = await Promise.all([
+        BookingService.getAll(userId, { type: 'all', limit: 1 }),
+        BookingService.getAll(userId, { type: 'active', limit: 1 }),
+        BookingService.getAll(userId, { type: 'archive', limit: 1 })
+    ]);
+
+    
+    return {
+        total: all.total || 0,
+        active: active.total || 0,
+        cancelled: archive.total || 0 
+    };
+}
+
+async getMe(req, res) {
+        try {
+            const user = await userService.getById(req.user.id);
+            res.json(user);
+        } catch (error) {
+            res.status(error.status || 500).json({ error: error.message });
+        }
+    }
+
+    async updateMe(req, res) {
+        try {
+            const updated = await userService.update(req.user.id, req.body);
+            res.json(updated);
+        } catch (error) {
+            res.status(error.status || 500).json({ error: error.message });
+        }
     }
 }
 

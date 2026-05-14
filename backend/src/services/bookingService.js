@@ -6,7 +6,8 @@
 import BookingDao from '../dao/bookings.js';
 import EquipmentDao from '../dao/equipments.js';
 import withTransaction from '../utils/withTransaction.js';
-import { assertStringId, validateDatePair } from '../utils/validators.js';
+import getPairInterval from '../utils/pairInterval.js';
+import { assertStringId, validateDatePair, validatePagination } from '../utils/validators.js';
 
 
 class BookingService {
@@ -16,8 +17,51 @@ class BookingService {
      * Получить список бронирований пользователя.
      * Только чтение
      */
-    async getAll({ userId }) {
-        return await BookingDao.findAll({ userId });
+    async getAll(userId, query = {}) {
+        const {
+            type = 'all',
+            page = 1,
+            limit = 10,
+            dateFrom = '',
+            dateTo = '',
+            pairNumber = '',
+            roomName = ''
+        } = query;
+
+        const pagination = validatePagination(page, limit);
+        const offset = (pagination.page - 1) * pagination.limit;
+
+        let statuses;
+        if (type === 'active') {
+            statuses = ['reserved', 'active'];
+        } else if (type === 'archive' || type === 'history') {
+            statuses = ['finished', 'cancelled', 'missed'];
+        } else {
+            statuses = ['reserved', 'active', 'finished', 'missed'];
+        }
+
+        let normalizedDateTo = dateTo;
+        if (dateTo && !dateTo.includes('T')) {
+            normalizedDateTo = `${dateTo}T23:59:59Z`;
+        }
+
+        let startTime = null;
+        if (pairNumber && dateFrom) {
+            const interval = getPairInterval(dateFrom, pairNumber);
+            startTime = interval.start;
+        } else if (pairNumber) {
+            // Если дата не указана, берём сегодня
+            const today = new Date().toISOString().slice(0, 10);
+            const interval = getPairInterval(today, pairNumber);
+            startTime = interval.start;
+        }
+
+        const filters = { dateFrom, dateTo: normalizedDateTo, startTime, roomName };
+
+        return await BookingDao.findAll(userId, statuses, filters, {
+            offset,
+            limit: pagination.limit
+        });
     }
 
     /**
@@ -171,31 +215,6 @@ class BookingService {
             return { message: "Успешно забронировано!", pc_name: freePC.name };
         });
     }
-
-    async getUserBookingsPaged(userId, query) {
-    const { 
-        type = 'active', 
-        page = 1, 
-        limit = 10,
-        dateFrom = '',
-        dateTo = '',
-        pairNumber = '',
-        roomName = ''
-    } = query;
-
-    const offset = (parseInt(page) - 1) * parseInt(limit);
-    
-    const statuses = type === 'active' 
-        ? ['reserved', 'active'] 
-        : ['finished', 'cancelled', 'missed'];
-
-    const filters = { dateFrom, dateTo, pairNumber, roomName };
-
-    return await BookingDao.findUserBookingsPaged(userId, statuses, filters, { 
-        offset, 
-        limit: parseInt(limit) 
-    });
-}
 }
 
 export default new BookingService();

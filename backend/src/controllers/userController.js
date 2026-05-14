@@ -81,6 +81,24 @@ class UserController {
 
         res.status(204).send();
     });
+
+    async getMe(req, res) {
+    try {
+        const user = await userService.getById(req.user.id);
+        
+        const { password, ...safeUserData } = user;
+        res.json(safeUserData);
+    } catch (error) {
+        res.status(error.status || 500).json({ error: error.message });
+    }
+}
+updateMe = asyncHandler(async (req, res) => {
+        const updated = await userService.update(req.user.id, req.body);
+        res.status(200).json({
+            message: "Профиль успешно обновлён",
+            user: updated
+        });
+    });
 }
 
 export default new UserController();

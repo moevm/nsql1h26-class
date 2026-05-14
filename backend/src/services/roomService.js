@@ -72,13 +72,13 @@ class RoomService {
 
         const targetDate = date || new Date().toISOString().slice(0, 10);
         const targetPair = pair || 1;
-        validateDatePair(targetDate, targetPair);
+
+        const interval = getPairInterval(targetDate, targetPair);
 
         const pagination = validatePagination(page, limit);
 
         return await roomDao.findAllPublic({
-            targetDate,
-            targetPair,
+            startTime: interval.start,
             page: pagination.page,
             limit: pagination.limit
         });
@@ -173,7 +173,7 @@ class RoomService {
             throw error;
         }
 
-        await roomDao.unassignPC(pcKey);
+        await roomDao.unassignPC(key);
 
         return { message: "Устройство отвязано" };
     }
@@ -277,12 +277,13 @@ class RoomService {
             await validateLayout(layout, true);
         }
 
-        if (Object.keys(updateData).length === 0 && (!layout || layout.length === 0)) {
+        const hasLayoutUpdate = layout !== undefined;
+
+        if (Object.keys(updateData).length === 0 && !hasLayoutUpdate) {
             const e = new Error("Нет данных для обновления");
             e.status = 400;
             throw e;
         }
-
 
         // --- Транзакция ---
         return withTransaction({ write: ['Rooms', 'Computers'] }, async (transaction) => {

@@ -4,6 +4,7 @@
  */
 
 import equipmentDao from '../dao/equipments.js';
+import { validatePagination } from '../utils/validators.js';
 
 
 class EquipmentService {
@@ -13,7 +14,25 @@ class EquipmentService {
      * Получить список компьютеров с фильтрами и пагинацией.
      */
     async getAll(filters) {
-        return await equipmentDao.findAll(filters);
+        const {
+            search = "",
+            status = "",
+            room_id = "",
+            software = "",
+            page = 1,
+            limit = 8
+        } = filters;
+
+        const pagination = validatePagination(page, limit);
+
+        return await equipmentDao.findAll({
+            search,
+            status,
+            room_id,
+            software,
+            page: pagination.page,
+            limit: pagination.limit
+        });
     }
 
     /**

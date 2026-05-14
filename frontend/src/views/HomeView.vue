@@ -55,39 +55,23 @@ const fetchRooms = async () => {
 
 const fetchMyBookings = async () => {
   try {
-    const res = await fetch('http://localhost:3000/api/bookings', {
+    const res = await fetch('http://localhost:3000/api/bookings?type=active&limit=5', {
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
     if (res.ok) {
       const data = await res.json()
-      myBookings.value = data.filter(b => b.status !== 'cancelled' && b.status !== 'finished')
+      myBookings.value = data.data || []
     }
   } catch (e) { console.error("Ошибка загрузки броней:", e) }
 }
 
 const topBookings = computed(() => myBookings.value.slice(0, 2))
-
 const totalPages = computed(() => Math.ceil(totalRooms.value / roomsLimit))
-const displayedRooms = computed(() => rooms.value)
 
 const formatDate = (isoString) => {
   if (!isoString) return '—'
   const date = new Date(isoString)
-  return date.toLocaleDateString('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  })
-}
-
-const getPairFromTime = (isoString) => {
-  if (!isoString) return '?'
-  const time = isoString.split('T')[1].substring(0, 5)
-  const map = { 
-    '08:00': 1, '09:50': 2, '11:40': 3, 
-    '13:40': 4, '15:30': 5, '17:20': 6, '19:00': 7 
-  }
-  return map[time] || '?'
+  return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 const formatTime = (isoString) => {
@@ -113,7 +97,7 @@ const openBooking = async (room) => {
     if (!selectedRoom.value.grid) {
       selectedRoom.value.grid = { rows: 1, cols: 1 }
     }
-    selectedRoomComputers.value = data.pcs
+    selectedRoomComputers.value = data.pcs || []
     selectedPC.value = null
     isModalOpen.value = true
   } catch (e) { console.error(e) }
@@ -126,12 +110,11 @@ const isMyBooking = (pc) => {
 }
 
 const selectSeat = (pc) => {
-  if (pc.status === 'active') selectedPC.value = pc
+  if (pc.status === 'active' && !pc.isPlaceholder) selectedPC.value = pc
 }
 
 const confirmBooking = async () => {
-  if (!selectedPC.value) return
-
+  if (!selectedPC.value || selectedPC.value.isPlaceholder) return
   const pcId = selectedPC.value._id || selectedPC.value.id || selectedPC.value._key
 
   try {
@@ -154,10 +137,11 @@ const confirmBooking = async () => {
       alert('Успешно забронировано!')
     } else {
       const errorData = await res.json()
-      alert('Ошибка: ' + errorData.error)
+      alert('Ошибка: ' + (errorData.message || errorData.error))
     }
   } catch (e) {
     console.error(e)
+    alert('Ошибка сети при бронировании')
   }
 }
 
@@ -169,6 +153,10 @@ const cancelBooking = async (id) => {
       headers: { 'Authorization': `Bearer ${authStore.token}` }
     })
     if (res.ok) await fetchAll()
+    else {
+      const err = await res.json()
+      alert('Ошибка отмены: ' + (err.message || err.error))
+    }
   } catch (e) { console.error(e) }
 }
 
@@ -176,25 +164,33 @@ const handleQuickBook = async () => {
   try {
     const res = await fetch('http://localhost:3000/api/bookings/quick', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authStore.token}` },
-      body: JSON.stringify(quickData.value)
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
+      },
+      body: JSON.stringify({
+        date: quickData.value.date,
+        pair: Number(quickData.value.pair),
+        tags: quickData.value.tags
+      })
     })
     const data = await res.json()
     if (res.ok) {
-      alert(`Бронь создана на месте: ${data.pc_name}`)
+      alert(`Бронь создана: ${data.pc_name || data.message}`)
       await fetchAll()
     } else {
-      alert(data.error || 'Свободных мест не найдено')
+      alert(data.message || data.error || 'Свободных мест не найдено')
     }
-  } catch (e) { console.error(e) }
+  } catch (e) {
+    console.error(e)
+    alert('Ошибка сети')
+  }
 }
 
 const gridSeats = computed(() => {
-  if (!selectedRoom.value) return []
-
+  if (!selectedRoom.value?.grid) return []
   const { rows, cols } = selectedRoom.value.grid
   const totalSlots = rows * cols
-
   const grid = []
   for (let i = 1; i <= totalSlots; i++) {
     const pc = selectedRoomComputers.value.find(p => p.seat_index === i)
@@ -206,10 +202,10 @@ const gridSeats = computed(() => {
 const getSeatTitle = (pc) => {
   if (pc.isPlaceholder) return 'Пустое место'
   if (isMyBooking(pc)) return `ПК №${pc.seat_index} — забронировано вами`
-  if (pc.status === 'occupied') return `ПК №${pc.seat_index} — уже забронировано другим`
+  if (pc.status === 'occupied') return `ПК №${pc.seat_index} — уже забронировано`
   if (pc.status === 'maintenance') return 'На техническом обслуживании'
   if (pc.status === 'inactive') return 'Неактивно'
-  return `ПК №${pc.seat_index} — свободно, кликните для бронирования`
+  return `ПК №${pc.seat_index} — свободно`
 }
 
 onMounted(fetchAll)
@@ -217,9 +213,7 @@ onMounted(fetchAll)
 
 <template>
   <div class="home-container" v-if="!loading">
-
     <div class="main-column">
-      <!-- ФИЛЬТРЫ -->
       <section class="filters-bar">
         <div class="filter-group">
           <label>ВЫБЕРИТЕ ДАТУ</label>
@@ -228,16 +222,13 @@ onMounted(fetchAll)
         <div class="filter-group">
           <label>ВЫБЕРИТЕ ПАРУ</label>
           <select v-model="selectedPair">
-            <option v-for="p in pairs" :key="p.id" :value="p.id">
-              {{ p.id }} пара ({{ p.time }})
-            </option>
+            <option v-for="p in pairs" :key="p.id" :value="p.id">{{ p.id }} пара ({{ p.time }})</option>
           </select>
         </div>
       </section>
 
-      <!-- СПИСОК АУДИТОРИЙ -->
       <div class="rooms-grid">
-        <div v-for="room in displayedRooms" :key="room.id || room._key" class="room-card">
+        <div v-for="room in rooms" :key="room.id || room._key" class="room-card">
           <div class="room-header">
             <h3>{{ room.name }}</h3>
             <div class="tags">
@@ -259,14 +250,10 @@ onMounted(fetchAll)
         </div>
       </div>
 
-      <!-- ПАГИНАЦИЯ -->
       <BasePagination :page="roomsPage" :totalPages="totalPages" @update:page="roomsPage = $event" />
 
-      <!-- БЫСТРОЕ БРОНИРОВАНИЕ -->
       <section class="quick-book-form">
-        <div class="qb-header">
-          <h3>БЫСТРОЕ БРОНИРОВАНИЕ</h3>
-        </div>
+        <div class="qb-header"><h3>БЫСТРОЕ БРОНИРОВАНИЕ</h3></div>
         <div class="form-grid">
           <div class="f-group">
             <label>ДАТА</label>
@@ -287,36 +274,29 @@ onMounted(fetchAll)
       </section>
     </div>
 
-    <!-- ПРАВАЯ ПАНЕЛЬ -->
     <aside class="side-panel">
       <div class="side-card">
         <div class="side-header">
           <h3>БЛИЖАЙШИЕ ЗАПИСИ</h3>
           <router-link to="/bookings" class="link-all">Все</router-link>
         </div>
-
-        <div v-if="topBookings.length === 0" class="empty-state">
-          У вас пока нет активных бронирований.
-        </div>
-
-        <div v-for="b in topBookings" :key="b.booking_id" class="booking-ticket">
+        <div v-if="topBookings.length === 0" class="empty-state">У вас пока нет активных бронирований.</div>
+        <div v-for="b in topBookings" :key="b.id" class="booking-ticket">
           <div class="ticket-content">
             <div class="b-header">
               <span class="b-room">{{ b.room_name }}</span>
               <span class="b-time">{{ formatTime(b.start_at) }}</span>
             </div>
             <div class="b-details">
-              <span class="pc-label">Место: {{ b.seat_index || b.pc_name }}</span> 
+              <span class="pc-label">Место: {{ b.seat_index || b.pc_name }}</span>
               <span class="b-date">{{ formatDate(b.start_at) }}</span>
-              
             </div>
           </div>
-          <button class="btn-cancel" @click="cancelBooking(b.booking_id)">ОТМЕНИТЬ</button>
+          <button class="btn-cancel" @click="cancelBooking(b.id)">ОТМЕНИТЬ</button>
         </div>
       </div>
     </aside>
 
-    <!-- МОДАЛКА ВЫБОРА -->
     <div v-if="isModalOpen" class="modal-overlay" @click.self="isModalOpen = false">
       <div class="modal-content">
         <button class="close-modal" @click="isModalOpen = false">✕</button>
@@ -325,7 +305,7 @@ onMounted(fetchAll)
           <p class="modal-subtitle">{{ selectedRoom.description }}</p>
         </header>
 
-        <div class="pc-details-box" v-if="selectedPC">
+        <div class="pc-details-box" v-if="selectedPC && !selectedPC.isPlaceholder">
           <div class="specs-grid">
             <div class="spec"><span>CPU</span> {{ selectedPC.specs?.cpu || '—' }}</div>
             <div class="spec"><span>GPU</span> {{ selectedPC.specs?.gpu || '—' }}</div>
@@ -340,20 +320,20 @@ onMounted(fetchAll)
         </div>
         <div v-else class="select-prompt">Выберите ПК на схеме</div>
 
-        <div class="seats-layout">
+        <div class="seats-layout" :style="{ gridTemplateColumns: `repeat(${selectedRoom?.grid?.cols || 4}, 1fr)` }">
           <div
             v-for="pc in gridSeats"
             :key="pc.id || pc.seat_index"
             class="seat-unit"
             :class="{
-              selected: selectedPC?.id === pc.id,
+              selected: selectedPC?.id === pc.id || selectedPC?._key === pc._key,
               'my-booking': isMyBooking(pc),
               'occupied-other': pc.status === 'occupied' && !isMyBooking(pc),
               'pc-broken': pc.status === 'maintenance' || pc.status === 'inactive',
               empty: pc.status === 'empty'
             }"
             :title="getSeatTitle(pc)"
-            @click="pc.status === 'active' && selectSeat(pc)"
+            @click="selectSeat(pc)"
           >
             <div class="monitor"></div>
             <span class="num">{{ pc.seat_index }}</span>
@@ -363,8 +343,8 @@ onMounted(fetchAll)
           </div>
         </div>
 
-        <button class="btn-confirm-final" :disabled="!selectedPC" @click="confirmBooking">
-          {{ selectedPC ? `ЗАБРОНИРОВАТЬ ПК №${selectedPC.seat_index}` : 'ВЫБЕРИТЕ МЕСТО' }}
+        <button class="btn-confirm-final" :disabled="!selectedPC || selectedPC.isPlaceholder" @click="confirmBooking">
+          {{ selectedPC && !selectedPC.isPlaceholder ? `ЗАБРОНИРОВАТЬ ПК №${selectedPC.seat_index}` : 'ВЫБЕРИТЕ МЕСТО' }}
         </button>
       </div>
     </div>

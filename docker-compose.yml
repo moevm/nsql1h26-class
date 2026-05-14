@@ -4,8 +4,6 @@ services:
     restart: always
     environment:
       - ARANGO_ROOT_PASSWORD=${DB_PASSWORD}
-    ports:
-      - "127.0.0.1:8529:8529"
     volumes:
       - db_data:/var/lib/arangodb3
     healthcheck:

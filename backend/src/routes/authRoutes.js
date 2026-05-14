@@ -12,7 +12,7 @@ const router = Router();
 /**
  * Публичные роуты, доступные всем
  */
-// router.post('/register', authController.register);
+router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 

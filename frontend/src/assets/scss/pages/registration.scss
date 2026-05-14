@@ -1,0 +1,123 @@
+@use '../variables' as v;
+
+.login-layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: v.$color-bg;
+
+  .info-section {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+    
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 1;
+      margin: 0;
+    }
+  }
+
+  .form-section {
+    flex: 1.2;
+    background-color: v.$color-panel;
+    border-left: 1px dashed v.$color-border;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+
+    .form-container {
+      width: 100%;
+      max-width: 320px;
+
+      h2 {
+        margin-bottom: 30px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 1.2rem;
+      }
+
+      .error-msg {
+        font-size: 0.8rem;
+        background: rgba(255, 77, 77, 0.1);
+        padding: 10px;
+        border-left: 3px solid #ff4d4d;
+      }
+    }
+  }
+}
+
+.input-group {
+  margin-bottom: 20px;
+  
+  label {
+    display: block;
+    font-size: 0.65rem;
+    color: v.$color-text-muted;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid v.$color-border;
+    color: v.$color-text;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    transition: v.$transition;
+
+    &::placeholder {
+      color: rgba(v.$color-text, 0.2);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: v.$color-primary;
+    }
+  }
+}
+
+.login-btn {
+  width: 100%;
+  background-color: v.$color-primary;
+  color: v.$color-bg;
+  border: none;
+  padding: 15px;
+  margin-top: 20px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: v.$transition;
+
+  &:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 15px rgba(v.$color-primary, 0.3);
+  }
+}
+
+.footer-links {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: v.$color-text-muted;
+
+  a {
+    color: v.$color-primary;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

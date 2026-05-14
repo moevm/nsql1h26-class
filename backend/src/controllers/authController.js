@@ -8,31 +8,29 @@ import authService from '../services/authService.js';
 
 class AuthController {
 
-    // register = async (req, res) => {
-    //     try {
-    //         const { full_name, group_code, email, password } = req.body;
-    //
-    //         if (!email || !password || !full_name) {
-    //             return res.status(400).json({ message: "Заполните все обязательные поля" });
-    //         }
-    //
-    //         const user = await authService.registerUser({
-    //             full_name,
-    //             group_code,
-    //             email,
-    //             password
-    //         });
-    //
-    //         const { password: _, ...safeUser } = user;
-    //
-    //         res.status(201).json({
-    //             message: "Регистрация прошла успешно!",
-    //             user: safeUser
-    //         });
-    //     } catch (error) {
-    //         this.handleError(res, error);
-    //     }
-    // }
+    register = asyncHandler(async (req, res) => {
+    const { full_name, group_code, email, password } = req.body;
+
+    if (!email || !password || !full_name) {
+        const error = new Error("Заполните все обязательные поля");
+        error.status = 400;
+        throw error;
+    }
+
+    const user = await authService.registerUser({
+        full_name,
+        group_code,
+        email,
+        password
+    });
+
+    const { password: _, ...safeUser } = user;
+
+    res.status(201).json({
+        message: "Регистрация прошла успешно!",
+        user: safeUser
+    });
+});
 
 
     /**

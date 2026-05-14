@@ -14,6 +14,12 @@ const router = createRouter({
       meta: { guestOnly: true }
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterPage.vue'),
+
+    },
+    {
       path: '/',
       component: UserLayout,
       meta: { requiresAuth: true, role: 'user' },
@@ -86,7 +92,8 @@ router.beforeEach((to) => {
   const isAuthenticated = authStore.isAuthenticated
   const isAdmin = authStore.isAdmin
 
-  if (!isAuthenticated && to.name !== 'login') {
+  const publicPages = ['login', 'register'];
+  if (!isAuthenticated && !publicPages.includes(to.name as string)) {
     return { name: 'login' }
   }
 

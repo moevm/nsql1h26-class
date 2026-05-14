@@ -57,6 +57,9 @@ const onLogin = async () => {
           </div>
           <button type="submit" class="btn-submit">ВОЙТИ</button>
         </form>
+        <div class="register-link">
+          <p>Нет аккаунта? <RouterLink to="/register">Зарегистрироваться</RouterLink></p>
+        </div>
       </div>
     </div>
   </div>
